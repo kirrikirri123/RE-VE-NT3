@@ -8,4 +8,4 @@ public class RentalRepoImpl implements RentalRepo{
     public RentalRepoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-}
+} //CRUD

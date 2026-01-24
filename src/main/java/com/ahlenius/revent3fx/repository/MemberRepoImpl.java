@@ -9,4 +9,4 @@ public class MemberRepoImpl implements MemberRepo{
     public MemberRepoImpl(SessionFactory sessionfactory) {
         this.sessionfactory = sessionfactory;
     }
-}
+} //CRUD

@@ -14,6 +14,7 @@ public class Rental {
     @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+    @Enumerated(EnumType.STRING)
     @Column(name="rental_type", nullable = false, length = 14)
     private RentalType rentalType;
     @Column(name= "rent_days",nullable = false)
@@ -35,8 +36,12 @@ public class Rental {
         this.member = member;
     }
 
+    public void setRentalType(RentalType rentalType) {
+        this.rentalType = rentalType;
+    }
     public void setReturned(boolean returned) {
         this.returned = returned;
+
     }
 
     //GETTER

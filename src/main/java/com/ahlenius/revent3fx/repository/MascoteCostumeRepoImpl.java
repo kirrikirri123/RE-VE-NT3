@@ -8,4 +8,4 @@ public class MascoteCostumeRepoImpl implements MascoteCostumeRepo{
     public MascoteCostumeRepoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-}
+} //CRUD

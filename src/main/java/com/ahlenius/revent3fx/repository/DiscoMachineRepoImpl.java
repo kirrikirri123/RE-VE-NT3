@@ -9,3 +9,4 @@ public class DiscoMachineRepoImpl implements DiscoMachineRepo{
         this.sessionFactory = sessionFactory;
     }
 }
+//CRUD

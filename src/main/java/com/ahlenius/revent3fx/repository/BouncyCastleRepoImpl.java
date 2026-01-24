@@ -8,4 +8,5 @@ public class BouncyCastleRepoImpl implements BouncyCastleRepo {
     public BouncyCastleRepoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
+    //CRUD
 }

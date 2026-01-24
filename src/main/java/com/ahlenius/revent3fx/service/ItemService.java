@@ -15,6 +15,8 @@ public class ItemService {
         this.discoMachineRepo = discoMachineRepo;
         this.mascoteCostumeRepo = mascoteCostumeRepo;
     }
+    // Lägg in här sorteringen vid hämtande av rentaltype och koppla mot rentalid för att bedömma vilken produkt som det avser.
+
 // sök produkt
 
 //uppdateraprodukt
