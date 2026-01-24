@@ -1,4 +1,11 @@
 package com.ahlenius.revent3fx.repository;
 
-public class BouncyCastleRepoImpl {
+import org.hibernate.SessionFactory;
+
+public class BouncyCastleRepoImpl implements BouncyCastleRepo {
+    private final SessionFactory sessionFactory;
+
+    public BouncyCastleRepoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 }
