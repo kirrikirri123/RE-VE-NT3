@@ -12,7 +12,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "member_id")
     private long memberId;
-    @Column(name= "first_name",nullable = false,length = 20)
+    @Column(name= "first_name",nullable = false,length = 30)
     private String fName;
     @Column(name= "last_name",nullable = false,length = 30)
     private String lName;
@@ -68,7 +68,7 @@ public class Member {
 
     @Override
     public String toString() {
-        return "Medlemsn: "+ memberId  + "\nNamn: "+ fName +" "+lName+ "\nMail:  "+ email+"\n Status: "+ memberStatus+ ".";
+        return "Medlemsnr: "+ memberId  + "\nNamn: "+ fName +" "+lName+ "\nMail:  "+ email+"\nStatus: "+ memberStatus;
     }
 
 }
