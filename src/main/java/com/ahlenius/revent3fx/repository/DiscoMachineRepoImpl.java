@@ -1,4 +1,12 @@
 package com.ahlenius.revent3fx.repository;
 
-public class DiscoMachineRepoImpl {
+import org.hibernate.SessionFactory;
+
+public class DiscoMachineRepoImpl implements DiscoMachineRepo{
+    private final SessionFactory sessionFactory;
+
+    public DiscoMachineRepoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 }
+//CRUD
