@@ -48,5 +48,5 @@ public BouncyCastle(String productName, String description, BigDecimal dayPrice,
 
     @Override
     public String toString() {
-        return productName +" "+ description + "Dagspris: "+ dayPrice ;   }
+        return productName +" Om: "+ description + ". Dagspris: "+ dayPrice +"kr.ex.moms.";   }
 }
