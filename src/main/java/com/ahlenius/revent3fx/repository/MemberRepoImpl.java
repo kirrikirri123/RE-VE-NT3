@@ -47,10 +47,10 @@ public class MemberRepoImpl implements MemberRepo{
                      .setParameter("email",email).uniqueResult();
          }
         }
-        public List<Member> findMemberByFname(String fName){
+        public List<Member> findMemberByFname(String fname){
             try(Session session = sessionFactory.openSession()){
-                return session.createQuery("from Member m where m.fName = :fName", Member.class)
-                        .setParameter("fname",fName).list();
+                return session.createQuery("from Member m where m.fname = :fname", Member.class)
+                        .setParameter("fname",fname).list();
             }
         }
 

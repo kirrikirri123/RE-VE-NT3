@@ -14,6 +14,8 @@ public class Rental {
     @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+    @Column(name = "product_id", nullable = false)
+    private long productId; // vart ska värdet in i detta?
     @Enumerated(EnumType.STRING)
     @Column(name="rental_type", nullable = false, length = 14)
     private RentalType rentalType;
@@ -24,7 +26,7 @@ public class Rental {
     @Column(nullable = false)
     private boolean returned;
 
-    public Rental(Member member, RentalType rentalType, int rentDays, LocalDate startOfRent, boolean returned) {
+    public Rental(Member member, long productId, RentalType rentalType, int rentDays, LocalDate startOfRent, boolean returned) {
         this.member = member;
         this.rentalType = rentalType;
         this.rentDays = rentDays;
@@ -45,6 +47,9 @@ public class Rental {
     }
 
     //GETTER
+
+    public Long getProductId() {
+        return productId;}
     public long getRentalId() {
         return rentalId;
     }

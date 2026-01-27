@@ -32,8 +32,8 @@ public class MemberService {
     // Söka och ändra medlem.
 
     public void updateMemberName(Member member,String newfName, String newlName){
-        member.setlName(newfName);
-        member.setfName(newlName);
+        member.setlname(newfName);
+        member.setfname(newlName);
         memberRepo.updateMember(member);
     }
     public void updateMemberPhone(Member member, String phone){

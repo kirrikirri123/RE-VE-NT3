@@ -29,18 +29,18 @@ public class Member {
 
     protected Member (){}
 
-    public Member(String fName, String lName, String phone, String email, MemberStatus memberStatus) {
-        this.fname = fName;
-        this.lname = lName;
+    public Member(String fname, String lname, String phone, String email, MemberStatus memberStatus) {
+        this.fname = fname;
+        this.lname = lname;
         this.phone = phone;
         this.email = email;
         this.memberStatus = memberStatus;}
 
     //SETTER
-    public void setfName(String fName) {
+    public void setfname(String fName) {
         this.fname = fName;
     }
-    public void setlName(String lName) {
+    public void setlname(String lName) {
         this.lname = lName;
     }
     public void setPhone(String phone) {
@@ -57,10 +57,10 @@ public class Member {
     public long getMemberId() {
         return memberId;
     }
-    public String getfName() {
+    public String getfname() {
         return fname;
     }
-    public String getlName() {
+    public String getlname() {
         return lname;
     }
     public String getPhone() {

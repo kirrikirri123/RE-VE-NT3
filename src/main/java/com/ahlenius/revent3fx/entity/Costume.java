@@ -28,7 +28,16 @@ protected Costume(){}
         this.dayPrice = dayPrice;
         this.season = season;
     }
-
+    //SETTERS
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setDayPrice(BigDecimal dayPrice) {
+        this.dayPrice = dayPrice;
+    }
     // GETTERS
     public long getProductId() {
         return productId;
