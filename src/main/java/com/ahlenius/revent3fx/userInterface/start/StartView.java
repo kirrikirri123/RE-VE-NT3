@@ -1,4 +1,4 @@
-package com.ahlenius.revent3fx.userInterface.view;
+package com.ahlenius.revent3fx.userInterface.start;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

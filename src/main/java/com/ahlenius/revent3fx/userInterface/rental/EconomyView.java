@@ -1,4 +1,4 @@
-package com.ahlenius.revent3fx.userInterface.view;
+package com.ahlenius.revent3fx.userInterface.rental;
 
 import com.ahlenius.revent3fx.service.RentalService;
 import javafx.geometry.Insets;

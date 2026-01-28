@@ -1,25 +1,15 @@
-package com.ahlenius.revent3fx.userInterface.view;
+package com.ahlenius.revent3fx.userInterface.rental;
 
 import com.ahlenius.revent3fx.entity.Member;
 import com.ahlenius.revent3fx.entity.Rental;
-import com.ahlenius.revent3fx.exception.InvalidAmountRentingDaysException;
-import com.ahlenius.revent3fx.exception.InvalidDateChoiceException;
-import com.ahlenius.revent3fx.exception.InvalidRentalInfoInputException;
 import com.ahlenius.revent3fx.service.MemberService;
 import com.ahlenius.revent3fx.service.RentalService;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Optional;
 
 
 public class RentalView {

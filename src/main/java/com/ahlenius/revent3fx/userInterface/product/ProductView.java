@@ -1,20 +1,14 @@
-package com.ahlenius.revent3fx.userInterface.view;
+package com.ahlenius.revent3fx.userInterface.product;
 
 import com.ahlenius.revent3fx.service.ItemService;
 import com.ahlenius.revent3fx.service.RentalService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
-
-import java.io.IOException;
-import java.util.Optional;
 
 public class ProductView {
     // Här läggs allt som har med produkterna att göra. Foto-info, boka osv.
