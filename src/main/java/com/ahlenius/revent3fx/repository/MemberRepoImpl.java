@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.util.List;
 import java.util.Optional;
 
 public class MemberRepoImpl implements MemberRepo{
@@ -40,12 +41,17 @@ public class MemberRepoImpl implements MemberRepo{
             return m; // returnerar kopia av uppdaterade objektet inte samma instans?
         }}
 
-    // Hitta medlem utifrån namn - return en medlem - Ändra denna framgent
-        public Member findMemberByName(String name){
+         public Member findMemberByEmail(String email){
          try(Session session = sessionFactory.openSession()){
-             return session.createQuery("from Member m where m.fName = :name", Member.class)
-                     .setParameter("name", name).uniqueResult();
+             return session.createQuery("from Member m where m.email = :email", Member.class)
+                     .setParameter("email",email).uniqueResult();
          }
+        }
+        public List<Member> findMemberByFname(String fname){
+            try(Session session = sessionFactory.openSession()){
+                return session.createQuery("from Member m where m.fname = :fname", Member.class)
+                        .setParameter("fname",fname).list();
+            }
         }
 
 

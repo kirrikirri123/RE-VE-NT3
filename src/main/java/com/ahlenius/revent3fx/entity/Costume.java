@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name="mascote_costume")
-public class MascoteCostume {
+public class Costume {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 @Column(name="product_id")
@@ -20,15 +20,24 @@ private BigDecimal dayPrice;
 @Column(length = 10)
 private String season;
 
-protected MascoteCostume(){}
+protected Costume(){}
 
-    public MascoteCostume(String productName, String description, BigDecimal dayPrice,String season) {
+    public Costume(String productName, String description, BigDecimal dayPrice, String season) {
         this.productName = productName;
         this.description = description;
         this.dayPrice = dayPrice;
         this.season = season;
     }
-
+    //SETTERS
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setDayPrice(BigDecimal dayPrice) {
+        this.dayPrice = dayPrice;
+    }
     // GETTERS
     public long getProductId() {
         return productId;

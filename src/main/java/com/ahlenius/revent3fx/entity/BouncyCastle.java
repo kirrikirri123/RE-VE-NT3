@@ -29,6 +29,19 @@ public BouncyCastle(String productName, String description, BigDecimal dayPrice,
      this.indoorUse = indoorUse;
     }
 
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDayPrice(BigDecimal dayPrice) {
+        this.dayPrice = dayPrice;
+    }
+
+    // SETTERS
     //GETTERS
     public String getProductName() {
         return productName;

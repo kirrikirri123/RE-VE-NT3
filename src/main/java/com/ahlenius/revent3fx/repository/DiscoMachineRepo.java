@@ -1,8 +1,6 @@
 package com.ahlenius.revent3fx.repository;
 
-import com.ahlenius.revent3fx.entity.BouncyCastle;
 import com.ahlenius.revent3fx.entity.DiscoMachine;
-import com.ahlenius.revent3fx.entity.MascoteCostume;
 
 import java.util.Optional;
 

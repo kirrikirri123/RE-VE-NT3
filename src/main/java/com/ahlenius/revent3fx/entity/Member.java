@@ -13,9 +13,9 @@ public class Member {
     @Column(name= "member_id")
     private long memberId;
     @Column(name= "first_name",nullable = false,length = 30)
-    private String fName;
+    private String fname;
     @Column(name= "last_name",nullable = false,length = 30)
-    private String lName;
+    private String lname;
     @Column(length = 15)
     private String phone;
     @Column(nullable = false,length = 120, unique = true)
@@ -29,20 +29,19 @@ public class Member {
 
     protected Member (){}
 
-    public Member(String fName, String lName, String phone, String email, MemberStatus memberStatus) {
-        this.fName = fName;
-        this.lName = lName;
+    public Member(String fname, String lname, String phone, String email, MemberStatus memberStatus) {
+        this.fname = fname;
+        this.lname = lname;
         this.phone = phone;
         this.email = email;
         this.memberStatus = memberStatus;}
+
     //SETTER
-
-
-    public void setfName(String fName) {
-        this.fName = fName;
+    public void setfname(String fName) {
+        this.fname = fName;
     }
-    public void setlName(String lName) {
-        this.lName = lName;
+    public void setlname(String lName) {
+        this.lname = lName;
     }
     public void setPhone(String phone) {
         this.phone = phone;
@@ -58,11 +57,11 @@ public class Member {
     public long getMemberId() {
         return memberId;
     }
-    public String getfName() {
-        return fName;
+    public String getfname() {
+        return fname;
     }
-    public String getlName() {
-        return lName;
+    public String getlname() {
+        return lname;
     }
     public String getPhone() {
         return phone;
@@ -85,7 +84,7 @@ public class Member {
 
     @Override
     public String toString() {
-        return "Medlemsnr: "+ memberId  + "\nNamn: "+ fName +" "+lName+ "\nMail:  "+ email+"\nStatus: "+ memberStatus;
+        return "Medlemsnr: "+ memberId  + "\nNamn: "+ fname +" "+lname+ "\nMail:  "+ email+"\nStatus: "+ memberStatus;
     }
 
 }

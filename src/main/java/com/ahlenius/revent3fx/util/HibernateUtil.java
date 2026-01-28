@@ -39,7 +39,7 @@ public class HibernateUtil {
 
             configuration.addAnnotatedClass(BouncyCastle.class);
             configuration.addAnnotatedClass(DiscoMachine.class);
-            configuration.addAnnotatedClass(MascoteCostume.class);
+            configuration.addAnnotatedClass(Costume.class);
             configuration.addAnnotatedClass(Member.class);
             configuration.addAnnotatedClass(Rental.class);
 

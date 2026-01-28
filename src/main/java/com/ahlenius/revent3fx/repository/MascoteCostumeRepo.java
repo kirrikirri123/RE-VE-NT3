@@ -1,18 +1,17 @@
 package com.ahlenius.revent3fx.repository;
 
-import com.ahlenius.revent3fx.entity.BouncyCastle;
-import com.ahlenius.revent3fx.entity.MascoteCostume;
+import com.ahlenius.revent3fx.entity.Costume;
 
 import java.util.Optional;
 
 public interface MascoteCostumeRepo {
 
-    void saveItem(MascoteCostume mascoteCostume);
+    void saveItem(Costume costume);
 
-    void removeItem(MascoteCostume mascoteCostume);
+    void removeItem(Costume costume);
 
-    MascoteCostume updateItem(MascoteCostume mascoteCostume);
+    Costume updateItem(Costume costume);
 
-    Optional<MascoteCostume> findById(long id);
+    Optional<Costume> findById(long id);
 
 }

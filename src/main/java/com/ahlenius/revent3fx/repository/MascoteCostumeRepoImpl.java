@@ -1,7 +1,6 @@
 package com.ahlenius.revent3fx.repository;
 
-import com.ahlenius.revent3fx.entity.MascoteCostume;
-import com.ahlenius.revent3fx.util.HibernateUtil;
+import com.ahlenius.revent3fx.entity.Costume;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -15,7 +14,7 @@ public class MascoteCostumeRepoImpl implements MascoteCostumeRepo{
     }
     // Create - save
     @Override
-    public void saveItem(MascoteCostume mC) {
+    public void saveItem(Costume mC) {
         try(Session session = sessionFactory.openSession()){
             var transaction = session.beginTransaction();
             session.persist(mC);
@@ -23,7 +22,7 @@ public class MascoteCostumeRepoImpl implements MascoteCostumeRepo{
         }
     }
     @Override
-    public void removeItem(MascoteCostume mC) {
+    public void removeItem(Costume mC) {
         try(Session session =sessionFactory.openSession()){
             var transaction = session.beginTransaction();
             session.remove(mC);
@@ -31,7 +30,7 @@ public class MascoteCostumeRepoImpl implements MascoteCostumeRepo{
         }
     }
     @Override
-    public MascoteCostume updateItem(MascoteCostume mC){
+    public Costume updateItem(Costume mC){
         try(Session session= sessionFactory.openSession()){
             Transaction transaction = session.beginTransaction();
             session.merge(mC);
@@ -40,15 +39,15 @@ public class MascoteCostumeRepoImpl implements MascoteCostumeRepo{
         }}
 
     @Override // Hitta produkt utifrån Id för att kunna matcha mot rental_type sen?
-    public Optional<MascoteCostume> findById(long id) {
+    public Optional<Costume> findById(long id) {
         try(Session session = sessionFactory.openSession()){
             return Optional.ofNullable(
-                    session.get(MascoteCostume.class, id)
+                    session.get(Costume.class, id)
             );}
     }
-    public MascoteCostume findProductByName(String name) {
+    public Costume findProductByName(String name) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from MascoteCostume m where m.productName = :name", MascoteCostume.class)
+            return session.createQuery("from Costume m where m.productName = :name", Costume.class)
                     .setParameter("name", name).uniqueResult();
         }
     }
