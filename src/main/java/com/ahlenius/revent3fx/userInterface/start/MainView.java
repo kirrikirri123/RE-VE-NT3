@@ -69,7 +69,7 @@ public class MainView {
         memberhistory = new MenuItem("Medlemsspecifik");
         history.getItems().addAll(rentalHistory, memberhistory);
         Menu economyMenu = new Menu("Ekonomi");
-        
+
         menuHeader.getMenus().addAll(startMenu, memberMenu, productMenu, rentalMenu, history, economyMenu);
         menuHeader.setPadding(new Insets(2, 10, 2, 345));
         //Center Welcome

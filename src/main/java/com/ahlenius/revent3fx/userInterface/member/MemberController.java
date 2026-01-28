@@ -6,9 +6,11 @@ import com.ahlenius.revent3fx.exception.InvalidNameInputException;
 import com.ahlenius.revent3fx.exception.InvalidPhoneInputException;
 import com.ahlenius.revent3fx.service.MemberService;
 import com.ahlenius.revent3fx.service.RentalService;
+import javafx.scene.control.ButtonType;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 
 public class MemberController {
@@ -77,51 +79,44 @@ public class MemberController {
             }
             searchBtnHist.setText(searchBtnString);
         });
-
+*/
         // Uppdatera medlemsinfo
-        searchBtnUpd.setOnAction(actionEvent -> {
-            searchBtnUpd.setText("Söker medlem...");
+        view.searchBtnUpd.setOnAction(actionEvent -> {
+            view.searchBtnUpd.setText("Söker medlem...");
             try {
-                Member foundMem = memberService.searchMemberByNameOrPhoneReturnMember(updateMember.getText());
-                confrUpdMem.setContentText("Hittade medlem " + foundMem.getfname() + " " + foundMem.getlname() + ". Stämmer det?");
-                Optional<ButtonType> userResult = confrUpdMem.showAndWait();
+                Member foundMem = memberService.searchAndReturnMemberByEmail(view.updateMember.getText());
+                view.confrUpdMem.setContentText("Hittade medlem " + foundMem.getfname() + " " + foundMem.getlname() + ". Stämmer det?");
+                Optional<ButtonType> userResult = view.confrUpdMem.showAndWait();
                 if (userResult.isPresent()) {
-                    if (userResult.get() == yesBtn) {
-                        updateMemInfo.setText("Medlem bekräftad. Laddar sida för uppdatering av medlemsinfo.");// detta skrivs aldrig ut?
-                        try {
-                            TimeUnit.MILLISECONDS.sleep(1000);
-                        } catch (InterruptedException e) {
-                            System.out.println("Fel uppstod vid sleep");
-                        }
-                        memberPane.setCenter(updateMemVbox);
-                        tempMember = foundMem;
-                        validatedMem.setText("Vald medlem : " + foundMem.getfname() + " " + foundMem.getlname());
-                        updUserNameField.setText(foundMem.getfname() + " " + foundMem.getlname());
-                        updUserPhoneField.setText(foundMem.getPhone());
-                        updUserStatusCombo.setValue(foundMem.getMemberStatus().toString());
-                    } else if (userResult.get() == noBtn) {
-                        updateMember.clear();
-                        searchBtnUpd.setText(searchBtnString);
-                        confrUpdMem.close();
+                    if (userResult.get() == view.yesBtn) {
+                        view.getMemberPane().setCenter(view.updateMemVbox);
+                        view.tempMember = foundMem;
+                        view.validatedMem.setText("Vald medlem : " + foundMem.getfname() + " " + foundMem.getlname());
+                        view.updUserNameField.setText(foundMem.getfname() + " " + foundMem.getlname());
+                        view.updUserPhoneField.setText(foundMem.getPhone());
+                        view.updUserStatusCombo.setValue(foundMem.getMemberStatus().toString());
+                    } else if (userResult.get() == view.noBtn) {
+                        view.updateMember.clear();
+                        view.searchBtnUpd.setText("Sök");
+                        view.confrUpdMem.close();
                     }
                 }
             } catch (NullPointerException e) {
-                updateMemInfo.setText(e.getMessage());
-                searchBtnUpd.setText(searchBtnString);
+                view.updateMemInfo.setText(e.getMessage());
+                view.searchBtnUpd.setText(view.searchEmail);
             }
         });
 
-
         //Uppdatera ändringar mot register
-        confBtn.setOnAction(actionEvent -> {
+        view.confBtn.setOnAction(actionEvent -> {
             if (!updUserNameField.getText().isEmpty()) {
-                memberService.updateMemberName(tempMember, updUserNameField.getText());
+                memberService.updateMemberName(view.tempMember, view.updUserNameField.getText());
             }
             if (!updUserPhoneField.getText().isEmpty()) {
-                memberService.updateMemberPhone(tempMember, updUserPhoneField.getText());
+                memberService.updateMemberPhone(view.tempMember, view.updUserPhoneField.getText());
             }
-            if (!updUserStatusCombo.getValue().equals(tempMember.getMemberStatus())) {
-                memberService.updateMemberStatus(tempMember, updUserStatusCombo.getValue());
+            if (!updUserStatusCombo.getValue().equals(view.tempMember.getMemberStatus())) {
+                memberService.updateMemberStatus(view.tempMember, view.updUserStatusCombo.getValue());
             }
             try {
                 jsonService.memberlistToJson();
@@ -135,8 +130,8 @@ public class MemberController {
             }
         });
         // Avsluta medlemskap
-        removeMemBtn.setOnAction(actionEvet -> {
-            confRemoveMem.setContentText("Vill du avsluta " + tempMember.getfname() + " " + tempMember.getlname() + "s medemskap?"); // tillägg senare om det påverkar uthyrning + kostnad kan man dra en chech här innan.
+        view.removeMemBtn.setOnAction(actionEvet -> {
+            view.confRemoveMem.setContentText("Vill du avsluta " + tempMember.getfname() + " " + tempMember.getlname() + "s medemskap?");
             Optional<ButtonType> userRemoveResult = confRemoveMem.showAndWait();
             if (userRemoveResult.isPresent()) {
                 if (userRemoveResult.get() == removeBtn) {
