@@ -40,5 +40,5 @@ protected DiscoMachine (){}
     }
     @Override
     public String toString() {
-        return productName +" "+ description + "Dagspris: "+ dayPrice ;   }
+        return productName +" Om: "+ description + ". Dagspris: "+ dayPrice +"kr.ex.moms.";}
 }

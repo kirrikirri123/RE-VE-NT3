@@ -24,7 +24,7 @@ public class Member {
     @Column(name = "member_status", length = 18, nullable = false)
     private MemberStatus memberStatus;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true) // fetch här? hur vill man göra med barnen?
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Rental> rentalListMember = new ArrayList<>(); // Vilka uthyrningar är kopplade till medlemmen
 
     protected Member (){}
@@ -34,6 +34,23 @@ public class Member {
         this.lName = lName;
         this.phone = phone;
         this.email = email;
+        this.memberStatus = memberStatus;}
+    //SETTER
+
+
+    public void setfName(String fName) {
+        this.fName = fName;
+    }
+    public void setlName(String lName) {
+        this.lName = lName;
+    }
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setMemberStatus(MemberStatus memberStatus) {
         this.memberStatus = memberStatus;
     }
 
