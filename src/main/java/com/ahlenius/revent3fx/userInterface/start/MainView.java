@@ -1,4 +1,4 @@
-package com.ahlenius.revent3fx.userInterface.view;
+package com.ahlenius.revent3fx.userInterface.start;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -47,8 +47,6 @@ public class MainView {
 
         //MenuBar
         Menu startMenu = new Menu("Start");
-        home = new MenuItem("Hem");
-        startMenu.getItems().add(home);
         Menu memberMenu = new Menu("Medlemshantering");
         newMem = new MenuItem("Ny medlem");
         searchMem = new MenuItem("Sök medlem");
@@ -71,9 +69,7 @@ public class MainView {
         memberhistory = new MenuItem("Medlemsspecifik");
         history.getItems().addAll(rentalHistory, memberhistory);
         Menu economyMenu = new Menu("Ekonomi");
-        revenue = new MenuItem("Intäkter");
-        economyMenu.getItems().addAll(revenue);
-
+        
         menuHeader.getMenus().addAll(startMenu, memberMenu, productMenu, rentalMenu, history, economyMenu);
         menuHeader.setPadding(new Insets(2, 10, 2, 345));
         //Center Welcome

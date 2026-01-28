@@ -1,13 +1,12 @@
 package com.ahlenius.revent3fx.repository;
 
 import com.ahlenius.revent3fx.entity.Member;
-import com.ahlenius.revent3fx.util.HibernateUtil;
+import jakarta.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.List;
-import java.util.Optional;
 
 public class MemberRepoImpl implements MemberRepo{
     private final SessionFactory sessionFactory;
@@ -53,7 +52,12 @@ public class MemberRepoImpl implements MemberRepo{
                         .setParameter("fname",fname).list();
             }
         }
+        public List<Member> findAllMembers() {
+            try (Session session = sessionFactory.openSession()) {
+                return session.createQuery("from Member", Member.class).getResultList();
+            }
 
+      }
+}
 
-    }
 

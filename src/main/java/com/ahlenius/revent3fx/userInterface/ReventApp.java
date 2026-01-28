@@ -4,7 +4,9 @@ import com.ahlenius.revent3fx.repository.*;
 import com.ahlenius.revent3fx.service.ItemService;
 import com.ahlenius.revent3fx.service.MemberService;
 import com.ahlenius.revent3fx.service.RentalService;
-import com.ahlenius.revent3fx.userInterface.view.*;
+import com.ahlenius.revent3fx.userInterface.member.MemberController;
+import com.ahlenius.revent3fx.userInterface.member.MemberView;
+import com.ahlenius.revent3fx.userInterface.start.*;
 import com.ahlenius.revent3fx.util.HibernateUtil;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -24,12 +26,13 @@ public class ReventApp extends Application {
 
     StartView startView = new StartView();
     MainView mainView = new MainView();
-   /* MemberView memberView = new MemberView(memberService,jsonService,rentalService);
-    ProductView productView = new ProductView(rentalService,jsonService);
-    RentalView rentalView = new RentalView(rentalService,memberService, jsonService);
-    HistoryView historyView = new HistoryView(rentalService);
-    EconomyView economyView = new EconomyView(rentalService);
-  */
+    MemberView memberView = new MemberView();
+    /* ProductView productView = new ProductView(rentalService,jsonService);
+     RentalView rentalView = new RentalView(rentalService,memberService, jsonService);
+     HistoryView historyView = new HistoryView(rentalService);
+     EconomyView economyView = new EconomyView(rentalService);
+   */
+    MemberController memberController = new MemberController(memberService,rentalService, memberView);
     Scene start,main;
 
     @Override
@@ -40,9 +43,27 @@ public class ReventApp extends Application {
         stage.setScene(start);
         stage.show();
 
+        // knappar
         startView.getImageStart().setOnMouseClicked(mouseEvent -> {
             changeScene(stage,main);});
 
+        // Medlemsknappar i meny.
+        mainView.getNewMem().setOnAction(actionEvent -> {
+            mainView.getMainView().setCenter(memberView.getMemberPane());
+            memberView.getMemberPane().setCenter(memberView.getNewMemBox());
+        });
+        mainView.getHistoryMem().setOnAction(actionEvent -> {
+            mainView.getMainView().setCenter(memberView.getMemberPane());
+            memberView.getMemberPane().setCenter(memberView.getMemHistoryPane());
+        });
+        mainView.getSearchMem().setOnAction(actionEvent -> {
+            mainView.getMainView().setCenter(memberView.getMemberPane());
+            memberView.getMemberPane().setCenter(memberView.getSearchMemPane());
+        });
+        mainView.getUpdateMem().setOnAction(actionEvent -> {
+            mainView.getMainView().setCenter(memberView.getMemberPane());
+            memberView.getMemberPane().setCenter(memberView.getUpdateMemPane());
+        });
     }
     public void changeScene(Stage stage,Scene scene){
         stage.setScene(scene);
