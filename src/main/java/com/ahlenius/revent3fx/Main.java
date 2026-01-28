@@ -1,34 +1,13 @@
 package com.ahlenius.revent3fx;
 
-import com.ahlenius.revent3fx.entity.BouncyCastle;
-import com.ahlenius.revent3fx.entity.DiscoMachine;
-import com.ahlenius.revent3fx.entity.Member;
-import com.ahlenius.revent3fx.entity.MemberStatus;
-import com.ahlenius.revent3fx.repository.*;
-import com.ahlenius.revent3fx.service.ItemService;
-import com.ahlenius.revent3fx.service.MemberService;
-import com.ahlenius.revent3fx.service.RentalService;
-import com.ahlenius.revent3fx.util.HibernateUtil;
-import org.hibernate.SessionFactory;
-
-
-
-import java.util.Scanner;
+import com.ahlenius.revent3fx.userInterface.ReventApp;
+import javafx.application.Application;
 
 public class Main {
 
 public static void main(String [] args){
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    var memberRepo = new MemberRepoImpl(sessionFactory);
-    var bouncyRepo = new BouncyCastleRepoImpl(sessionFactory);
-    var discoRepo = new DiscoMachineRepoImpl(sessionFactory);
-    var costumeRepo = new MascoteCostumeRepoImpl(sessionFactory);
-    var rentalRepo = new RentalRepoImpl(sessionFactory);
-    ItemService itemService = new ItemService(bouncyRepo,discoRepo,costumeRepo);
-    MemberService memberService = new MemberService(memberRepo);
-    RentalService rentalService = new RentalService(rentalRepo);
-
-
+    Application.launch(ReventApp.class);
+/*
     System.out.println("This is the rental-app of your dreams.");
     boolean run = true;
 
@@ -58,7 +37,7 @@ public static void main(String [] args){
 
         DiscoMachine discoProd = discoRepo.findProductByName("Discokula");
          if(discoProd!= null){
-        System.out.println(discoProd);} else {System.out.println("Hittade ingen sådan produkt i lager just nu.");}*/
+        System.out.println(discoProd);} else {System.out.println("Hittade ingen sådan produkt i lager just nu.");}
 
 
 System.out.println("Vill du avsluta? Skriv JA");
@@ -67,6 +46,6 @@ System.out.println("Vill du avsluta? Skriv JA");
 
 
 
-}
+}*/
 }
 }
