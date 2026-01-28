@@ -1,5 +1,6 @@
 package com.ahlenius.revent3fx.userInterface.member;
 
+import com.ahlenius.revent3fx.entity.Member;
 import com.ahlenius.revent3fx.exception.InvalidMemberInfoInputException;
 import com.ahlenius.revent3fx.exception.InvalidNameInputException;
 import com.ahlenius.revent3fx.exception.InvalidPhoneInputException;
@@ -7,6 +8,7 @@ import com.ahlenius.revent3fx.service.MemberService;
 import com.ahlenius.revent3fx.service.RentalService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class MemberController {
@@ -39,25 +41,23 @@ public class MemberController {
             }
         });
        //Vanlig sök
-       view.searchBtnMem.setOnAction(actionEvent -> { // Nånting gör så att det tidigare sökningar syns i resultatet. även om ett exception kommer emellan.
-            if (searchMember.getText().isEmpty()) {
-                confirmationSearchMem.setText("För att söka fyll i namn eller telefonummer.");
-            } else {
-                confirmationSearchMem.setText(" ");
-                searchBtnMem.setText("Söker medlem..."); // Lägga en sleep och sen återställa knapp till "Sök. Så syns det att den "gör nått"
-                try {
-                    ArrayList<String> foundMem = new ArrayList<>(memberService.checkMemberlistReturnFormatedStringList(searchMember.getText()));
-                    foundMem.stream().forEach(s -> builder.append(s).append("\n")); // Göör troligast så hisotriken finns kvar.
-                    confirmationSearchMem.setText(builder.toString());
-                    searchBtnMem.setText(searchBtnString);
-                    searchMember.clear();
-                    foundMem.clear();
-                } catch (NullPointerException ex) {
-                    confirmationSearchMem.setText(ex.getMessage());
-                    searchBtnMem.setText(searchBtnString);
-                }
-            }
-        /*});
+       view.searchBtnMem.setOnAction(actionEvent -> {
+                   if (view.searchMember.getText().isEmpty()) {
+                       view.confirmationSearchMem.setText("För att söka fyll i fullständig mailadress.");
+                   } else {
+                       view.confirmationSearchMem.setText(" ");
+                       try {
+                           Member foundMem = memberService.searchAndReturnMemberByEmail(view.searchMember.getText());
+                           view.confirmationSearchMem.setText(foundMem.toString());
+                           view.searchMember.clear();
+                           foundMem = null;
+                       } catch (NullPointerException ex) {
+                           view.confirmationSearchMem.setText(ex.getMessage());
+                       }
+                   }
+               });
+
+       /*
         //Historik
         searchBtnHist.setOnAction(actionEvent -> {
             searchBtnHist.setText("Söker medlem...");// Lägga en sleep och sen återställa knapp till "Sök."
@@ -152,6 +152,6 @@ public class MemberController {
             }
         });*/
 
-        // vilka views och vilka repos??
-    }
+           // vilka views och vilka repos??
+       }
 }

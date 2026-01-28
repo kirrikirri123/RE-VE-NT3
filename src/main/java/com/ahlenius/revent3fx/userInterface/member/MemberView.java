@@ -24,14 +24,20 @@ public class MemberView {
     final Button historyMem;
     final String searchString = "Sök på emailadress: ";
     final Button OKBTN = new Button("OK");
+    final Button searchBtnUpd = new Button("Sök");
+    final Button searchBtnMem = new Button("Sök");
+    final Button searchBtnHist = new Button("Sök");
     Label exceptionInfo = new Label();
     Label headerText;
-    Label confrimationText;
+    Label confrimationText= new Label();
+    Label confirmationSearchMem = new Label();
     TextField userEmail = new TextField();
     TextField userfName = new TextField();
     TextField userlName = new TextField();
     TextField userPhone = new TextField();
+    TextField searchMember = new TextField();
     ComboBox<String> statusComboBox;
+
     //  private Member tempMember;
    // private Member tempHistMember;
 
@@ -39,7 +45,6 @@ public class MemberView {
     public MemberView(){
          //NY medlemsVy
         headerText = new Label("Skapa ny medlem");
-        confrimationText = new Label();
         GridPane newMemPane= new GridPane();
         newMem = new Button("Ny medlem");
         Label fName = new Label("Förnamn / Föreningsnamn ");
@@ -47,13 +52,13 @@ public class MemberView {
         Label phone = new Label("Telefonnummer ");
         Label email = new Label("Emailadress ") ;
         Label status = new Label("Välj status: ");
-        userfName.maxWidth(225);
+        userlName.maxWidth(250);
         userfName.setPromptText("Kickan / Kickans kexförening");
-        userlName.maxWidth(225);
+        userlName.maxWidth(250);
         userlName.setPromptText("Kristersson \nalt. Förening (vid föreningskund)");
-        userPhone.maxWidth(225);
+        userPhone.maxWidth(250);
         userPhone.setPromptText(" 070 302 48 10");
-        userEmail.maxWidth(225);
+        userEmail.maxWidth(250);
         userEmail.setPromptText("Bosse.Bengtsson@live.se");
         String statusPi= "Privatperson";
         String statusSo ="Förening";
@@ -84,13 +89,9 @@ public class MemberView {
         //Sök medlemsVy
         searchMem = new Button("Sök medlem");
         Label headerSearch = new Label("Sök befintlig medlem");
-        Label confirmationSearchMem = new Label();
-        StringBuilder builder = new StringBuilder();
         Label searchMemLabel = new Label(searchString);
-        TextField searchMember = new TextField();
         searchMember.setMaxWidth(250);
         searchMember.setPromptText("Tex. Bosse.Bengtsson@yahoo.se");
-        Button searchBtnMem = new Button("Sök");
         searchMemPane.setSpacing(10);
         searchMemPane.setAlignment(Pos.CENTER);
         searchMemPane.getChildren().addAll(headerSearch,searchMemLabel,searchMember,searchBtnMem,confirmationSearchMem);
@@ -134,7 +135,6 @@ public class MemberView {
         TextField updateMember = new TextField();
         updateMember.setMaxWidth(250);
         updateMember.setPromptText("Tex. Bosse.Bengtsson@telia.se");
-        Button searchBtnUpd = new Button("Sök");
         updateMemPane.setSpacing(10);
         updateMemPane.setAlignment(Pos.CENTER);
         updateMemPane.getChildren().addAll(headerUpdate,updateMemLabel,updateMember,searchBtnUpd,updateMemInfo);
@@ -212,8 +212,6 @@ public class MemberView {
             memberPane.setCenter(memHistoryPane);
             memberHistory.clear();exceptionInfoHistory.setText("");
         });
-
-
          // Layout MembershipView
         memberPane.setCenter(newMemBox);
         memberPane.setLeft(leftField);
