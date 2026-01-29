@@ -49,8 +49,8 @@ public class MemberService {
     // Uppdatera medlem
 
     public void updateMemberName(Member member, String newfName, String newlName) {
-        member.setlname(newfName);
-        member.setfname(newlName);
+        member.setfname(newfName);
+        member.setlname(newlName);
         memberRepo.updateMember(member);
     }
 
