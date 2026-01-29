@@ -9,6 +9,7 @@ import org.hibernate.HibernateException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class MemberService {
     private MemberRepoImpl memberRepo;
@@ -73,10 +74,8 @@ public class MemberService {
     //Sök
 
     public Member searchAndReturnMemberByEmail(String email) throws NoMemberFoundException {
-        Member foundMember = memberRepo.findMemberByEmail(email);
-        if(foundMember== null){throw new NoMemberFoundException("Hittade ingen matchande medlem.");}
-        return foundMember;
-    }
+        return memberRepo.findMemberByEmail(email).orElseThrow(() -> new NoMemberFoundException("Hittade ingen matchande medlem."));}
+
 
     public List<Member> searchMemberByEmailReturnList(String fname) throws NoMemberFoundException {
         List<Member> ListMembers = memberRepo.findMemberByFname(fname);

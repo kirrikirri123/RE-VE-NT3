@@ -48,10 +48,10 @@ public class BouncyCastleRepoImpl implements BouncyCastleRepo {
             );
         }
     }
-    public BouncyCastle findProductByName(String name){
+    public Optional<BouncyCastle> findProductByName(String name){
         try(Session session = sessionFactory.openSession()){
             return session.createQuery("from BouncyCastle m where m.productName = :name", BouncyCastle.class)
-                    .setParameter("name", name).uniqueResult();
+                    .setParameter("name", name).uniqueResultOptional();
         }
     }
 }
