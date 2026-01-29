@@ -1,37 +1,34 @@
 package com.ahlenius.revent3fx.userInterface.items;
 
 import com.ahlenius.revent3fx.service.ItemService;
-import javafx.scene.control.ButtonType;
 
-import java.util.Optional;
 
 public class ItemController {
     private ItemService itemService;
     private ItemView view;
 
-    public ItemController(ItemService itemService, ItemView itemview){
+    public ItemController(ItemService itemService, ItemView itemview) {
         this.itemService = itemService;
         this.view = itemview;
 
         startUi();
     }
-     public void startUi(){
+     private void startUi(){
          view.OKBTN.setOnAction(actionEvent -> {
              double dayPrice = Double.parseDouble(view.dayPriceField.getText());
              if(view.itemTypeCombo.getValue().equals(view.costume)){
-                 try {
-                     itemService.newCostumeItem(view.prodNameField.getText(),view.prodDescriptField.getText(),dayPrice,true,"Året runt");***************
-                     view.confrimationText.setText("Ny produkt tillagd");
-                 } catch (IOException e) {view.exceptionInfo.setText(e.getMessage()+"Dräktproblem");}
-             }
+                 itemService.newCostumeItem(view.prodNameField.getText(),view.prodDescriptField.getText(),dayPrice,"Året runt"); // Borde man fixa ett fält fär säsong kanske så det har nån betydelse?
+                 view.confrimationText.setText("Ny produkt tillagd");
+                    }
              if(view.itemTypeCombo.getValue().equals(view.bouncyC)){
-                 try {
-                     itemService.newBouncyItem(view.prodNameField.getText(),view.prodDescriptField.getText(),dayPrice,true,false);******§********
-                     view.confrimationText.setText("Ny produkt tillagd");
-                 } catch (IOException e) {view.exceptionInfo.setText((e.getMessage()+"Hoppborgssfail"));
-                 }
+                 itemService.newBouncyItem(view.prodNameField.getText(),view.prodDescriptField.getText(),dayPrice,false);
+                 view.confrimationText.setText("Ny produkt tillagd");
+                                  }
+             if(view.itemTypeCombo.getValue().equals(view.disco)){
+                 itemService.newDiscoItem(view.prodNameField.getText(),view.prodDescriptField.getText(),dayPrice);
+                 view.confrimationText.setText("Ny produkt tillagd");
              } view.prodNameField.clear();view.prodDescriptField.clear();view.dayPriceField.clear();view.exceptionInfo.setText("");
-         });
+        });}
          /*//Uppdatera produkt
          view.searchBtnUpd.setOnAction(actionEvent -> {
              try {
@@ -85,4 +82,4 @@ public class ItemController {
 
      }
 
-}
+

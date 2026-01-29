@@ -1,7 +1,5 @@
 package com.ahlenius.revent3fx.userInterface.items;
 
-import com.ahlenius.revent3fx.service.ItemService;
-import com.ahlenius.revent3fx.service.RentalService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -18,17 +16,40 @@ public class ItemView {
     private FlowPane itemView = new FlowPane();
     private VBox newProdBox = new VBox();
     private VBox updateProdPane = new VBox();
-    private Button products;
-    private Button newProd;
-    private Button editProd;
-    private Button viewAccesibleProdBtn = new Button("Aktuella produkter");
-    private final Button OKBTN = new Button("OK");
-    private Label confrimationText= new Label();
-    private Label exceptionInfo= new Label();
-    private Label updProdInfo = new Label();
+    final Button products;
+    final Button newProd;
+    final Button editProd;
+    final Button viewAccesibleProdBtn = new Button("Aktuella produkter");
+    final Button OKBTN = new Button("OK");
+    final Button searchBtnUpd;
+    final ButtonType noBtn;
+    final ButtonType yesBtn;
+    final ButtonType removeBtn;
+    final ButtonType noRemoveBtn;
+    Label confrimationText= new Label();
+    Label exceptionInfo= new Label();
+    Label updProdInfo = new Label();
+    Label confrmUpdText;
+    Label updMemExceptionInfo;
+    TextField prodNameField;
+    TextField prodDescriptField;
+    TextField updateProdField;
+    TextField dayPriceField;
+    TextField updProdNameField;
+    TextField updProdDescripField;
+    TextField updDayPriceField;
+    ComboBox<String> itemTypeCombo;
+    Alert confrUpdProd;
+    Alert confRemoveProd;
+    final String bouncyC;
+    final String costume;
+    final String disco;
+    Button confBtn;
+    Button removeProdBtn;
+
 
     public ItemView(){
-                    // GalleriVY
+        // GalleriVY
         products = new Button("Galleri");
         Label headerGallery = new Label("Ett urval av produkter");
         headerGallery.setAlignment(Pos.CENTER);
@@ -37,7 +58,7 @@ public class ItemView {
         VBox item1 = new VBox();
         item1.setAlignment(Pos.BASELINE_LEFT);
         item1.setSpacing(10);
-        Image image1 = new Image(getClass().getResourceAsStream("/com/ahlenius/revent2/gurk_costume.png"));
+        Image image1 = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/gurk_costume.png"));
         ImageView imageView1 = new ImageView(image1);
         imageView1.setPreserveRatio(true);
         imageView1.setFitWidth(235);
@@ -49,7 +70,7 @@ public class ItemView {
 
         VBox item2 = new VBox();
         item2.setAlignment(Pos.CENTER);
-        Image image2 = new Image(getClass().getResourceAsStream("/com/ahlenius/revent2/dino_costume.png"));
+        Image image2 = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/dino_costume.png"));
         ImageView imageView2 = new ImageView(image2);
         imageView2.setPreserveRatio(true);
         imageView2.setFitWidth(235);
@@ -61,7 +82,7 @@ public class ItemView {
 
         VBox item4 = new VBox();
         item4.setAlignment(Pos.BASELINE_RIGHT);
-        Image image4 = new Image(getClass().getResourceAsStream("/com/ahlenius/revent2/trampoline.png"));
+        Image image4 = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/trampoline.png"));
         ImageView imageView4 = new ImageView(image4);
         imageView4.setPreserveRatio(true);
         imageView4.setFitWidth(235);
@@ -77,19 +98,20 @@ public class ItemView {
         newProdBox.setAlignment(Pos.CENTER);
         newProd = new Button("Ny produkt");
         Label prodName = new Label("Produktnamn ");
-        TextField prodNameField = new TextField();
+        prodNameField = new TextField();
         prodNameField.setPromptText("Stora stygga vargen");
         prodNameField.setMaxWidth(250);
-        ComboBox<String> itemTypeCombo = new ComboBox<>();
+        itemTypeCombo = new ComboBox<>();
         Label itemTypeL = new Label("Vilken typ av produkt?");
-        String costume = "Dräkt";
-        String bouncyC = "Hoppborg";
-        itemTypeCombo.getItems().addAll(costume,bouncyC);
+        costume = "Dräkt";
+        bouncyC = "Hoppborg";
+        disco = "Disco";
+        itemTypeCombo.getItems().addAll(costume,bouncyC,disco);
         Label prodDescript = new Label("Beskrivning ");
-        TextField prodDescriptField = new TextField();
+        prodDescriptField = new TextField();
         prodDescriptField.setPromptText("tex. Lurvig svart varg med löstagbar svans");
         Label dayPrice = new Label("Dagspris i sek ");
-        TextField dayPriceField= new TextField();
+        dayPriceField = new TextField();
         dayPriceField.setPromptText("tex. 750");
         dayPriceField.setMaxWidth(250);
         GridPane newProdPane =new GridPane();
@@ -114,15 +136,14 @@ public class ItemView {
         Label headerUpd = new Label("Redigera produkt");
         Label validatedProd = new Label();
         Label updateProdLabel = new Label("Sök på fullständigt produktnamn för redigering");
-        TextField updateProdField = new TextField();
+        updateProdField = new TextField();
         updateProdField.setPromptText("tex. Tomten");
         updateProdField.setMaxWidth(250);
         updateProdField.setPromptText("Produktnamn");
-        Button searchBtnUpd = new Button("Sök och redigera");
-
-        Alert confrUpdProd = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType yesBtn = new ButtonType("Ja");
-        ButtonType noBtn = new ButtonType("Avbryt");
+        searchBtnUpd = new Button("Sök och redigera");
+        confrUpdProd = new Alert(Alert.AlertType.CONFIRMATION);
+        yesBtn = new ButtonType("Ja");
+        noBtn = new ButtonType("Avbryt");
         confrUpdProd.getButtonTypes().setAll(yesBtn,noBtn);
         confrUpdProd.setTitle("Redigera produkt - Validering");
         confrUpdProd.setHeaderText("Vill du redigera en produkt?");
@@ -137,15 +158,15 @@ public class ItemView {
         Label updName = new Label(" Ändra produktnamn: ");
         Label updDescript = new Label("Uppdatera beskrivning: ");
         Label updDayPrice = new Label("Uppdatera dagshyra: ");
-        TextField updProdNameField = new TextField();
+        updProdNameField = new TextField();
         updProdNameField.maxWidth(225);
-        TextField updProdDescripField = new TextField();
+        updProdDescripField = new TextField();
         updProdDescripField.maxWidth(225);
-        TextField updDayPriceField = new TextField();
-        Button confBtn = new Button(" Bekräfta ändring ");
-        Button removeProdBtn = new Button("Ta bort produkt");
-        Label confrmUpdText = new Label();
-        Label updMemExceptionInfo = new Label();
+        updDayPriceField = new TextField();
+        confBtn = new Button(" Bekräfta ändring ");
+        removeProdBtn = new Button("Ta bort produkt");
+        confrmUpdText = new Label();
+        updMemExceptionInfo = new Label();
         GridPane updProdPane = new GridPane();
         updProdPane.setHgap(5);
         updProdPane.setVgap(5);
@@ -163,10 +184,9 @@ public class ItemView {
         updateProdVbox.setSpacing(15);
         updateProdVbox.setAlignment(Pos.CENTER);
         updateProdVbox.getChildren().addAll(update2ndView,validatedProd,updProdPane);
-
-        Alert confRemoveProd = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType removeBtn = new ButtonType("Radera");
-        ButtonType noRemoveBtn = new ButtonType("Avbryt");
+        confRemoveProd = new Alert(Alert.AlertType.CONFIRMATION);
+        removeBtn = new ButtonType("Radera");
+        noRemoveBtn = new ButtonType("Avbryt");
         confRemoveProd.getButtonTypes().setAll(removeBtn,noRemoveBtn);
         confRemoveProd.setTitle("Radera produkt");
         confRemoveProd.setHeaderText("Vill radera produkten?");
