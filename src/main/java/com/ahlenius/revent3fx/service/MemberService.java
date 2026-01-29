@@ -3,10 +3,9 @@ package com.ahlenius.revent3fx.service;
 import com.ahlenius.revent3fx.Main;
 import com.ahlenius.revent3fx.entity.Member;
 import com.ahlenius.revent3fx.entity.MemberStatus;
-import com.ahlenius.revent3fx.exception.InvalidMemberInfoInputException;
-import com.ahlenius.revent3fx.exception.InvalidNameInputException;
-import com.ahlenius.revent3fx.exception.InvalidPhoneInputException;
+import com.ahlenius.revent3fx.exception.*;
 import com.ahlenius.revent3fx.repository.MemberRepoImpl;
+import org.hibernate.HibernateException;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +21,7 @@ public class MemberService {
     }
 
     //Skapa, spara ny medlem
-    public void newMember(String lname, String fname, String phone, String email, MemberStatus memberStatus) throws IOException {
+    public void newMember(String fname, String lname, String phone, String email, MemberStatus memberStatus) {
         if (!phone.startsWith("07")) // lägga till nått mer??
         { throw new InvalidPhoneInputException("Dubbelkolla ditt mobilnummer. Ex. 070 123 45 67");
         }
@@ -37,7 +36,17 @@ public class MemberService {
         }
     }
 
-    // Söka och ändra medlem.
+    public MemberStatus createMemberStatus(String status) {
+        return switch (status) {
+            case "Privatperson" -> MemberStatus.PRIVATEINDIVIDUAL;
+            case "Förening" -> MemberStatus.SOCIETY;
+            case "Kollega" -> MemberStatus.EMPLOYEE;
+            default -> throw new IllegalStateException("Ogiltig medlemsstatus.");
+        };
+
+    }
+
+    // Uppdatera medlem
 
     public void updateMemberName(Member member, String newfName, String newlName) {
         member.setlname(newfName);
@@ -57,26 +66,30 @@ public class MemberService {
             case "Kollega" -> member.setMemberStatus(MemberStatus.EMPLOYEE);
         }
     }
+    public void deleteMember(Member member){ // behöver få in koll om den har några aktiva uthyrningar. Isf får den ej hyra. Vad händer om detta inte funkar? Då vill jag kasta ett exception??
+        try {memberRepo.deleteMember(member);}catch (HibernateException e){throw new MemberDeleteException("Medlemskap gick ej att avsluta.");
+        }}
 
-    public Member searchAndReturnMemberByEmail(String email) {
-        return memberRepo.findMemberByEmail(email);
+    //Sök
+
+    public Member searchAndReturnMemberByEmail(String email) throws NoMemberFoundException {
+        Member foundMember = memberRepo.findMemberByEmail(email);
+        if(foundMember== null){throw new NoMemberFoundException("Hittade ingen matchande medlem.");}
+        return foundMember;
     }
 
-    public List<Member> searchMemberByEmailReturnList(String fname) {
-        return memberRepo.findMemberByFname(fname);
+    public List<Member> searchMemberByEmailReturnList(String fname) throws NoMemberFoundException {
+        List<Member> ListMembers = memberRepo.findMemberByFname(fname);
+        if(ListMembers== null){throw new NoMemberFoundException("Hittade ingen matchande medlem.");}
+        return ListMembers;
     }
 
     public List<Member> findAllMembers() {
         return memberRepo.findAllMembers();
     }
 
-    public MemberStatus createMemberStatus(String status) {
-        return switch (status) {
-            case "Privatperson" -> MemberStatus.PRIVATEINDIVIDUAL;
-            case "Förening" -> MemberStatus.SOCIETY;
-            case "Kollega" -> MemberStatus.EMPLOYEE;
-            default -> throw new IllegalStateException("Ogiltig medlemsstatus.");
-        };
 
-    }
+
+
+
 }

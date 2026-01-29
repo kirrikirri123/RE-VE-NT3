@@ -18,7 +18,6 @@ public class MainView {
     private Label bottomLabel = new Label();
     private Button quitBtn = new Button();
     private MenuBar menuHeader = new MenuBar();
-    private MenuItem home;
     private MenuItem newMem;
     private MenuItem searchMem;
     private MenuItem updateMem;
@@ -32,7 +31,7 @@ public class MainView {
     private MenuItem endRental;
     private MenuItem rentalHistory;
     private MenuItem memberhistory;
-    private MenuItem revenue;
+
 
 
     public MainView() {
@@ -98,7 +97,7 @@ public class MainView {
         mainPane.setBottom(bottom);
 
         // Action-i menyn
-        home.setOnAction(actionEvent -> {
+        startMenu.setOnAction(actionEvent -> { // flytta denna?
             mainPane.setCenter(centerBox);
         });
           }
@@ -113,9 +112,6 @@ public class MainView {
         }
         public MenuItem getNewMem () {
             return newMem;
-        }
-        public MenuItem getHome () {
-            return home;
         }
         public Label getHeaderLabel () {
             return headerLabel;
@@ -152,9 +148,6 @@ public class MainView {
     }
     public MenuItem getAccesibleProd() {
         return accesibleProd;
-    }
-    public MenuItem getRevenue() {
-        return revenue;
     }
     public MenuItem getViewAccesibleProd() {
         return viewAccesibleProd;
