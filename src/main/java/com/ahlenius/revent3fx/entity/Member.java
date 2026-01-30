@@ -84,7 +84,7 @@ public class Member {
 
     @Override
     public String toString() {
-        return "Medlemsnr: "+ memberId  + "\nNamn: "+ fname +" "+lname+ "\nMail:  "+ email+"\nStatus: "+ memberStatus;
+        return "Medlemsnr: "+ memberId  + "\nNamn: "+ fname +" "+lname;
     }
 
 }

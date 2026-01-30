@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 
 public class RentalView {
@@ -27,17 +28,27 @@ public class RentalView {
 
     private BorderPane rentalPane = new BorderPane();
     VBox prodViewBox;
-    private VBox newRentalBox = new VBox();
-    private VBox endRentalBox = new VBox();
-    private Button viewProd = new Button();
-    private Button newRental = new Button();
-    private Button endRental = new Button();
-    private Button OKBTN = new Button("OK");
-    private Label exceptionInfo = new Label();
-    private Member foundRentingMem;
+    VBox newRentalBox = new VBox();
+    VBox endRentalBox = new VBox();
+    GridPane newRentalPane;
+    Button viewProd = new Button();
+    Button newRental = new Button();
+    Button endRental = new Button();
+    Button OKBTN = new Button("OK");
+    Label exceptionInfo = new Label();
+    Label rentalProd;
+    Label confrimationText;
     private Rental tempRental;
-    private int days;
-    ToggleGroup radioGroup;
+    int days;
+    RadioButton discobtn;
+    RadioButton costumebtn;
+    RadioButton bouncybtn;
+    ComboBox<BouncyCastle> availableBCItem;
+    ComboBox<Costume> availableMCItem;
+    ComboBox<DiscoMachine> availableDMItem;
+    ComboBox<Member> memberComboBox;
+    TextField daysOfRentField;
+    DatePicker datePicker;
 
     public RentalView(){}
 
@@ -100,51 +111,45 @@ public class RentalView {
         Label headerNewRental = new Label("Ny uthyrning");
         newRentalBox.setAlignment(Pos.CENTER);
         newRentalBox.setSpacing(10);
-        Label confrimationText = new Label();
-        GridPane newRentalPane = new GridPane();
+        confrimationText = new Label();
+        newRentalPane = new GridPane();
         Label memName = new Label("Namn på hyrande medlem: ");
         Label categoryLabel= new Label("Välj kategori: ");
-        Label rentalProd = new Label("Välj produkt: ");
+        rentalProd = new Label("Välj produkt: ");
         Label rentFromDate = new Label("Startdatum: ");
         Label daysOfRent = new Label("Hur många dagar önskas hyra?");
-        TextField rentalMemField = new TextField();
-        TextField daysOfRentField = new TextField();
+        daysOfRentField = new TextField();
         daysOfRentField.setPromptText("tex. 5");
         daysOfRentField.setMaxWidth(250);
-        rentalMemField.setMaxWidth(250);
-        rentalMemField.setPromptText("tex. Kickan Kristersson");
         ObservableList<Member> memberObsList = FXCollections.observableArrayList(memberService.findAllMembers());
-        ComboBox<Member> memberComboBox = new ComboBox<>(memberObsList);
+        memberComboBox = new ComboBox<>(memberObsList);
         VBox radioBtnBox = new VBox();
-        radioGroup = new ToggleGroup();
-        RadioButton discobtn = new RadioButton("Disco");
-        RadioButton costumebtn = new RadioButton("Dräkt");
-        RadioButton bouncybtn = new RadioButton("Hoppborg");
+        ToggleGroup radioGroup = new ToggleGroup();
+        discobtn = new RadioButton("Disco");
+        costumebtn = new RadioButton("Dräkt");
+        bouncybtn = new RadioButton("Hoppborg");
         discobtn.setToggleGroup(radioGroup);
         costumebtn.setToggleGroup(radioGroup);
         bouncybtn.setToggleGroup(radioGroup);
         radioBtnBox.setPadding(new Insets(5,5,5,5));
-        radioBtnBox.getChildren().setAll(bouncybtn,costumebtn,discobtn);
-        // sedan uppdateras listan för produkter?
-        ComboBox<BouncyCastle> availableBCItem = new ComboBox<>();
+        radioBtnBox.getChildren().addAll(bouncybtn,costumebtn,discobtn);
+        availableBCItem = new ComboBox<>(obsListBouncy);
+        availableMCItem = new ComboBox<>(obsListCostume);
+        availableDMItem = new ComboBox<>(obsListDisco);
         availableBCItem.setMaxWidth(250);
-        TextField fromDateField = new TextField();
-        fromDateField.setPromptText("Använd format: ÅÅÅÅ-MM-DD");
-        fromDateField.setMaxWidth(250);
+        datePicker = new DatePicker(LocalDate.of(2026,2,9));
         newRentalPane.add(memName, 0, 0);
-        newRentalPane.add(rentalMemField, 1, 0);
+        newRentalPane.add(memberComboBox, 1, 0);
         newRentalPane.add(categoryLabel, 0, 1);
         newRentalPane.add(radioBtnBox, 1, 1);
-        //newRentalPane.add(rentalProd, 0, 1);
-        //newRentalPane.add(availableItem, 1, 1);
-        newRentalPane.add(daysOfRent, 0, 2);
-        newRentalPane.add(daysOfRentField, 1, 2);
         newRentalPane.add(rentFromDate, 0, 3);
-        newRentalPane.add(fromDateField, 1, 3);
-        newRentalPane.add(OKBTN, 2, 4);
-        newRentalPane.add(confrimationText, 0, 5);
-        newRentalPane.add(exceptionInfo, 0, 6);
-        newRentalPane.setVgap(5);
+        newRentalPane.add(datePicker, 1, 3);
+        newRentalPane.add(daysOfRent, 0, 4);
+        newRentalPane.add(daysOfRentField, 1, 4);
+        newRentalPane.add(OKBTN, 2, 5);
+        newRentalPane.add(confrimationText, 0, 6);
+        newRentalPane.add(exceptionInfo, 0, 7);
+        newRentalPane.setVgap(8);
         newRentalPane.setHgap(5);
         newRentalPane.setAlignment(Pos.CENTER);
         newRentalPane.setAlignment(Pos.CENTER);
@@ -167,8 +172,6 @@ public class RentalView {
         confEndRent.getButtonTypes().setAll(endRentBtn, closeConfAlertBtn);
         confEndRent.setTitle("Avsluta Uthyrning");
         confEndRent.setHeaderText("Säker på att du vill avsluta uthyrning?");
-
-
 
         // Steg 2 - Avsluta uthyrning
         // Ta in vald rental - sett ett slut datum ändra returned till true
@@ -210,9 +213,7 @@ public class RentalView {
         });
         newRental.setOnAction(actionEvent -> {
             rentalPane.setCenter(newRentalBox);
-            rentalMemField.clear();
             daysOfRentField.clear();
-            fromDateField.clear();
             exceptionInfo.setText("");
     //        exceptionEndRent.setText("");
         });
@@ -221,74 +222,15 @@ public class RentalView {
       //      exceptionEndRent.setText("");
         });
         // Knappar funktioner
-/*
-        // Ny uthyrning
-        OKBTN.setOnAction(actionEvent -> {
-            try {
-                days = Integer.parseInt(daysOfRentField.getText());
-            } catch (NumberFormatException e) {
-                exceptionInfo.setText("Missat antal dagar. Skriv ett ungefärligt antal dar.");
-            }
-           LocalDate dateStart = rentalService.createDateOfRent(fromDateField.getText());
-            try {
-                foundRentingMem = memberService.searchMemberByNameOrPhoneReturnMember(rentalMemField.getText());
-            } catch (NullPointerException e) {
-                exceptionInfo.setText(e.getMessage() + ".\n Namnet behöver ha den exakta stavningen.");}
-            if(foundRentingMem != null){
-            try {
-                Rental newestRental = rentalService.newRental(foundRentingMem, availableItem.getValue(),days,String.valueOf(dateStart));
-                Item rentedItem = newestRental.getRentalItem();
-                rentalService.getInventory().getItemList().stream().filter(item -> item.equals(rentedItem))
-                        .forEach(item -> item.setAvailable(false));
-                confrimationText.setText("Ny uthyrning skapad.\n" + newestRental);
-                foundRentingMem = null;
-                rentalMemField.clear();
-                daysOfRentField.clear();
-                fromDateField.clear();
-                exceptionInfo.setText("");
-
-            } catch (IOException | InvalidAmountRentingDaysException | InvalidDateChoiceException |
-                     InvalidRentalInfoInputException e) {exceptionInfo.setText(e.getMessage());
-            }
-        }});
-
-        // Avsluta uthyrning
-        confirmRentMem.setOnAction(actionEvent -> {
-            tempRental = rentingMemberComboBox.getValue();
-
-            confEndRent.setContentText("Vill du avsluta uthyrningen av " + tempRental.getRentalItem().getName() + " till " + tempRental.getRentingMember().getName() + " ?");
-            Optional<ButtonType> userEndingRentResult = confEndRent.showAndWait();
-            if (userEndingRentResult.isPresent()) {
-                if (userEndingRentResult.get() == endRentBtn) {
-                    rentalPane.setCenter(finalEndRentBox);}
-                if (userEndingRentResult.get() == closeConfAlertBtn) {
-                    exceptionEndRent.setText("Avbryter återlämning. Produkt fortfarande uthyrd.");
-                }
-            }
-        });
-        confEndRentBtn.setOnAction(actionE -> {
-            tempRental.setReturned(true);
-            tempRental.getRentalItem().setAvailable(true);
-                LocalDate dateStopRent = rentalService.userChooseDate(endDateField.getText()); // Nån exception här så att det stoppar ett felaktigt datum intryck?
-                rentalService.countActualDays(dateStopRent,tempRental);
-                rentalPane.setCenter(finnishedRentingBox);
-                String days = String.valueOf(rentalService.rentalCountDays(tempRental));
-                String price = rentalService.pricePolicyCalc(tempRental);
-               rentalDays.setText(days);
-               rentalCostSum.setText(price);
-            try{
-                                }catch(IOException e){System.out.println("Feluppstod vid sparande till uthyrningsfil.");}
-            tempRental = null;
-        }); */
 
         // Layout RentalPane
         rentalPane.setLeft(leftBox);
         rentalPane.setCenter(prodViewBox);
-    }//Konstruktor slut
+    }
 
-                public VBox getEndRentalBox () {
-                    return endRentalBox;
-                }
+    public VBox getEndRentalBox () {
+        return endRentalBox;
+    }
                 public VBox getNewRentalBox () {
                     return newRentalBox;
                 }

@@ -108,15 +108,7 @@ public Costume updateItemName(Costume costume, String newName){
     public void checkItem(String pNameHolder)
     { }
 
-    public  Optional connectItemAndRentalByRentaType(Rental rental){ // returnerar denna hela objektet?
-        return switch(rental.getRentalType()){
-            case BOUNCYCASTLE -> bouncyCastleRepo.findById(rental.getProductId());
-            case DISCOMACHINE -> discoMachineRepo.findById(rental.getProductId());
-            case MASCOTECOSTUME -> mascoteCostumeRepo.findById(rental.getProductId());
-        };
-     }
-
-     public List<BouncyCastle> returnListBouncyItem(){
+         public List<BouncyCastle> returnListBouncyItem(){
       return  bouncyCastleRepo.findAllItems();
      }
     public List<Costume> returnListCostumeItem(){
