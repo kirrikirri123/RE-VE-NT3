@@ -1,9 +1,12 @@
 package com.ahlenius.revent3fx.repository;
 
 import com.ahlenius.revent3fx.entity.Costume;
+import com.ahlenius.revent3fx.entity.Member;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+
+import java.util.List;
 import java.util.Optional;
 
 public class MascoteCostumeRepoImpl implements MascoteCostumeRepo{
@@ -45,11 +48,17 @@ public class MascoteCostumeRepoImpl implements MascoteCostumeRepo{
                     session.get(Costume.class, id)
             );}
     }
-    public Costume findProductByName(String name) {
+    public Optional<Costume> findProductByName(String name) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("from Costume m where m.productName = :name", Costume.class)
-                    .setParameter("name", name).uniqueResult();
+                    .setParameter("name", name).uniqueResultOptional();
         }
+    }
+    public List<Costume> findAllItems() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Costume", Costume.class).getResultList();
+        }
+
     }
 
 }

@@ -1,13 +1,13 @@
 package com.ahlenius.revent3fx.service;
 
-import com.ahlenius.revent3fx.entity.BouncyCastle;
-import com.ahlenius.revent3fx.entity.Costume;
-import com.ahlenius.revent3fx.entity.DiscoMachine;
-import com.ahlenius.revent3fx.entity.Rental;
+import com.ahlenius.revent3fx.entity.*;
+import com.ahlenius.revent3fx.exception.NoItemFoundException;
 import com.ahlenius.revent3fx.repository.*;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 public class ItemService {
@@ -89,15 +89,43 @@ public Costume updateItemName(Costume costume, String newName){
 
 // sök produkt
 
-// Lägg in här sorteringen vid hämtande av rentaltype och koppla mot rentalid för att bedömma vilken produkt som det avser.
+    public Object sortByRentalType(RentalType rentalType,String name){
+         return switch(rentalType){
+            case RentalType.BOUNCYCASTLE  -> findBCByName(name);
+            case RentalType.MASCOTECOSTUME -> findCByName(name);
+            case RentalType.DISCOMACHINE ->  findDMByName(name);
+        };}
 
-    public Optional connectItemAndRentalByRentaType(Rental rental){ // returnerar denna hela objektet?
+    public BouncyCastle findBCByName(String name){
+     return   bouncyCastleRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen hoppborg med det namnet."));
+    }
+    public Costume findCByName(String name){
+        return mascoteCostumeRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen maskeraddräkt med det namnet."));
+    }
+    public DiscoMachine findDMByName(String name){
+        return discoMachineRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen disco produkt med det namnet."));
+    }
+    public void checkItem(String pNameHolder)
+    { }
+
+    public  Optional connectItemAndRentalByRentaType(Rental rental){ // returnerar denna hela objektet?
         return switch(rental.getRentalType()){
             case BOUNCYCASTLE -> bouncyCastleRepo.findById(rental.getProductId());
             case DISCOMACHINE -> discoMachineRepo.findById(rental.getProductId());
             case MASCOTECOSTUME -> mascoteCostumeRepo.findById(rental.getProductId());
         };
      }
+
+     public List<BouncyCastle> returnListBouncyItem(){
+      return  bouncyCastleRepo.findAllItems();
+     }
+    public List<Costume> returnListCostumeItem(){
+        return  mascoteCostumeRepo.findAllItems();
+    }
+    public List<DiscoMachine> returnListDiscoItem(){
+        return  discoMachineRepo.findAllItems();
+    }
+
 
 
 }

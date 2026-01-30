@@ -1,5 +1,9 @@
 package com.ahlenius.revent3fx.userInterface.items;
 
+import com.ahlenius.revent3fx.entity.BouncyCastle;
+import com.ahlenius.revent3fx.entity.Costume;
+import com.ahlenius.revent3fx.entity.DiscoMachine;
+import com.ahlenius.revent3fx.entity.RentalType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -12,10 +16,11 @@ import javafx.scene.layout.VBox;
 
 public class ItemView {
     // Här läggs allt som har med produkterna att göra. Foto-info, boka osv.
-    private BorderPane productPane = new BorderPane();
-    private FlowPane itemView = new FlowPane();
-    private VBox newProdBox = new VBox();
-    private VBox updateProdPane = new VBox();
+    final BorderPane productPane = new BorderPane();
+    final FlowPane itemView = new FlowPane();
+    final VBox newProdBox = new VBox();
+    final VBox updateProdPane = new VBox();
+    final VBox updateProdVbox;
     final Button products;
     final Button newProd;
     final Button editProd;
@@ -29,6 +34,7 @@ public class ItemView {
     Label confrimationText= new Label();
     Label exceptionInfo= new Label();
     Label updProdInfo = new Label();
+    Label validatedProd;
     Label confrmUpdText;
     Label updMemExceptionInfo;
     TextField prodNameField;
@@ -38,14 +44,18 @@ public class ItemView {
     TextField updProdNameField;
     TextField updProdDescripField;
     TextField updDayPriceField;
-    ComboBox<String> itemTypeCombo;
+    ComboBox<RentalType> itemTypeCombo;
+    ComboBox<RentalType> updateComboBox;
     Alert confrUpdProd;
     Alert confRemoveProd;
-    final String bouncyC;
-    final String costume;
-    final String disco;
     Button confBtn;
     Button removeProdBtn;
+    BouncyCastle bouncyItem;
+    Costume costumeItem;
+    DiscoMachine discoItem;
+    String pNameHolder;
+    String pDescrHolder;
+    String pDayPriceHolder;
 
 
     public ItemView(){
@@ -103,10 +113,7 @@ public class ItemView {
         prodNameField.setMaxWidth(250);
         itemTypeCombo = new ComboBox<>();
         Label itemTypeL = new Label("Vilken typ av produkt?");
-        costume = "Dräkt";
-        bouncyC = "Hoppborg";
-        disco = "Disco";
-        itemTypeCombo.getItems().addAll(costume,bouncyC,disco);
+        itemTypeCombo.getItems().addAll(RentalType.values());
         Label prodDescript = new Label("Beskrivning ");
         prodDescriptField = new TextField();
         prodDescriptField.setPromptText("tex. Lurvig svart varg med löstagbar svans");
@@ -126,7 +133,7 @@ public class ItemView {
         newProdPane.add(OKBTN,3,4);
         newProdPane.add(confrimationText,0,5);
         newProdPane.add(exceptionInfo,0,6);
-        newProdPane.setVgap(5);
+        newProdPane.setVgap(8);
         newProdPane.setHgap(5);
         newProdPane.setAlignment(Pos.CENTER);
         newProdBox.getChildren().addAll(headerNewProd,newProdPane);
@@ -134,13 +141,25 @@ public class ItemView {
         // Redigera ProduktVy
         editProd = new Button("Redigera produkt");
         Label headerUpd = new Label("Redigera produkt");
-        Label validatedProd = new Label();
-        Label updateProdLabel = new Label("Sök på fullständigt produktnamn för redigering");
+        Label updateItemType = new Label("Välj produktkategori");
+        Label updateItemSearch = new Label("Sök på fullständigt produktnamn för redigering");
+        updateComboBox = new ComboBox<>();
+        updateComboBox.getItems().addAll(RentalType.values());
         updateProdField = new TextField();
         updateProdField.setPromptText("tex. Tomten");
         updateProdField.setMaxWidth(250);
         updateProdField.setPromptText("Produktnamn");
         searchBtnUpd = new Button("Sök och redigera");
+        GridPane updItemPane =new GridPane();
+        updItemPane.setHgap(5);
+        updItemPane.setVgap(8);
+        updItemPane.setAlignment(Pos.CENTER);
+        updItemPane.add(updateItemType,0,0);
+        updItemPane.add(updateComboBox,1,0);
+        updItemPane.add(updateItemSearch,0,1);
+        updItemPane.add(updateProdField,1,1);
+        updItemPane.add(updProdInfo,1,2);
+        updItemPane.add(searchBtnUpd,3,4);
         confrUpdProd = new Alert(Alert.AlertType.CONFIRMATION);
         yesBtn = new ButtonType("Ja");
         noBtn = new ButtonType("Avbryt");
@@ -150,14 +169,15 @@ public class ItemView {
 
         updateProdPane.setSpacing(5);
         updateProdPane.setAlignment(Pos.CENTER);
-        updateProdPane.getChildren().addAll(headerUpd,updateProdLabel,updateProdField,searchBtnUpd,updProdInfo);
+        updateProdPane.getChildren().addAll(headerUpd,updItemPane);
 
         // Steg 2 uppdatera produkt.
-        VBox updateProdVbox= new VBox();
+        updateProdVbox = new VBox();
         Label update2ndView = new Label("Redigering av produktinformation");
         Label updName = new Label(" Ändra produktnamn: ");
         Label updDescript = new Label("Uppdatera beskrivning: ");
         Label updDayPrice = new Label("Uppdatera dagshyra: ");
+        validatedProd = new Label();
         updProdNameField = new TextField();
         updProdNameField.maxWidth(225);
         updProdDescripField = new TextField();
@@ -169,7 +189,7 @@ public class ItemView {
         updMemExceptionInfo = new Label();
         GridPane updProdPane = new GridPane();
         updProdPane.setHgap(5);
-        updProdPane.setVgap(5);
+        updProdPane.setVgap(8);
         updProdPane.setAlignment(Pos.CENTER);
         updProdPane.add(updName,0,0);
         updProdPane.add(updProdNameField,1,0);
