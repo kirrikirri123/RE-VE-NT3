@@ -1,9 +1,6 @@
 package com.ahlenius.revent3fx.userInterface.items;
 
-import com.ahlenius.revent3fx.entity.BouncyCastle;
-import com.ahlenius.revent3fx.entity.Costume;
-import com.ahlenius.revent3fx.entity.DiscoMachine;
-import com.ahlenius.revent3fx.entity.RentalType;
+import com.ahlenius.revent3fx.entity.*;
 import com.ahlenius.revent3fx.exception.NoItemFoundException;
 import com.ahlenius.revent3fx.service.ItemService;
 import javafx.scene.control.ButtonType;
@@ -14,6 +11,7 @@ import java.util.Optional;
 public class ItemController {
     private ItemService itemService;
     private ItemView view;
+
 
 
     public ItemController(ItemService itemService, ItemView itemview) {

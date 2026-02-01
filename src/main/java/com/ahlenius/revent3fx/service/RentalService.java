@@ -1,10 +1,12 @@
 package com.ahlenius.revent3fx.service;
 
 import com.ahlenius.revent3fx.entity.Member;
+import com.ahlenius.revent3fx.entity.Rental;
 import com.ahlenius.revent3fx.entity.RentalType;
 import com.ahlenius.revent3fx.repository.RentalRepoImpl;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class RentalService {
 private RentalRepoImpl rentalRepo;
@@ -16,11 +18,16 @@ public RentalService(){}
             }
 //skapa uthyrningsdatum
 
-    // skapa ny rental
-    public void newRental(Member member, long productId,RentalType rentalType, int rentDays, LocalDate startOfRent, boolean returned){
+ // skapa ny rental
+    public void newRental(Member member, long productId,RentalType rentalType, int rentDays, LocalDate startOfRent, boolean returned) {
+    }
+// byta antal uthyrda dagar
 
-    // byta antal uthyrda dagar
 // hämta rental
 
-}}
+        public List<Rental> getRentalList(){
+            return rentalRepo.findRentalList();
+        }
+
+}
 

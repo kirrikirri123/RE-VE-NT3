@@ -13,7 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,7 +25,7 @@ public class RentalView {
     private RentalService rentalService;
     private MemberService memberService;
     private ItemService itemService;
-
+    private final TypeList typeList = new TypeList();
     private BorderPane rentalPane = new BorderPane();
     VBox prodViewBox;
     VBox newRentalBox = new VBox();
@@ -34,6 +34,8 @@ public class RentalView {
     Button viewProd = new Button();
     Button newRental = new Button();
     Button endRental = new Button();
+    Button updItemList = new Button();
+    Button cateChoiceBtn;
     Button OKBTN = new Button("OK");
     Label exceptionInfo = new Label();
     Label rentalProd;
@@ -43,10 +45,12 @@ public class RentalView {
     RadioButton discobtn;
     RadioButton costumebtn;
     RadioButton bouncybtn;
+    ComboBox<RentalType>rentalTypeComboBox;
     ComboBox<BouncyCastle> availableBCItem;
     ComboBox<Costume> availableMCItem;
     ComboBox<DiscoMachine> availableDMItem;
     ComboBox<Member> memberComboBox;
+
     TextField daysOfRentField;
     DatePicker datePicker;
 
@@ -108,13 +112,15 @@ public class RentalView {
         prodViewBox.setPadding(new Insets(25, 10, 10, 10));
 
         // Ny uthyrning
+        typeList.listOfRentalType();
         Label headerNewRental = new Label("Ny uthyrning");
         newRentalBox.setAlignment(Pos.CENTER);
         newRentalBox.setSpacing(10);
         confrimationText = new Label();
         newRentalPane = new GridPane();
         Label memName = new Label("Namn på hyrande medlem: ");
-        Label categoryLabel= new Label("Välj kategori: ");
+        Label categoryLabel= new Label("Kategori: ");
+        cateChoiceBtn = new Button("Lås vald kategori");
         rentalProd = new Label("Välj produkt: ");
         Label rentFromDate = new Label("Startdatum: ");
         Label daysOfRent = new Label("Hur många dagar önskas hyra?");
@@ -123,16 +129,9 @@ public class RentalView {
         daysOfRentField.setMaxWidth(250);
         ObservableList<Member> memberObsList = FXCollections.observableArrayList(memberService.findAllMembers());
         memberComboBox = new ComboBox<>(memberObsList);
-        VBox radioBtnBox = new VBox();
-        ToggleGroup radioGroup = new ToggleGroup();
-        discobtn = new RadioButton("Disco");
-        costumebtn = new RadioButton("Dräkt");
-        bouncybtn = new RadioButton("Hoppborg");
-        discobtn.setToggleGroup(radioGroup);
-        costumebtn.setToggleGroup(radioGroup);
-        bouncybtn.setToggleGroup(radioGroup);
-        radioBtnBox.setPadding(new Insets(5,5,5,5));
-        radioBtnBox.getChildren().addAll(bouncybtn,costumebtn,discobtn);
+        ObservableList<RentalType> rentalTypeObsList = FXCollections.observableArrayList(typeList.getRentalInString());
+        rentalTypeComboBox = new ComboBox<>(rentalTypeObsList);
+
         availableBCItem = new ComboBox<>(obsListBouncy);
         availableMCItem = new ComboBox<>(obsListCostume);
         availableDMItem = new ComboBox<>(obsListDisco);
@@ -141,7 +140,8 @@ public class RentalView {
         newRentalPane.add(memName, 0, 0);
         newRentalPane.add(memberComboBox, 1, 0);
         newRentalPane.add(categoryLabel, 0, 1);
-        newRentalPane.add(radioBtnBox, 1, 1);
+        newRentalPane.add(rentalTypeComboBox, 1, 1);
+        newRentalPane.add(cateChoiceBtn,2,1);
         newRentalPane.add(rentFromDate, 0, 3);
         newRentalPane.add(datePicker, 1, 3);
         newRentalPane.add(daysOfRent, 0, 4);
@@ -154,14 +154,15 @@ public class RentalView {
         newRentalPane.setAlignment(Pos.CENTER);
         newRentalPane.setAlignment(Pos.CENTER);
         newRentalBox.getChildren().addAll(headerNewRental, newRentalPane);
-/*
+
         // Avsluta uthyrning
         Label headerCloseRental = new Label("Avsluta uthyrning");
         endRentalBox.setAlignment(Pos.TOP_CENTER);
         endRentalBox.setSpacing(10);
         endRentalBox.setPadding(new Insets(35, 15, 15, 15));
         Label rentalChoice = new Label("Välj bland aktuella uthyrningar: ");
-        ComboBox<Rental> rentingMemberComboBox = new ComboBox<>(rentalService.rentalsObsListNotReturned(rentalService.getRentalRegistry().getRentalObsList()));
+        ObservableList<Rental> rentalsObsList = FXCollections.observableArrayList(rentalService.getRentalList());
+        ComboBox<Rental> rentingMemberComboBox = new ComboBox<>(rentalsObsList);
         memberComboBox.getItems().addAll();
         Button confirmRentMem = new Button("Välj uthyrning");
         endRentalBox.getChildren().addAll(headerCloseRental, rentalChoice, rentingMemberComboBox, confirmRentMem);
@@ -205,10 +206,9 @@ public class RentalView {
         rentingSumPane.add(rentalCostSum,1,1);
 
         finnishedRentingBox.getChildren().addAll(headerRentingInfo,rentingSumPane);
-*/
-        // Knappar Layout
+
+        // Knappar i sidoMeny
         viewProd.setOnAction(actionEvent -> {
-  //          itemListTableView.refresh();
             rentalPane.setCenter(prodViewBox);
         });
         newRental.setOnAction(actionEvent -> {
@@ -219,9 +219,16 @@ public class RentalView {
         });
         endRental.setOnAction(actionEvent -> {
             rentalPane.setCenter(endRentalBox);
-      //      exceptionEndRent.setText("");
+//            exceptionEndRent.setText("");
         });
-        // Knappar funktioner
+        cateChoiceBtn.setOnAction(actionEvent -> {
+            cateChoiceBtn.setDisable(true);
+            switch(rentalTypeComboBox.getValue()){
+                case BOUNCYCASTLE -> newRentalPane.add(availableBCItem, 1, 2);
+                case RentalType.MASCOTECOSTUME -> newRentalPane.add(availableMCItem, 1, 2);
+                case RentalType.DISCOMACHINE -> newRentalPane.add(availableDMItem, 1, 2);}
+
+        });
 
         // Layout RentalPane
         rentalPane.setLeft(leftBox);

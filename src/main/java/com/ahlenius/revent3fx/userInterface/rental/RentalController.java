@@ -2,10 +2,12 @@ package com.ahlenius.revent3fx.userInterface.rental;
 
 import com.ahlenius.revent3fx.entity.Member;
 import com.ahlenius.revent3fx.entity.Rental;
+import com.ahlenius.revent3fx.entity.RentalType;
 import com.ahlenius.revent3fx.exception.InvalidAmountRentingDaysException;
 import com.ahlenius.revent3fx.exception.InvalidDateChoiceException;
 import com.ahlenius.revent3fx.exception.InvalidRentalInfoInputException;
 import com.ahlenius.revent3fx.service.RentalService;
+import javafx.scene.control.Button;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.time.LocalDate;
@@ -24,31 +26,13 @@ private RentalView view;
     }
 
     public void startUi(){
-
-        // Ny uthyrning
-         view.discobtn.setOnAction(actionEvent -> {
-             if(view.discobtn.isSelected()){
-             view.confrimationText.setText("test disco");
-             view.newRentalPane.add(view.rentalProd, 0, 2);
-             view.newRentalPane.add(view.availableDMItem, 1, 2);}
-                 });
-
-         view.bouncybtn.setOnAction(actionEvent -> {
-             if (view.bouncybtn.isSelected()) {
-                 System.out.println("test bouncy");
-                 view.newRentalPane.add(view.rentalProd, 0, 2);
-                 view.newRentalPane.add(view.availableBCItem, 1, 2);
-             }
-         });
-
-         view.costumebtn.setOnAction(actionEvent -> {
-             if (view.costumebtn.isSelected()) {
-                 view.confrimationText.setText("test costume");
-                 view.newRentalPane.add(view.rentalProd, 0, 1);
-                 view.newRentalPane.add(view.availableMCItem, 1, 1);
-             }
-         });
 /*
+        //Knappar i sidomeny
+        view.updItemList.setOnAction( actionEvent ->{
+                            }
+        );
+
+
         view.OKBTN.setOnAction(actionEvent -> {
             try {
                 view.days = Integer.parseInt(view.daysOfRentField.getText());
