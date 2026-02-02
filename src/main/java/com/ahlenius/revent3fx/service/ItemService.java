@@ -6,6 +6,7 @@ import com.ahlenius.revent3fx.repository.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 
 public class ItemService {
@@ -21,101 +22,127 @@ public class ItemService {
         this.discoMachineRepo = discoMachineRepo;
         this.mascoteCostumeRepo = mascoteCostumeRepo;
     }
-// skapa ny produkt
-public void newCostumeItem(String name, String description, double dayPrice, String season){
-    Costume costume = new Costume(name, description, new BigDecimal(dayPrice), season);
-    mascoteCostumeRepo.saveItem(costume);
-    }
-public void newBouncyItem(String name, String description, double dayprice,boolean indoor){
-    BouncyCastle bouncyCastle = new BouncyCastle(name, description,new BigDecimal(dayprice),indoor);
-    bouncyCastleRepo.saveItem(bouncyCastle);
-    }
-public void newDiscoItem(String name, String description, double dayPrice) {
-    DiscoMachine discoMachine = new DiscoMachine(name, description,new BigDecimal(dayPrice));
-    discoMachineRepo.saveItem(discoMachine);
+
+    // skapa ny produkt
+    public void newCostumeItem(String name, String description, double dayPrice, String season) {
+        Costume costume = new Costume(name, description, new BigDecimal(dayPrice), season);
+        mascoteCostumeRepo.saveItem(costume);
     }
 
- // delete
-    public void deleteItem(Costume costume){
-    mascoteCostumeRepo.removeItem(costume);
+    public void newBouncyItem(String name, String description, double dayprice, boolean indoor) {
+        BouncyCastle bouncyCastle = new BouncyCastle(name, description, new BigDecimal(dayprice), indoor);
+        bouncyCastleRepo.saveItem(bouncyCastle);
     }
-    public void deleteItem(BouncyCastle bouncyCastle){
-    bouncyCastleRepo.removeItem(bouncyCastle);
+
+    public void newDiscoItem(String name, String description, double dayPrice) {
+        DiscoMachine discoMachine = new DiscoMachine(name, description, new BigDecimal(dayPrice));
+        discoMachineRepo.saveItem(discoMachine);
     }
-    public void deleteItem(DiscoMachine discoMachine){
-    discoMachineRepo.removeItem(discoMachine);
+
+    // delete
+    public void deleteItem(Costume costume) {
+        mascoteCostumeRepo.removeItem(costume);
     }
-//Uppdateringar
+
+    public void deleteItem(BouncyCastle bouncyCastle) {
+        bouncyCastleRepo.removeItem(bouncyCastle);
+    }
+
+    public void deleteItem(DiscoMachine discoMachine) {
+        discoMachineRepo.removeItem(discoMachine);
+    }
+
+    //Uppdateringar
 //Pris
-    public Costume updateItemPrice(Costume costume, double newPrice){
+    public Costume updateItemPrice(Costume costume, double newPrice) {
         costume.setDayPrice(new BigDecimal(newPrice));
         return mascoteCostumeRepo.updateItem(costume);
     }
-    public BouncyCastle updateItemPrice (BouncyCastle bouncyCastle,double newPrice){
+
+    public BouncyCastle updateItemPrice(BouncyCastle bouncyCastle, double newPrice) {
         bouncyCastle.setDayPrice(new BigDecimal(newPrice));
         return bouncyCastleRepo.updateItem(bouncyCastle);
-            }
-    public DiscoMachine updateItemPrice (DiscoMachine discoMachine,double newPrice){
+    }
+
+    public DiscoMachine updateItemPrice(DiscoMachine discoMachine, double newPrice) {
         discoMachine.setDayPrice(new BigDecimal(newPrice));
         return discoMachineRepo.updateItem(discoMachine);
     }
-//Prodnamn
-public Costume updateItemName(Costume costume, String newName){
+
+    //Prodnamn
+    public Costume updateItemName(Costume costume, String newName) {
         costume.setProductName(newName);
-    return mascoteCostumeRepo.updateItem(costume);
-}
-    public BouncyCastle updateItemName(BouncyCastle bouncyCastle, String newName){
+        return mascoteCostumeRepo.updateItem(costume);
+    }
+
+    public BouncyCastle updateItemName(BouncyCastle bouncyCastle, String newName) {
         bouncyCastle.setProductName(newName);
         return bouncyCastleRepo.updateItem(bouncyCastle);
     }
-    public DiscoMachine updateItemName (DiscoMachine discoMachine, String newName){
+
+    public DiscoMachine updateItemName(DiscoMachine discoMachine, String newName) {
         discoMachine.setProductName(newName);
         return discoMachineRepo.updateItem(discoMachine);
     }
-// Beskrivning
-    public Costume updateItemDesc(Costume costume,String descript){
+
+    // Beskrivning
+    public Costume updateItemDesc(Costume costume, String descript) {
         costume.setDescription(descript);
-    return mascoteCostumeRepo.updateItem(costume);}
+        return mascoteCostumeRepo.updateItem(costume);
+    }
 
-    public BouncyCastle updateItemDesc(BouncyCastle bouncyCastle,String descript){
+    public BouncyCastle updateItemDesc(BouncyCastle bouncyCastle, String descript) {
         bouncyCastle.setDescription(descript);
-       return bouncyCastleRepo.updateItem(bouncyCastle);}
+        return bouncyCastleRepo.updateItem(bouncyCastle);
+    }
 
-    public DiscoMachine updateItemDesc(DiscoMachine discoMachine,String descript){
+    public DiscoMachine updateItemDesc(DiscoMachine discoMachine, String descript) {
         discoMachine.setDescription(descript);
-        return discoMachineRepo.updateItem(discoMachine);}
+        return discoMachineRepo.updateItem(discoMachine);
+    }
 
 // sök produkt
 
-    public Object sortByRentalType(RentalType rentalType,String name){
-         return switch(rentalType){
-            case RentalType.BOUNCYCASTLE  -> findBCByName(name);
+    public Object sortByRentalType(RentalType rentalType, String name) {
+        return switch (rentalType) {
+            case RentalType.BOUNCYCASTLE -> findBCByName(name);
             case RentalType.MASCOTECOSTUME -> findCByName(name);
-            case RentalType.DISCOMACHINE ->  findDMByName(name);
-        };}
-
-    public BouncyCastle findBCByName(String name){
-     return   bouncyCastleRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen hoppborg med det namnet."));
+            case RentalType.DISCOMACHINE -> findDMByName(name);
+        };
     }
-    public Costume findCByName(String name){
+
+    public BouncyCastle findBCByName(String name) {
+        return bouncyCastleRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen hoppborg med det namnet."));
+    }
+
+    public Costume findCByName(String name) {
         return mascoteCostumeRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen maskeraddräkt med det namnet."));
     }
-    public DiscoMachine findDMByName(String name){
+
+    public DiscoMachine findDMByName(String name) {
         return discoMachineRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen disco produkt med det namnet."));
     }
-    public void checkItem(String pNameHolder)
-    { }
 
-         public List<BouncyCastle> returnListBouncyItem(){
-      return  bouncyCastleRepo.findAllItems();
-     }
-    public List<Costume> returnListCostumeItem(){
-        return  mascoteCostumeRepo.findAllItems();
-    }
-    public List<DiscoMachine> returnListDiscoItem(){
-        return  discoMachineRepo.findAllItems();
+    public void checkItem(String pNameHolder) {
     }
 
+    public List<BouncyCastle> returnListBouncyItem() {
+        return bouncyCastleRepo.findAllItems();
+    }
 
+    public List<Costume> returnListCostumeItem() {
+        return mascoteCostumeRepo.findAllItems();
+    }
 
+    public List<DiscoMachine> returnListDiscoItem() {
+        return discoMachineRepo.findAllItems();
+    }
+
+    public Optional connectItemAndRentalByRentaType(Rental rental) {
+        return switch (rental.getRentalType()) {
+            case BOUNCYCASTLE -> bouncyCastleRepo.findById(rental.getProductId());
+            case DISCOMACHINE -> discoMachineRepo.findById(rental.getProductId());
+            case MASCOTECOSTUME -> mascoteCostumeRepo.findById(rental.getProductId());
+        };
+    }
 }

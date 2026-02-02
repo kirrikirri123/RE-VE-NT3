@@ -25,9 +25,15 @@ public class RentalService {
         return rental;
     }
 
+    public void updateReturnedStatus(Rental rental){
+        rental.setReturned(true);
+        rentalRepo.updateRental(rental);
+    }
+
     // Hyresdagar - sätta, byta, räkna
     public void changeRentDays(Rental rental, int x) {
         rental.setRentDays(x);
+        rentalRepo.updateRental(rental);
     }
 
     // Prissättning
@@ -75,5 +81,13 @@ public class RentalService {
     public List<Rental> getRentalList() {
         return rentalRepo.findRentalList();
     }
+
+     public List<Rental> getNotReturnedRentalList(){
+        return rentalRepo.findAvailibaleRentalList(true);
+     }
+
+
 }
+
+
 

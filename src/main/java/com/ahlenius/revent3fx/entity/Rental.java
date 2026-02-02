@@ -11,7 +11,7 @@ public class Rental {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "rental_id")
     private long rentalId;
-    @ManyToOne(optional = false,fetch = FetchType.LAZY)
+    @ManyToOne(optional = false,fetch = FetchType.EAGER) // Hur skriva HQL queryn så denna kan vara lazy??
     @JoinColumn(name = "member_id")
     private Member member;
     @Column(name = "product_id", nullable = false)
@@ -76,6 +76,11 @@ public class Rental {
 
     @Override
     public String toString() {
-        return member+" har hyrt en "+ rentalType + ". from." + startOfRent;
+        return "  Uthyrningsid: " + rentalId +
+                ","+ member +
+                ", Produktnr: " + productId +
+                ", Kategori: " + rentalType +
+                ". Hyrd from." + startOfRent
+                ;
     }
 }

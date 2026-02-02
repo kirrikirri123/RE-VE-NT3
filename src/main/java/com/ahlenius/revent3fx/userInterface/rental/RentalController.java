@@ -35,11 +35,16 @@ private RentalView view;
                 view.exceptionInfo.setText("Missat antal dagar. Skriv ett ungefärligt antal dar.");} //
                 try{
                     switch(view.rentalTypeComboBox.getValue()) {
-                     case BOUNCYCASTLE  ->  view.rental = rentalService.newRental(view.memberComboBox.getValue(), 2L,BOUNCYCASTLE, view.days, dateStart, false);
+                     case BOUNCYCASTLE  ->  view.rental = rentalService.newRental(view.memberComboBox.getValue(),view.availableBCItem.getValue().getProductId(),BOUNCYCASTLE, view.days, dateStart, false);
+                     //itemService.connectItemAndRentalByRentaType(view.rental).isPresent();
                      case MASCOTECOSTUME ->  view.rental = rentalService.newRental(view.memberComboBox.getValue(), view.availableMCItem.getValue().getProductId(),MASCOTECOSTUME, view.days, dateStart, false);
                      case DISCOMACHINE-> view.rental = rentalService.newRental(view.memberComboBox.getValue(), view.availableDMItem.getValue().getProductId(),DISCOMACHINE, view.days, dateStart, false);
                  }
-                 view.confrimationText.setText("Ny uthyrning skapad.\n" + view.rental.getProductId()+ " - "+ " "+ view.rental.getMember().getEmail());
+
+                   // itemService.connectItemAndRentalByRentaType(view.rental).isPresent();
+
+
+                 view.confrimationText.setText("Ny uthyrning skapad.\n" + view.rental);
                     view.daysOfRentField.clear();
                     view.exceptionInfo.setText("");
                     view.rental = null;
@@ -51,7 +56,7 @@ private RentalView view;
         view.confirmRentMem.setOnAction(actionEvent -> {
             view.tempRental = view.rentingMemberComboBox.getValue();
 
-            view.confEndRent.setContentText("Vill du avsluta uthyrningen av "+ view.tempRental.getProductId()+ " till " + view.tempRental.getMember().getfname() +" " +view.tempRental.getMember().getlname()  + " ?");
+            view.confEndRent.setContentText("Vill du avsluta uthyrningen av " + view.tempRental.getMember().getfname() +" " +view.tempRental.getMember().getlname()  + "?");
             Optional<ButtonType> userEndingRentResult = view.confEndRent.showAndWait();
             if (userEndingRentResult.isPresent()) {
                 if (userEndingRentResult.get() == view.endRentBtn) {
@@ -63,7 +68,7 @@ private RentalView view;
             }
         });
         view.confEndRentBtn.setOnAction(actionE -> {
-            view.tempRental.setReturned(true);
+            rentalService.updateReturnedStatus(view.tempRental);
             rentalService.countActualDays(view.endDatePicker.getValue(),view.tempRental);
             view.rentalPane.setCenter(view.finnishedRentingBox);
             String days = String.valueOf(rentalService.rentalCountDays(view.tempRental));

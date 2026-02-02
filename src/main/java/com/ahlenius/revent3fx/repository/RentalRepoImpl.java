@@ -35,14 +35,15 @@ public class RentalRepoImpl implements RentalRepo{
     @Override
     public List<Rental> findRentalList() {
         try(Session session = sessionFactory.openSession()){
-        return session.createQuery("from Rental", Rental.class).getResultList();
+        return session.createQuery(" FROM Rental"
+                 , Rental.class).getResultList();
         }
     }
 
-    public List<Rental> findAvailibaleRentalList(String returned) {
+    public List<Rental> findAvailibaleRentalList(boolean returned) {
         try(Session session = sessionFactory.openSession()){
             return session.createQuery("from Rental r where r.returned = : returned", Rental.class)
-                    .setParameter("returned",returned) // funkar detta på boolean?
+                    .setParameter("returned",returned)
                     .getResultList();
         }
     }

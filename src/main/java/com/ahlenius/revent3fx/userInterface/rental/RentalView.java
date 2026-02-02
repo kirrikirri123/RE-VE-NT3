@@ -173,7 +173,7 @@ public class RentalView {
         endRentalBox.setSpacing(10);
         endRentalBox.setPadding(new Insets(35, 15, 15, 15));
         Label rentalChoice = new Label("Välj bland aktuella uthyrningar: ");
-        ObservableList<Rental> rentalsObsList = FXCollections.observableArrayList(rentalService.getRentalList());
+        ObservableList<Rental> rentalsObsList = FXCollections.observableArrayList(rentalService.getNotReturnedRentalList());
         rentingMemberComboBox = new ComboBox<>(rentalsObsList);
         memberComboBox.getItems().addAll();
         confirmRentMem = new Button("Välj uthyrning");
