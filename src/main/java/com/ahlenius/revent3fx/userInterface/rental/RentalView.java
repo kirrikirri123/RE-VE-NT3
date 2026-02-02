@@ -4,6 +4,7 @@ import com.ahlenius.revent3fx.entity.*;
 import com.ahlenius.revent3fx.service.ItemService;
 import com.ahlenius.revent3fx.service.MemberService;
 import com.ahlenius.revent3fx.service.RentalService;
+import com.ahlenius.revent3fx.util.TypeList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -15,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -26,10 +26,12 @@ public class RentalView {
     private MemberService memberService;
     private ItemService itemService;
     private final TypeList typeList = new TypeList();
-    private BorderPane rentalPane = new BorderPane();
+    final BorderPane rentalPane = new BorderPane();
     VBox prodViewBox;
     VBox newRentalBox = new VBox();
     VBox endRentalBox = new VBox();
+    VBox finalEndRentBox;
+    VBox finnishedRentingBox;
     GridPane newRentalPane;
     Button viewProd = new Button();
     Button newRental = new Button();
@@ -37,21 +39,32 @@ public class RentalView {
     Button updItemList = new Button();
     Button cateChoiceBtn;
     Button OKBTN = new Button("OK");
+    Button confirmRentMem;
+    Button confEndRentBtn;
+    ButtonType endRentBtn;
+    ButtonType closeConfAlertBtn;
     Label exceptionInfo = new Label();
     Label rentalProd;
     Label confrimationText;
-    private Rental tempRental;
+    Label exceptionEndRent;
+    Label rentalCostSum;
+    Label rentalDays;
+    Rental tempRental;
     int days;
     RadioButton discobtn;
     RadioButton costumebtn;
     RadioButton bouncybtn;
+    Alert confEndRent;
     ComboBox<RentalType>rentalTypeComboBox;
     ComboBox<BouncyCastle> availableBCItem;
     ComboBox<Costume> availableMCItem;
     ComboBox<DiscoMachine> availableDMItem;
     ComboBox<Member> memberComboBox;
+    ComboBox<Rental> rentingMemberComboBox;
     TextField daysOfRentField;
     DatePicker datePicker;
+    DatePicker endDatePicker;
+    Rental rental;
 
     public RentalView(){}
 
@@ -131,7 +144,6 @@ public class RentalView {
         memberComboBox = new ComboBox<>(memberObsList);
         ObservableList<RentalType> rentalTypeObsList = FXCollections.observableArrayList(typeList.getRentalInString());
         rentalTypeComboBox = new ComboBox<>(rentalTypeObsList);
-
         availableBCItem = new ComboBox<>(obsListBouncy);
         availableMCItem = new ComboBox<>(obsListCostume);
         availableDMItem = new ComboBox<>(obsListDisco);
@@ -162,33 +174,32 @@ public class RentalView {
         endRentalBox.setPadding(new Insets(35, 15, 15, 15));
         Label rentalChoice = new Label("Välj bland aktuella uthyrningar: ");
         ObservableList<Rental> rentalsObsList = FXCollections.observableArrayList(rentalService.getRentalList());
-        ComboBox<Rental> rentingMemberComboBox = new ComboBox<>(rentalsObsList);
+        rentingMemberComboBox = new ComboBox<>(rentalsObsList);
         memberComboBox.getItems().addAll();
-        Button confirmRentMem = new Button("Välj uthyrning");
+        confirmRentMem = new Button("Välj uthyrning");
         endRentalBox.getChildren().addAll(headerCloseRental, rentalChoice, rentingMemberComboBox, confirmRentMem);
 
-        Alert confEndRent = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType endRentBtn = new ButtonType("Ja, avsluta");
-        ButtonType closeConfAlertBtn = new ButtonType("Avbryt");
+        confEndRent = new Alert(Alert.AlertType.CONFIRMATION);
+        endRentBtn = new ButtonType("Ja, avsluta");
+        closeConfAlertBtn = new ButtonType("Avbryt");
         confEndRent.getButtonTypes().setAll(endRentBtn, closeConfAlertBtn);
         confEndRent.setTitle("Avsluta Uthyrning");
         confEndRent.setHeaderText("Säker på att du vill avsluta uthyrning?");
 
         // Steg 2 - Avsluta uthyrning
         // Ta in vald rental - sett ett slut datum ändra returned till true
-        VBox finalEndRentBox = new VBox();
+        finalEndRentBox = new VBox();
         finalEndRentBox.setAlignment(Pos.CENTER);
         finalEndRentBox.setSpacing(5);
         Label validateEndRent = new Label();
         Label endDateOfRent = new Label("Återlämningsdatum: ");
-        TextField endDateField = new TextField("2025-12-31");
-        endDateField.setMaxWidth(250);
-        Button confEndRentBtn = new Button("Bekräfta avslut");
-        Label exceptionEndRent = new Label();
-        finalEndRentBox.getChildren().addAll(headerCloseRental, validateEndRent, endDateOfRent, endDateField, confEndRentBtn, exceptionEndRent);
+        endDatePicker = new DatePicker(LocalDate.of(2026,3,1));
+        confEndRentBtn = new Button("Bekräfta avslut");
+        exceptionEndRent = new Label();
+        finalEndRentBox.getChildren().addAll(headerCloseRental, validateEndRent, endDateOfRent, endDatePicker, confEndRentBtn, exceptionEndRent);
 
          // Steg 3 - Räkna ihop uthyrning. Dagar och kostnad.
-        VBox finnishedRentingBox = new VBox();
+        finnishedRentingBox = new VBox();
         finnishedRentingBox.setSpacing(10);
         finnishedRentingBox.setAlignment(Pos.CENTER);
         Label headerRentingInfo = new Label("Uthyrning avslutad.");
@@ -198,8 +209,8 @@ public class RentalView {
         rentingSumPane.setAlignment(Pos.CENTER);
         Label rentingDays = new Label("Dagar uthyrd: ");
         Label rentingCost = new Label("Totalkostnad: ");
-        Label rentalDays = new Label("0");
-        Label rentalCostSum = new Label("kr");
+        rentalDays = new Label("0");
+        rentalCostSum = new Label("kr");
         rentingSumPane.add(rentingDays, 0,0);
         rentingSumPane.add(rentingCost,0,1);
         rentingSumPane.add(rentalDays,1,0);
@@ -215,11 +226,12 @@ public class RentalView {
             rentalPane.setCenter(newRentalBox);
             daysOfRentField.clear();
             exceptionInfo.setText("");
-    //        exceptionEndRent.setText("");
+            exceptionEndRent.setText("");
         });
         endRental.setOnAction(actionEvent -> {
             rentalPane.setCenter(endRentalBox);
-//            exceptionEndRent.setText("");
+            rentalsObsList.setAll(rentalService.getRentalList());
+            exceptionEndRent.setText("");
         });
         updItemList.setOnAction( actionEvent ->{
             obsListDisco.setAll(itemService.returnListDiscoItem());
@@ -232,8 +244,8 @@ public class RentalView {
             cateChoiceBtn.setDisable(true);
             switch(rentalTypeComboBox.getValue()){
                 case BOUNCYCASTLE -> newRentalPane.add(availableBCItem, 1, 2);
-                case RentalType.MASCOTECOSTUME -> newRentalPane.add(availableMCItem, 1, 2);
-                case RentalType.DISCOMACHINE -> newRentalPane.add(availableDMItem, 1, 2);}
+                case MASCOTECOSTUME -> newRentalPane.add(availableMCItem, 1, 2);
+                case DISCOMACHINE -> newRentalPane.add(availableDMItem, 1, 2);}
 
         });
 

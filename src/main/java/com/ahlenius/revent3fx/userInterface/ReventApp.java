@@ -8,6 +8,7 @@ import com.ahlenius.revent3fx.userInterface.items.ItemView;
 import com.ahlenius.revent3fx.userInterface.member.MemberController;
 import com.ahlenius.revent3fx.userInterface.member.MemberView;
 import com.ahlenius.revent3fx.userInterface.items.ItemController;
+import com.ahlenius.revent3fx.userInterface.rental.RentalController;
 import com.ahlenius.revent3fx.userInterface.rental.RentalView;
 import com.ahlenius.revent3fx.userInterface.start.*;
 import com.ahlenius.revent3fx.util.HibernateUtil;
@@ -37,6 +38,7 @@ public class ReventApp extends Application {
    */
     MemberController memberController = new MemberController(memberService,rentalService, memberView);
     ItemController itemController = new ItemController(itemService,itemView);
+    RentalController rentalController = new RentalController(rentalService,rentalView,itemService);
     Scene start,main;
 
     @Override
@@ -91,11 +93,11 @@ public class ReventApp extends Application {
             rentalView.getRentalPane().setCenter(rentalView.getProdViewBox());
         });
 
-      /*  // - ProduktView funktioner
+        // - ProduktView funktioner
         itemView.getViewAccesibleProdBtn().setOnAction(actionEvent ->{
             mainView.getMainView().setCenter(rentalView.getRentalPane());
             rentalView.getRentalPane().setCenter(rentalView.getProdViewBox());
-        });*/
+        });
         // Uthyrningsknappar i meny
 
         mainView.getAccesibleProd().setOnAction(actionEvent -> {

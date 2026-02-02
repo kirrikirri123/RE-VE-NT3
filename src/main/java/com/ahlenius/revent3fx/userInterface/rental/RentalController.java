@@ -1,88 +1,80 @@
 package com.ahlenius.revent3fx.userInterface.rental;
 
-import com.ahlenius.revent3fx.entity.Member;
-import com.ahlenius.revent3fx.entity.Rental;
-import com.ahlenius.revent3fx.entity.RentalType;
 import com.ahlenius.revent3fx.exception.InvalidAmountRentingDaysException;
 import com.ahlenius.revent3fx.exception.InvalidDateChoiceException;
-import com.ahlenius.revent3fx.exception.InvalidRentalInfoInputException;
+import com.ahlenius.revent3fx.service.ItemService;
 import com.ahlenius.revent3fx.service.RentalService;
-import javafx.scene.control.Button;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
-
+import javafx.scene.control.ButtonType;
 import java.time.LocalDate;
+import java.util.Optional;
+
+import static com.ahlenius.revent3fx.entity.RentalType.*;
+
 
 public class RentalController {
 private RentalService rentalService;
+private ItemService itemService;
 private RentalView view;
 
 
-    public RentalController(RentalService rentalService, RentalView rentalView) {
+    public RentalController(RentalService rentalService, RentalView rentalView,ItemService itemService) {
         this.rentalService = rentalService;
         this.view = rentalView;
+        this.itemService = itemService;
 
     startUi();
 
     }
 
     public void startUi(){
-/*
         view.OKBTN.setOnAction(actionEvent -> {
+            LocalDate dateStart = view.datePicker.valueProperty().getValue();
             try {
                 view.days = Integer.parseInt(view.daysOfRentField.getText());
             } catch (NumberFormatException e) {
-                view.exceptionInfo.setText("Missat antal dagar. Skriv ett ungefärligt antal dar.");
-            }
-            LocalDate dateStart = view.datePicker.valueProperty().getValue();
-/*
-            Member member, long productId,RentalType rentalType, int rentDays, LocalDate startOfRent, boolean returned
-             try {
-                 Rental newestRental = rentalService.newRental(view.memberComboBox.getValue(),produktID, RentalType,view.days,String.valueOf(dateStart),false);
-                 view.confrimationText.setText("Ny uthyrning skapad.\n" + newestRental);
+                view.exceptionInfo.setText("Missat antal dagar. Skriv ett ungefärligt antal dar.");} //
+                try{
+                    switch(view.rentalTypeComboBox.getValue()) {
+                     case BOUNCYCASTLE  ->  view.rental = rentalService.newRental(view.memberComboBox.getValue(), 2L,BOUNCYCASTLE, view.days, dateStart, false);
+                     case MASCOTECOSTUME ->  view.rental = rentalService.newRental(view.memberComboBox.getValue(), view.availableMCItem.getValue().getProductId(),MASCOTECOSTUME, view.days, dateStart, false);
+                     case DISCOMACHINE-> view.rental = rentalService.newRental(view.memberComboBox.getValue(), view.availableDMItem.getValue().getProductId(),DISCOMACHINE, view.days, dateStart, false);
+                 }
+                 view.confrimationText.setText("Ny uthyrning skapad.\n" + view.rental.getProductId()+ " - "+ " "+ view.rental.getMember().getEmail());
                     view.daysOfRentField.clear();
                     view.exceptionInfo.setText("");
+                    view.rental = null;
 
-                } catch (InvalidAmountRentingDaysException | InvalidDateChoiceException |
-                         InvalidRentalInfoInputException e) {view.exceptionInfo.setText(e.getMessage());
-                }
-            }});
+                } catch (InvalidAmountRentingDaysException | InvalidDateChoiceException e) {view.exceptionInfo.setText(e.getMessage());}
+            });
 
         // Avsluta uthyrning
-        confirmRentMem.setOnAction(actionEvent -> {
-            tempRental = rentingMemberComboBox.getValue();
+        view.confirmRentMem.setOnAction(actionEvent -> {
+            view.tempRental = view.rentingMemberComboBox.getValue();
 
-            confEndRent.setContentText("Vill du avsluta uthyrningen av " + tempRental.getRentalItem().getName() + " till " + tempRental.getRentingMember().getName() + " ?");
-            Optional<ButtonType> userEndingRentResult = confEndRent.showAndWait();
+            view.confEndRent.setContentText("Vill du avsluta uthyrningen av "+ view.tempRental.getProductId()+ " till " + view.tempRental.getMember().getfname() +" " +view.tempRental.getMember().getlname()  + " ?");
+            Optional<ButtonType> userEndingRentResult = view.confEndRent.showAndWait();
             if (userEndingRentResult.isPresent()) {
-                if (userEndingRentResult.get() == endRentBtn) {
-                    rentalPane.setCenter(finalEndRentBox);}
-                if (userEndingRentResult.get() == closeConfAlertBtn) {
-                    exceptionEndRent.setText("Avbryter återlämning. Produkt fortfarande uthyrd.");
+                if (userEndingRentResult.get() == view.endRentBtn) {
+                    view.rentalPane.setCenter(view.finalEndRentBox);}
+                if (userEndingRentResult.get() == view.closeConfAlertBtn) {
+                    view.exceptionEndRent.setText("Avbryter återlämning. Produkt fortfarande uthyrd.");
+                    view.tempRental = null;
                 }
             }
         });
-        confEndRentBtn.setOnAction(actionE -> {
-            tempRental.setReturned(true);
-            tempRental.getRentalItem().setAvailable(true);
-            LocalDate dateStopRent = rentalService.userChooseDate(endDateField.getText()); // Nån exception här så att det stoppar ett felaktigt datum intryck?
-            rentalService.countActualDays(dateStopRent,tempRental);
-            rentalPane.setCenter(finnishedRentingBox);
-            String days = String.valueOf(rentalService.rentalCountDays(tempRental));
-            String price = rentalService.pricePolicyCalc(tempRental);
-            rentalDays.setText(days);
-            rentalCostSum.setText(price);
-            try{
-            }catch(IOException e){System.out.println("Feluppstod vid sparande till uthyrningsfil.");}
-            tempRental = null;
+        view.confEndRentBtn.setOnAction(actionE -> {
+            view.tempRental.setReturned(true);
+            rentalService.countActualDays(view.endDatePicker.getValue(),view.tempRental);
+            view.rentalPane.setCenter(view.finnishedRentingBox);
+            String days = String.valueOf(rentalService.rentalCountDays(view.tempRental));
+            //String price = rentalService.pricePolicyCalc(view.tempRental);
+            view.rentalDays.setText(days);
+           // view.rentalCostSum.setText(price);
+            view.tempRental = null;
         });
 
+    }
 
 
-
-    }*/
-
-
-
-
-    }}
+    }
 

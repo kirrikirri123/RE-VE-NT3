@@ -15,7 +15,7 @@ public class Rental {
     @JoinColumn(name = "member_id")
     private Member member;
     @Column(name = "product_id", nullable = false)
-    private long productId; // vart ska värdet in i detta?
+    private long productId; // vart ska värdet in i detta? Ska vi ha nån relation här?
     @Enumerated(EnumType.STRING)
     @Column(name="rental_type", nullable = false, length = 14)
     private RentalType rentalType;
@@ -31,6 +31,7 @@ public class Rental {
     public Rental(Member member, long productId, RentalType rentalType, int rentDays, LocalDate startOfRent, boolean returned) {
         this.member = member;
         this.rentalType = rentalType;
+        this.productId =productId;
         this.rentDays = rentDays;
         this.startOfRent = startOfRent;
         this.returned = returned;
@@ -47,14 +48,16 @@ public class Rental {
         this.returned = returned;
 
     }
+    // SETTER
+
+    public void setRentDays(int rentDays) {
+        this.rentDays = rentDays;
+    }
 
     //GETTER
 
-    public Long getProductId() {
-        return productId;}
-    public long getRentalId() {
-        return rentalId;
-    }
+    public long getProductId() {return productId;}
+    public long getRentalId() {return rentalId;}
     public Member getMember() {
         return member;
     }
@@ -73,6 +76,6 @@ public class Rental {
 
     @Override
     public String toString() {
-        return member+" har hyrt en "+rentalType + ". From." + startOfRent;
+        return member+" har hyrt en "+ rentalType + ". from." + startOfRent;
     }
 }

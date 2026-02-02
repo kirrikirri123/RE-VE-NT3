@@ -1,4 +1,6 @@
-package com.ahlenius.revent3fx.entity;
+package com.ahlenius.revent3fx.util;
+
+import com.ahlenius.revent3fx.entity.RentalType;
 
 import java.util.ArrayList;
 import java.util.List;

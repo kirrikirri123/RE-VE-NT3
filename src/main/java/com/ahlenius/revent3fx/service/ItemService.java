@@ -3,12 +3,10 @@ package com.ahlenius.revent3fx.service;
 import com.ahlenius.revent3fx.entity.*;
 import com.ahlenius.revent3fx.exception.NoItemFoundException;
 import com.ahlenius.revent3fx.repository.*;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
+
 
 public class ItemService {
     private BouncyCastleRepoImpl bouncyCastleRepo;
