@@ -50,7 +50,6 @@ public class RentalView {
     ComboBox<Costume> availableMCItem;
     ComboBox<DiscoMachine> availableDMItem;
     ComboBox<Member> memberComboBox;
-
     TextField daysOfRentField;
     DatePicker datePicker;
 
@@ -66,9 +65,10 @@ public class RentalView {
         viewProd.setText("Akutella produkter");
         newRental.setText("Ny uthyrning");
         endRental.setText("Avsluta uthyrning");
+        updItemList.setText("Uppdatera produktlistor");
         leftBox.setPadding(new Insets(15, 15, 5, 10));
         leftBox.setSpacing(10);
-        leftBox.getChildren().addAll(viewProd, newRental, endRental);
+        leftBox.getChildren().addAll(viewProd, newRental, endRental,updItemList);
 
         // Aktuella produkter. TabelPane
         prodViewBox = new VBox();
@@ -221,6 +221,13 @@ public class RentalView {
             rentalPane.setCenter(endRentalBox);
 //            exceptionEndRent.setText("");
         });
+        updItemList.setOnAction( actionEvent ->{
+            obsListDisco.setAll(itemService.returnListDiscoItem());
+                    obsListBouncy.setAll(itemService.returnListBouncyItem());
+                        obsListCostume.setAll(itemService.returnListCostumeItem());
+                            }
+
+        );
         cateChoiceBtn.setOnAction(actionEvent -> {
             cateChoiceBtn.setDisable(true);
             switch(rentalTypeComboBox.getValue()){

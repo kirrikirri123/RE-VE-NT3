@@ -27,12 +27,6 @@ private RentalView view;
 
     public void startUi(){
 /*
-        //Knappar i sidomeny
-        view.updItemList.setOnAction( actionEvent ->{
-                            }
-        );
-
-
         view.OKBTN.setOnAction(actionEvent -> {
             try {
                 view.days = Integer.parseInt(view.daysOfRentField.getText());
