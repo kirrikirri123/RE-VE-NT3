@@ -230,7 +230,7 @@ public class RentalView {
         });
         endRental.setOnAction(actionEvent -> {
             rentalPane.setCenter(endRentalBox);
-            rentalsObsList.setAll(rentalService.getRentalList());
+            rentalsObsList.setAll(rentalService.getNotReturnedRentalList());
             exceptionEndRent.setText("");
         });
         updItemList.setOnAction( actionEvent ->{

@@ -81,9 +81,12 @@ public class RentalService {
     public List<Rental> getRentalList() {
         return rentalRepo.findRentalList();
     }
+    public List<Rental> getReturnedRentalList(){
+        return rentalRepo.findAvailibaleRentalList(true);
+    }
 
      public List<Rental> getNotReturnedRentalList(){
-        return rentalRepo.findAvailibaleRentalList(true);
+        return rentalRepo.findAvailibaleRentalList(false);
      }
 
 

@@ -42,7 +42,7 @@ public class RentalRepoImpl implements RentalRepo{
 
     public List<Rental> findAvailibaleRentalList(boolean returned) {
         try(Session session = sessionFactory.openSession()){
-            return session.createQuery("from Rental r where r.returned = : returned", Rental.class)
+            return session.createQuery("from Rental r where r.returned = :returned", Rental.class)
                     .setParameter("returned",returned)
                     .getResultList();
         }
