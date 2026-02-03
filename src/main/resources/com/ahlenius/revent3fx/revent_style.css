@@ -93,7 +93,12 @@
 /* =======================
    ListView / TableView
    ======================= */
-.list-cell, .table-row-cell {
+   .table-view {
+       -fx-min-width: 300;
+       -fx-max-width: 600;
+       -fx-pref-width: 500;
+   }
+ .list-cell, .table-row-cell {
     -fx-background-color: white;
 }
 .list-cell:selected, .table-row-cell:selected {

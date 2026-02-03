@@ -68,12 +68,13 @@ public class RentalView {
 
     public RentalView(){}
 
-    public RentalView (RentalService rentalService, MemberService memberService, ItemService itemService) {
-        this.rentalService = rentalService;
-        this.memberService = memberService;
+    public RentalView(ItemService itemService,MemberService memberService, RentalService rentalservice) {
         this.itemService = itemService;
+        this.memberService = memberService;
+        this.rentalService = rentalservice;
 
-        // Vänstrafältet
+
+    // Vänstrafältet
         VBox leftBox = new VBox();
         viewProd.setText("Akutella produkter");
         newRental.setText("Ny uthyrning");

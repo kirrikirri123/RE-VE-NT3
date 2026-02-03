@@ -1,6 +1,6 @@
 package com.ahlenius.revent3fx;
 
-import com.ahlenius.revent3fx.userInterface.ReventApp;
+import com.ahlenius.revent3fx.userInterface.start.ReventApp;
 import javafx.application.Application;
 
 public class Main {

@@ -11,13 +11,15 @@ import javafx.scene.layout.VBox;
 
 public class MainView {
     // Här hälsas man välkommen och får info. HEMSKÄRM.
-    private BorderPane mainPane = new BorderPane();
+    BorderPane mainPane = new BorderPane();
     private VBox header = new VBox();
     private Label headerLabel = new Label();
     private HBox bottom = new HBox();
     private Label bottomLabel = new Label();
     private Button quitBtn = new Button();
     private MenuBar menuHeader = new MenuBar();
+    Menu startMenu;
+    VBox centerBox = new VBox();
     private MenuItem newMem;
     private MenuItem searchMem;
     private MenuItem updateMem;
@@ -45,7 +47,7 @@ public class MainView {
         topHeader.getChildren().addAll(iconImageView, headerLabel);
 
         //MenuBar
-        Menu startMenu = new Menu("Start");
+        startMenu = new Menu("Start");
         Menu memberMenu = new Menu("Medlemshantering");
         newMem = new MenuItem("Ny medlem");
         searchMem = new MenuItem("Sök medlem");
@@ -78,8 +80,7 @@ public class MainView {
                 "\n R-EV-ENT är den hjälpande handen som hyr till dig om privatperson och förening\n när ni skapar för ett oförglömligt minne, en ökad gemenskap i föreningen \n och glädje för familj med vänner." +
                 "\n Ditt nästa lyckade event börjar här. Just rent !");
         mainUnderLabel.setStyle("-fx-font-size: 12px");
-         VBox centerBox = new VBox();
-        centerBox.setSpacing(5);
+         centerBox.setSpacing(5);
         centerBox.setAlignment(Pos.CENTER);
         centerBox.getChildren().addAll(mainLabel,mainUnderLabel);
 
@@ -96,11 +97,9 @@ public class MainView {
         mainPane.setCenter(centerBox);
         mainPane.setBottom(bottom);
 
-        // Action-i menyn
-        startMenu.setOnAction(actionEvent -> { // flytta denna?
-            mainPane.setCenter(centerBox);
-        });
-          }
+
+
+        }
         public MenuItem getHistoryMem () {
             return historyMem;
         }
