@@ -57,5 +57,5 @@ protected Costume(){}
 
     @Override
     public String toString() {
-        return productName +" Om: "+ description + ". Dagspris: "+ dayPrice +"kr.ex.moms.";  }
+        return productName +". Dagspris: "+ dayPrice +"kr.ex.moms.";  }
 }

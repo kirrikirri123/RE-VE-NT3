@@ -1,4 +1,4 @@
-package com.ahlenius.revent3fx.userInterface;
+package com.ahlenius.revent3fx.userInterface.start;
 
 import com.ahlenius.revent3fx.repository.*;
 import com.ahlenius.revent3fx.service.ItemService;
@@ -8,13 +8,18 @@ import com.ahlenius.revent3fx.userInterface.items.ItemView;
 import com.ahlenius.revent3fx.userInterface.member.MemberController;
 import com.ahlenius.revent3fx.userInterface.member.MemberView;
 import com.ahlenius.revent3fx.userInterface.items.ItemController;
+import com.ahlenius.revent3fx.userInterface.rental.HistoryView;
+import com.ahlenius.revent3fx.userInterface.rental.RentalController;
 import com.ahlenius.revent3fx.userInterface.rental.RentalView;
-import com.ahlenius.revent3fx.userInterface.start.*;
 import com.ahlenius.revent3fx.util.HibernateUtil;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import org.hibernate.SessionFactory;
+
+import java.util.Optional;
 
 public class ReventApp extends Application {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
@@ -23,7 +28,7 @@ public class ReventApp extends Application {
     DiscoMachineRepoImpl discoRepo = new DiscoMachineRepoImpl(sessionFactory);
     MascoteCostumeRepoImpl costumeRepo = new MascoteCostumeRepoImpl(sessionFactory);
     RentalRepoImpl rentalRepo = new RentalRepoImpl(sessionFactory);
-    ItemService itemService = new ItemService(bouncyRepo,discoRepo,costumeRepo);
+    ItemService itemService = new ItemService(bouncyRepo, discoRepo, costumeRepo);
     MemberService memberService = new MemberService(memberRepo);
     RentalService rentalService = new RentalService(rentalRepo);
 
@@ -31,26 +36,34 @@ public class ReventApp extends Application {
     MainView mainView = new MainView();
     MemberView memberView = new MemberView();
     ItemView itemView = new ItemView();
-    RentalView rentalView = new RentalView(rentalService,memberService,itemService);
-    /* HistoryView historyView = new HistoryView(rentalService);
-     EconomyView economyView = new EconomyView(rentalService);
+    RentalView rentalView = new RentalView(itemService,memberService,rentalService);
+    HistoryView historyView = new HistoryView(rentalService);
+    /* EconomyView economyView = new EconomyView(rentalService);
    */
-    MemberController memberController = new MemberController(memberService,rentalService, memberView);
-    ItemController itemController = new ItemController(itemService,itemView);
-    Scene start,main;
+    MemberController memberController = new MemberController(memberService, rentalService, memberView);
+    ItemController itemController = new ItemController(itemService, itemView);
+    RentalController rentalController = new RentalController(rentalService, rentalView, itemService);
+    Scene start, main;
 
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("R-EV-ENT - Re-Invent your event - Just rent!");
         start = new Scene(startView.getStartView(), 500, 450);
-        main = new Scene(mainView.getMainView(), 925, 850);
+        main = new Scene(mainView.getMainView(), 925, 800);
+        start.getStylesheets().add("/com/ahlenius/revent3fx/revent_style.css");
+        main.getStylesheets().add("/com/ahlenius/revent3fx/revent_style.css");
         stage.setScene(start);
         stage.show();
 
-        // knappar
+
         startView.getImageStart().setOnMouseClicked(mouseEvent -> {
             changeScene(stage, main);
         });
+
+        mainView.startMenu.setOnAction(actionEvent -> {
+            mainView.mainPane.setCenter(mainView.centerBox);
+        });
+
 
         // Medlemsknappar i meny.
         mainView.getNewMem().setOnAction(actionEvent -> {
@@ -91,11 +104,11 @@ public class ReventApp extends Application {
             rentalView.getRentalPane().setCenter(rentalView.getProdViewBox());
         });
 
-      /*  // - ProduktView funktioner
-        itemView.getViewAccesibleProdBtn().setOnAction(actionEvent ->{
+        // - ProduktView funktioner
+        itemView.getViewAccesibleProdBtn().setOnAction(actionEvent -> {
             mainView.getMainView().setCenter(rentalView.getRentalPane());
             rentalView.getRentalPane().setCenter(rentalView.getProdViewBox());
-        });*/
+        });
         // Uthyrningsknappar i meny
 
         mainView.getAccesibleProd().setOnAction(actionEvent -> {
@@ -112,8 +125,43 @@ public class ReventApp extends Application {
             mainView.getMainView().setCenter(rentalView.getRentalPane());
             rentalView.getRentalPane().setCenter(rentalView.getEndRentalBox());
         });
+        // Historyknappar i meny
+        mainView.getRentalHistory().setOnAction(actionEvent -> {
+            mainView.getMainView().setCenter(historyView.getHistoryPane());
+            //historyView.getHistoryPane().setCenter(historyView.getHistoryViewBox());
+        });
+
+        mainView.getMemberhistory().setOnAction(actionEvent -> {
+            mainView.getMainView().setCenter(memberView.getMemberPane());
+            memberView.getMemberPane().setCenter(memberView.getMemHistoryPane());
+        });
+        historyView.getMemberHistBtn().setOnAction(actionEvent -> {
+            mainView.getMainView().setCenter(memberView.getMemberPane());
+            memberView.getMemberPane().setCenter(memberView.getMemHistoryPane());
+        });
+
+
+        // Avsluta
+        Alert saveBeforeQuit = new Alert(Alert.AlertType.CONFIRMATION);
+        saveBeforeQuit.setHeaderText("Avsluta");
+        saveBeforeQuit.setTitle("Stäng ner program");
+        saveBeforeQuit.setContentText("Är du säker du vill avsluta programmet?");
+        ButtonType yesBtn = new ButtonType("Ja då");
+        ButtonType noBtn = new ButtonType("Nej, låt bli");
+        saveBeforeQuit.getButtonTypes().setAll(yesBtn,noBtn);
+
+
+        mainView.getQuitBtn().setOnAction(actionEvent -> {
+            Optional<ButtonType> userChoice = saveBeforeQuit.showAndWait();
+            if (userChoice.isPresent()) {
+                if (userChoice.get() == yesBtn) {
+                    stage.close();
+                }
+            }
+        });
     }
-    public void changeScene(Stage stage,Scene scene){
-        stage.setScene(scene);
-    }
+        public void changeScene (Stage stage, Scene scene){
+            stage.setScene(scene);
+        }
+
 }

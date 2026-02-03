@@ -1,7 +1,21 @@
 package com.ahlenius.revent3fx.userInterface.rental;
 
+import com.ahlenius.revent3fx.entity.Rental;
+import com.ahlenius.revent3fx.service.RentalService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+
 public class HistoryView {
-/*
+
     private RentalService rentalService;
     private BorderPane historyPane = new BorderPane();
     private VBox historyViewBox = new VBox();
@@ -27,11 +41,12 @@ public class HistoryView {
         Label headerHistory = new Label("Uthyrningshistorik");
         historyViewBox.setAlignment(Pos.CENTER);
         historyViewBox.setSpacing(10);
-        TableView<Rental> allHistoryView = new TableView<>(rentalService.getRentalRegistry().getRentalObsList());
+        ObservableList<Rental> rentalHistoryObsList = FXCollections.observableList(rentalService.getReturnedRentalList());
+        TableView<Rental> allHistoryView = new TableView<>(rentalHistoryObsList);
         TableColumn<Rental, String> rentalNameCol = new TableColumn<>("Medlem");
-        rentalNameCol.setCellValueFactory(new PropertyValueFactory<>("rentingMember"));
-        TableColumn<Rental, String> rentalItemCol = new TableColumn<>("Hyrd vara");
-        rentalItemCol.setCellValueFactory(new PropertyValueFactory<>("rentalItem"));
+        rentalNameCol.setCellValueFactory(new PropertyValueFactory<>("member"));
+        TableColumn<Rental, String> rentalItemCol = new TableColumn<>("Varukategori");
+        rentalItemCol.setCellValueFactory(new PropertyValueFactory<>("rentalType"));
         TableColumn<Rental, String> startRentCol = new TableColumn<>("Uthyrd from. datum");
         startRentCol.setCellValueFactory(new PropertyValueFactory<>("startOfRent"));
         TableColumn<Rental, String> daysRentedCol = new TableColumn<>("Hyresdagar");
@@ -66,5 +81,5 @@ public class HistoryView {
     }
     public BorderPane getHistoryPane() {
         return historyPane;
-    }*/
+    }
 }

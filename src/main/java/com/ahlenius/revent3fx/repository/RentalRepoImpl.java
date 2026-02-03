@@ -5,6 +5,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.util.List;
+
 public class RentalRepoImpl implements RentalRepo{
     private final SessionFactory sessionFactory;
 
@@ -27,6 +29,22 @@ public class RentalRepoImpl implements RentalRepo{
             var transaction = session.beginTransaction();
             session.remove(rental);
             transaction.commit();
+        }
+    }
+
+    @Override
+    public List<Rental> findRentalList() {
+        try(Session session = sessionFactory.openSession()){
+        return session.createQuery(" FROM Rental"
+                 , Rental.class).getResultList();
+        }
+    }
+
+    public List<Rental> findAvailibaleRentalList(boolean returned) {
+        try(Session session = sessionFactory.openSession()){
+            return session.createQuery("from Rental r where r.returned = :returned", Rental.class)
+                    .setParameter("returned",returned)
+                    .getResultList();
         }
     }
 

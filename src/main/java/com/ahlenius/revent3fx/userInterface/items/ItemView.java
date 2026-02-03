@@ -246,5 +246,7 @@ public class ItemView {
     public BorderPane getProductPane(){
      return productPane;}
 
-
+    public Button getViewAccesibleProdBtn() {
+        return viewAccesibleProdBtn;
+    }
 }
