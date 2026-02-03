@@ -26,6 +26,8 @@ public class Rental {
     @Column(nullable = false)
     private boolean returned;
 
+    public Rental (){}
+
     public Rental(Member member, long productId, RentalType rentalType, int rentDays, LocalDate startOfRent, boolean returned) {
         this.member = member;
         this.rentalType = rentalType;

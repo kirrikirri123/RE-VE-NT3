@@ -1,15 +1,21 @@
 package com.ahlenius.revent3fx.userInterface.rental;
 
-import com.ahlenius.revent3fx.entity.Member;
-import com.ahlenius.revent3fx.entity.Rental;
+import com.ahlenius.revent3fx.entity.*;
+import com.ahlenius.revent3fx.service.ItemService;
 import com.ahlenius.revent3fx.service.MemberService;
 import com.ahlenius.revent3fx.service.RentalService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
+
+import java.math.BigDecimal;
 
 
 public class RentalView {
@@ -17,9 +23,10 @@ public class RentalView {
     //Här hanteras bokning och återlämning
     private RentalService rentalService;
     private MemberService memberService;
-    //repo
+    private ItemService itemService;
+
     private BorderPane rentalPane = new BorderPane();
-    private VBox prodViewBox = new VBox();
+    VBox prodViewBox;
     private VBox newRentalBox = new VBox();
     private VBox endRentalBox = new VBox();
     private Button viewProd = new Button();
@@ -30,12 +37,14 @@ public class RentalView {
     private Member foundRentingMem;
     private Rental tempRental;
     private int days;
+    ToggleGroup radioGroup;
 
     public RentalView(){}
 
-    public RentalView (RentalService rentalService, MemberService memberService) {
+    public RentalView (RentalService rentalService, MemberService memberService, ItemService itemService) {
         this.rentalService = rentalService;
         this.memberService = memberService;
+        this.itemService = itemService;
 
         // Vänstrafältet
         VBox leftBox = new VBox();
@@ -45,22 +54,47 @@ public class RentalView {
         leftBox.setPadding(new Insets(15, 15, 5, 10));
         leftBox.setSpacing(10);
         leftBox.getChildren().addAll(viewProd, newRental, endRental);
-/*
-        // Aktuella produkter. TabelPane
-        Label headerViewProd = new Label("Aktuella produkter för uthyrning: ");
-        TableView<Item> itemListTableView = new TableView<>();
-        itemListTableView.setItems(rentalService.getInventory().getItemsObsList());// Lägga till en sortering här på endast ej uthyrda!
-        TableColumn<Item, String> prodNameCol = new TableColumn<Item, String>("Produktnamn");
-        prodNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<Item, String> prodDescriptCol = new TableColumn<>("Info");
-        prodDescriptCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        TableColumn<Item, String> dayPriceCol = new TableColumn<>("Dagspris i SEK. ex.moms");
-        dayPriceCol.setCellValueFactory(new PropertyValueFactory<>("dayPrice"));
-        itemListTableView.getColumns().setAll(prodNameCol, prodDescriptCol, dayPriceCol);
 
-        prodViewBox.getChildren().addAll(headerViewProd, itemListTableView);
+        // Aktuella produkter. TabelPane
+        prodViewBox = new VBox();
+        Label headerViewProd = new Label("Aktuella produkter för uthyrning: ");
+        //hoppb
+        ObservableList<BouncyCastle> obsListBouncy = FXCollections.observableArrayList(itemService.returnListBouncyItem());
+        TableView<BouncyCastle> bouncyCastleTableView = new TableView<>();
+        bouncyCastleTableView.setItems(obsListBouncy);
+        TableColumn<BouncyCastle, String> bouncyNameCol = new TableColumn<>("Hoppborgar");
+        bouncyNameCol.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        TableColumn<BouncyCastle, String> bouncyDescriptCol = new TableColumn<>("Info");
+        bouncyDescriptCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        TableColumn<BouncyCastle, String> bouncyDayPriceCol = new TableColumn<>("Dagspris i SEK. ex.moms");
+        bouncyDayPriceCol.setCellValueFactory(new PropertyValueFactory<>("dayPrice"));
+        bouncyCastleTableView.getColumns().setAll(bouncyNameCol, bouncyDescriptCol, bouncyDayPriceCol);
+        //dräkter
+        ObservableList<Costume> obsListCostume = FXCollections.observableArrayList(itemService.returnListCostumeItem());
+        TableView<Costume> costumeTableView = new TableView<>();
+        costumeTableView.setItems(obsListCostume);
+        TableColumn<Costume,String> costNameCol = new TableColumn<>("Dräkter");
+        costNameCol.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        TableColumn<Costume, String> costDescriptCol = new TableColumn<>("Info");
+        costDescriptCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        TableColumn<Costume,String > costDayPriceCol = new TableColumn<>("Dagspris i SEK. ex.moms");
+        costDayPriceCol.setCellValueFactory(new PropertyValueFactory<>("dayPrice"));
+        costumeTableView.getColumns().setAll(costNameCol, costDescriptCol, costDayPriceCol);
+        //disco
+        ObservableList<DiscoMachine> obsListDisco = FXCollections.observableArrayList(itemService.returnListDiscoItem());
+        TableView<DiscoMachine> discoTableView = new TableView<>();
+        discoTableView.setItems(obsListDisco);
+        TableColumn<DiscoMachine, String> discoNameCol = new TableColumn<>("Disco-disco");
+        discoNameCol.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        TableColumn<DiscoMachine, String> discoDescriptCol = new TableColumn<>("Info");
+        discoDescriptCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        TableColumn<DiscoMachine, String> discoDayPriceCol = new TableColumn<>("Dagspris i SEK. ex.moms");
+        discoDayPriceCol.setCellValueFactory(new PropertyValueFactory<>("dayPrice"));
+        discoTableView.getColumns().setAll(discoNameCol, discoDescriptCol, discoDayPriceCol);
+
+        prodViewBox.getChildren().addAll(headerViewProd,bouncyCastleTableView,costumeTableView,discoTableView);
         prodViewBox.setSpacing(15);
-        prodViewBox.setPadding(new Insets(25, 10, 10, 10));*/
+        prodViewBox.setPadding(new Insets(25, 10, 10, 10));
 
         // Ny uthyrning
         Label headerNewRental = new Label("Ny uthyrning");
@@ -69,6 +103,7 @@ public class RentalView {
         Label confrimationText = new Label();
         GridPane newRentalPane = new GridPane();
         Label memName = new Label("Namn på hyrande medlem: ");
+        Label categoryLabel= new Label("Välj kategori: ");
         Label rentalProd = new Label("Välj produkt: ");
         Label rentFromDate = new Label("Startdatum: ");
         Label daysOfRent = new Label("Hur många dagar önskas hyra?");
@@ -78,17 +113,30 @@ public class RentalView {
         daysOfRentField.setMaxWidth(250);
         rentalMemField.setMaxWidth(250);
         rentalMemField.setPromptText("tex. Kickan Kristersson");
-    /*    ObservableList<Member> memberobsListTest = FXCollections.observableArrayList(memberService.getMemberRegistry().getMemberRegistryList());
-        ComboBox<Member> memberComboBox = new ComboBox<>(memberobsListTest); // visar inget
-        ComboBox<Item> availableItem = new ComboBox<>(rentalService.getInventory().getItemsObsList());
-        availableItem.setMaxWidth(250);
+        ObservableList<Member> memberObsList = FXCollections.observableArrayList(memberService.findAllMembers());
+        ComboBox<Member> memberComboBox = new ComboBox<>(memberObsList);
+        VBox radioBtnBox = new VBox();
+        radioGroup = new ToggleGroup();
+        RadioButton discobtn = new RadioButton("Disco");
+        RadioButton costumebtn = new RadioButton("Dräkt");
+        RadioButton bouncybtn = new RadioButton("Hoppborg");
+        discobtn.setToggleGroup(radioGroup);
+        costumebtn.setToggleGroup(radioGroup);
+        bouncybtn.setToggleGroup(radioGroup);
+        radioBtnBox.setPadding(new Insets(5,5,5,5));
+        radioBtnBox.getChildren().setAll(bouncybtn,costumebtn,discobtn);
+        // sedan uppdateras listan för produkter?
+        ComboBox<BouncyCastle> availableBCItem = new ComboBox<>();
+        availableBCItem.setMaxWidth(250);
         TextField fromDateField = new TextField();
         fromDateField.setPromptText("Använd format: ÅÅÅÅ-MM-DD");
         fromDateField.setMaxWidth(250);
         newRentalPane.add(memName, 0, 0);
         newRentalPane.add(rentalMemField, 1, 0);
-        newRentalPane.add(rentalProd, 0, 1);
-        newRentalPane.add(availableItem, 1, 1);
+        newRentalPane.add(categoryLabel, 0, 1);
+        newRentalPane.add(radioBtnBox, 1, 1);
+        //newRentalPane.add(rentalProd, 0, 1);
+        //newRentalPane.add(availableItem, 1, 1);
         newRentalPane.add(daysOfRent, 0, 2);
         newRentalPane.add(daysOfRentField, 1, 2);
         newRentalPane.add(rentFromDate, 0, 3);
@@ -101,7 +149,7 @@ public class RentalView {
         newRentalPane.setAlignment(Pos.CENTER);
         newRentalPane.setAlignment(Pos.CENTER);
         newRentalBox.getChildren().addAll(headerNewRental, newRentalPane);
-
+/*
         // Avsluta uthyrning
         Label headerCloseRental = new Label("Avsluta uthyrning");
         endRentalBox.setAlignment(Pos.TOP_CENTER);
@@ -154,10 +202,10 @@ public class RentalView {
         rentingSumPane.add(rentalCostSum,1,1);
 
         finnishedRentingBox.getChildren().addAll(headerRentingInfo,rentingSumPane);
-
+*/
         // Knappar Layout
         viewProd.setOnAction(actionEvent -> {
-            itemListTableView.refresh();
+  //          itemListTableView.refresh();
             rentalPane.setCenter(prodViewBox);
         });
         newRental.setOnAction(actionEvent -> {
@@ -166,14 +214,14 @@ public class RentalView {
             daysOfRentField.clear();
             fromDateField.clear();
             exceptionInfo.setText("");
-            exceptionEndRent.setText("");
+    //        exceptionEndRent.setText("");
         });
         endRental.setOnAction(actionEvent -> {
             rentalPane.setCenter(endRentalBox);
-            exceptionEndRent.setText("");
+      //      exceptionEndRent.setText("");
         });
         // Knappar funktioner
-
+/*
         // Ny uthyrning
         OKBTN.setOnAction(actionEvent -> {
             try {

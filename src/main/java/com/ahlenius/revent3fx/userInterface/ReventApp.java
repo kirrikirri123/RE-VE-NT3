@@ -31,7 +31,7 @@ public class ReventApp extends Application {
     MainView mainView = new MainView();
     MemberView memberView = new MemberView();
     ItemView itemView = new ItemView();
-    RentalView rentalView = new RentalView(rentalService,memberService);
+    RentalView rentalView = new RentalView(rentalService,memberService,itemService);
     /* HistoryView historyView = new HistoryView(rentalService);
      EconomyView economyView = new EconomyView(rentalService);
    */
@@ -42,14 +42,15 @@ public class ReventApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("R-EV-ENT - Re-Invent your event - Just rent!");
-        start = new Scene(startView.getStartView(),500,450);
-        main = new Scene(mainView.getMainView(),925,550);
+        start = new Scene(startView.getStartView(), 500, 450);
+        main = new Scene(mainView.getMainView(), 925, 850);
         stage.setScene(start);
         stage.show();
 
         // knappar
         startView.getImageStart().setOnMouseClicked(mouseEvent -> {
-            changeScene(stage,main);});
+            changeScene(stage, main);
+        });
 
         // Medlemsknappar i meny.
         mainView.getNewMem().setOnAction(actionEvent -> {
@@ -90,11 +91,27 @@ public class ReventApp extends Application {
             rentalView.getRentalPane().setCenter(rentalView.getProdViewBox());
         });
 
-        /*// - ProduktView funktioner
+      /*  // - ProduktView funktioner
         itemView.getViewAccesibleProdBtn().setOnAction(actionEvent ->{
             mainView.getMainView().setCenter(rentalView.getRentalPane());
             rentalView.getRentalPane().setCenter(rentalView.getProdViewBox());
         });*/
+        // Uthyrningsknappar i meny
+
+        mainView.getAccesibleProd().setOnAction(actionEvent -> {
+            mainView.getMainView().setCenter(rentalView.getRentalPane());
+            rentalView.getRentalPane().setCenter(rentalView.getProdViewBox());
+        });
+
+        mainView.getNewRental().setOnAction(actionEvent -> {
+            mainView.getMainView().setCenter(rentalView.getRentalPane());
+            rentalView.getRentalPane().setCenter(rentalView.getNewRentalBox());
+        });
+
+        mainView.getEndRental().setOnAction(actionEvent -> {
+            mainView.getMainView().setCenter(rentalView.getRentalPane());
+            rentalView.getRentalPane().setCenter(rentalView.getEndRentalBox());
+        });
     }
     public void changeScene(Stage stage,Scene scene){
         stage.setScene(scene);

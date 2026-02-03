@@ -75,7 +75,7 @@ public class MemberService {
 
     public Member searchAndReturnMemberByEmail(String email) throws NoMemberFoundException {
         return memberRepo.findMemberByEmail(email).orElseThrow(() -> new NoMemberFoundException("Hittade ingen matchande medlem."));}
-
+// returnerar ovan verkligen ett member objekt??
 
     public List<Member> searchMemberByEmailReturnList(String fname) throws NoMemberFoundException {
         List<Member> ListMembers = memberRepo.findMemberByFname(fname);

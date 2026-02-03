@@ -1,11 +1,13 @@
 package com.ahlenius.revent3fx.repository;
 
 import com.ahlenius.revent3fx.entity.BouncyCastle;
+import com.ahlenius.revent3fx.entity.Member;
 import com.ahlenius.revent3fx.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.util.List;
 import java.util.Optional;
 
 public class BouncyCastleRepoImpl implements BouncyCastleRepo {
@@ -53,5 +55,11 @@ public class BouncyCastleRepoImpl implements BouncyCastleRepo {
             return session.createQuery("from BouncyCastle m where m.productName = :name", BouncyCastle.class)
                     .setParameter("name", name).uniqueResultOptional();
         }
+    }
+    public List<BouncyCastle> findAllItems() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from BouncyCastle", BouncyCastle.class).getResultList();
+        }
+
     }
 }
