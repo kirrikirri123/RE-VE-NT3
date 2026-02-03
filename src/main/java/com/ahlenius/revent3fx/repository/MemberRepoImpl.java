@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.List;
+import java.util.Optional;
 
 public class MemberRepoImpl implements MemberRepo{
     private final SessionFactory sessionFactory;
@@ -40,10 +41,10 @@ public class MemberRepoImpl implements MemberRepo{
             return m; // returnerar kopia av uppdaterade objektet inte samma instans?
         }}
 
-         public Member findMemberByEmail(String email){
+         public Optional<Member> findMemberByEmail(String email){
          try(Session session = sessionFactory.openSession()){
              return session.createQuery("from Member m where m.email = :email", Member.class)
-                     .setParameter("email",email).uniqueResult();
+                     .setParameter("email",email).uniqueResultOptional();
          }
         }
         public List<Member> findMemberByFname(String fname){

@@ -1,5 +1,6 @@
 package com.ahlenius.revent3fx.userInterface.member;
 
+import com.ahlenius.revent3fx.entity.Member;
 import com.ahlenius.revent3fx.entity.Rental;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,27 +19,45 @@ public class MemberView {
     private final VBox memHistoryPane = new VBox();
     private final VBox updateMemPane = new VBox();
     private final VBox searchMemPane = new VBox();
+    final VBox updateMemVbox= new VBox();
     final Button newMem;
     final Button searchMem;
     final Button updateMem;
     final Button historyMem;
-    final String searchString = "Sök på emailadress: ";
+    final String searchEmail = "Sök på emailadress: ";
     final Button OKBTN = new Button("OK");
-    final Button searchBtnUpd = new Button("Sök");
-    final Button searchBtnMem = new Button("Sök");
-    final Button searchBtnHist = new Button("Sök");
+    final String searchString = "Sök";
+    final Button searchBtnUpd = new Button(searchString);
+    final Button searchBtnMem = new Button(searchString);
+    final Button searchBtnHist = new Button(searchString);
+    final ButtonType yesBtn = new ButtonType("Ja");
+    final ButtonType noBtn = new ButtonType("Avbryt");
+    final Button confBtn;
+    final Button removeMemBtn;
+    final ButtonType noRemoveBtn;
+    final ButtonType removeBtn;
     Label exceptionInfo = new Label();
     Label headerText;
     Label confrimationText= new Label();
     Label confirmationSearchMem = new Label();
+    Label confrmUpdText;
+    Label validatedMem;
+    Label updMemExceptionInfo;
+    Label updateMemInfo;
     TextField userEmail = new TextField();
     TextField userfName = new TextField();
     TextField userlName = new TextField();
     TextField userPhone = new TextField();
     TextField searchMember = new TextField();
+    TextField updateMember = new TextField();
+    TextField updUserfNameField;
+    TextField updUserlNameField;
+    TextField updUserPhoneField;
     ComboBox<String> statusComboBox;
-
-    //  private Member tempMember;
+    ComboBox<String>updUserStatusCombo;
+    Member tempMember;
+    Alert confrUpdMem;
+    Alert confRemoveMem;
    // private Member tempHistMember;
 
 
@@ -52,7 +71,7 @@ public class MemberView {
         Label phone = new Label("Telefonnummer ");
         Label email = new Label("Emailadress ") ;
         Label status = new Label("Välj status: ");
-        userlName.maxWidth(250);
+        userfName.maxWidth(250);
         userfName.setPromptText("Kickan / Kickans kexförening");
         userlName.maxWidth(250);
         userlName.setPromptText("Kristersson \nalt. Förening (vid föreningskund)");
@@ -89,7 +108,7 @@ public class MemberView {
         //Sök medlemsVy
         searchMem = new Button("Sök medlem");
         Label headerSearch = new Label("Sök befintlig medlem");
-        Label searchMemLabel = new Label(searchString);
+        Label searchMemLabel = new Label(searchEmail);
         searchMember.setMaxWidth(250);
         searchMember.setPromptText("Tex. Bosse.Bengtsson@yahoo.se");
         searchMemPane.setSpacing(10);
@@ -99,12 +118,11 @@ public class MemberView {
         //HistorikVy
         historyMem = new Button("Medlemshistorik");
         Label headerHistoryMem = new Label("Medlemshistorik");
-        Label memberHistLab = new Label(searchString);
+        Label memberHistLab = new Label(searchEmail);
         Label exceptionInfoHistory = new Label();
         TextField memberHistory = new TextField();
         memberHistory.setMaxWidth(250);
         memberHistory.setPromptText("Tex. Bosse.Bengtsson@outlook.com");
-        Button searchBtnHist = new Button("Sök");
         memHistoryPane.setSpacing(10);
         memHistoryPane.setAlignment(Pos.CENTER);
         memHistoryPane.getChildren().addAll(headerHistoryMem,memberHistLab,memberHistory,searchBtnHist,exceptionInfoHistory);
@@ -130,47 +148,47 @@ public class MemberView {
         //Uppdatera medlemVy
         updateMem = new Button("Uppdatera medlem");
         Label headerUpdate = new Label("Uppdatera medlem");
-        Label updateMemLabel = new Label(searchString);
-        Label updateMemInfo = new Label();
-        TextField updateMember = new TextField();
+        Label updateMemLabel = new Label(searchEmail);
+        updateMemInfo = new Label();
         updateMember.setMaxWidth(250);
         updateMember.setPromptText("Tex. Bosse.Bengtsson@telia.se");
         updateMemPane.setSpacing(10);
         updateMemPane.setAlignment(Pos.CENTER);
         updateMemPane.getChildren().addAll(headerUpdate,updateMemLabel,updateMember,searchBtnUpd,updateMemInfo);
-          Alert confrUpdMem = new Alert(Alert.AlertType.CONFIRMATION);
-            ButtonType yesBtn = new ButtonType("Ja");
-            ButtonType noBtn = new ButtonType("Avbryt");
+        confrUpdMem = new Alert(Alert.AlertType.CONFIRMATION);
             confrUpdMem.getButtonTypes().setAll(yesBtn,noBtn);
             confrUpdMem.setTitle("Uppdatera medlem - Validering");
             confrUpdMem.setHeaderText("Vill du uppdatera medlem?");
 
             // Steg 2 uppdatera medlem.
-        VBox updateMemVbox= new VBox();
         Label update2ndView = new Label("Redigering av medlemsinformation");
-        Label validatedMem = new Label();
+        validatedMem = new Label();
         Label updName = new Label(" Ändra stavning i namn : ");
         Label updPhone = new Label("Ändra telefonnummer : ");
         Label updStatus = new Label("Välj korrekt medlemsstatus ");
-        TextField updUserNameField = new TextField();
-        userfName.maxWidth(225);
-        TextField updUserPhoneField = new TextField();
+        updUserfNameField = new TextField();
+        updUserfNameField.maxWidth(225);
+        updUserlNameField = new TextField();
+        updUserlNameField.maxWidth(225);
+        updUserPhoneField = new TextField();
         userPhone.maxWidth(225);
-        ComboBox<String>updUserStatusCombo = new ComboBox<>();
+        updUserStatusCombo = new ComboBox<>();
         String privateIndividual = "Privatperson";
         String society = "Förening";
-        updUserStatusCombo.getItems().addAll(privateIndividual,society);
+        String colleague = "Kollega";
+        updUserStatusCombo.getItems().addAll(privateIndividual,society,colleague);
         updUserStatusCombo.maxWidth(225);
-        Button confBtn = new Button(" Bekräfta ändring ");
-        Button removeMemBtn = new Button("Eliminera medlem");
-        Label confrmUpdText = new Label();
-        Label updMemExceptionInfo = new Label();
+        confBtn = new Button(" Bekräfta ändring ");
+        removeMemBtn = new Button("Avsluta medlemskap");
+        confrmUpdText = new Label();
+        updMemExceptionInfo = new Label();
         GridPane updMemPane = new GridPane();
         updMemPane.setHgap(5);
         updMemPane.setVgap(5);
         updMemPane.setAlignment(Pos.CENTER);
         updMemPane.add(updName,0,0);
-        updMemPane.add(updUserNameField,1,0);
+        updMemPane.add(updUserfNameField,1,0);
+        updMemPane.add(updUserlNameField,1,1);
         updMemPane.add(updPhone,0,2);
         updMemPane.add(updUserPhoneField,1,2);
         updMemPane.add(updStatus,0,3);
@@ -183,9 +201,9 @@ public class MemberView {
         updateMemVbox.setAlignment(Pos.CENTER);
         updateMemVbox.getChildren().addAll(update2ndView,validatedMem,updMemPane);
 
-        Alert confRemoveMem = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType removeBtn = new ButtonType("Avsluta");
-        ButtonType noRemoveBtn = new ButtonType("Avbryt");
+        confRemoveMem = new Alert(Alert.AlertType.CONFIRMATION);
+        removeBtn = new ButtonType("Avsluta");
+        noRemoveBtn = new ButtonType("Avbryt");
         confRemoveMem.getButtonTypes().setAll(removeBtn,noRemoveBtn);
         confRemoveMem.setTitle("Avsluta Medlemskap");
         confRemoveMem.setHeaderText("Vill du ta bort medlem ur register?");

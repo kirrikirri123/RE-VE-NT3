@@ -1,20 +1,19 @@
-package com.ahlenius.revent3fx.userInterface.product;
+package com.ahlenius.revent3fx.userInterface.items;
 
 import com.ahlenius.revent3fx.service.ItemService;
 import com.ahlenius.revent3fx.service.RentalService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
-public class ProductView {
+public class ItemView {
     // Här läggs allt som har med produkterna att göra. Foto-info, boka osv.
-    private RentalService rentalService;
-    private ItemService itemservice;
-    //repo
     private BorderPane productPane = new BorderPane();
     private FlowPane itemView = new FlowPane();
     private VBox newProdBox = new VBox();
@@ -28,19 +27,13 @@ public class ProductView {
     private Label exceptionInfo= new Label();
     private Label updProdInfo = new Label();
 
-    public ProductView(){}
-
-    public ProductView(RentalService rentalService, ItemService itemService){
-        this.rentalService = rentalService;
-        this.itemservice = itemService;
-
-
-                // GalleriVY
+    public ItemView(){
+                    // GalleriVY
         products = new Button("Galleri");
         Label headerGallery = new Label("Ett urval av produkter");
         headerGallery.setAlignment(Pos.CENTER);
         headerGallery.setPrefSize(750,55);
-/*
+
         VBox item1 = new VBox();
         item1.setAlignment(Pos.BASELINE_LEFT);
         item1.setSpacing(10);
@@ -77,7 +70,7 @@ public class ProductView {
         Label item4Price = new Label("1500kr");
         item4.getChildren().addAll(imageView4,item4name,item4desc,item4Price);
         itemView.getChildren().addAll(headerGallery,item1,item2,item4);
-*/
+
         // Ny produktVY
         Label headerNewProd = new Label(" Skapa ny produkt");
         newProdBox.setSpacing(10);
@@ -189,72 +182,7 @@ public class ProductView {
             productPane.setCenter(updateProdPane);
             searchBtnUpd.setText("Sök"); updateProdField.clear();confrmUpdText.setText("");
         });
-/*
-        // Knappar funktion
-        // Ny produkt -OK
-        OKBTN.setOnAction(actionEvent -> {
-             double day = Double.parseDouble(dayPriceField.getText());
-                if(itemTypeCombo.getValue().equals(costume)){
-                    try {
-                        itemService.newCostumeItem(prodNameField.getText(),prodDescriptField.getText(),day,true,"Året runt");***************
-                        confrimationText.setText("Ny produkt tillagd");
-                    } catch (IOException e) {exceptionInfo.setText(e.getMessage()+"Dräktproblem");}
-                    }
-                if(itemTypeCombo.getValue().equals(bouncyC)){
-                    try {
-                        itemservice.newBouncyItem(prodNameField.getText(),prodDescriptField.getText(),day,true,false);**************
-                        confrimationText.setText("Ny produkt tillagd");
-                    } catch (IOException e) {exceptionInfo.setText((e.getMessage()+"Hoppborgssfail"));
-                    }
-                } prodNameField.clear();prodDescriptField.clear();dayPriceField.clear();exceptionInfo.setText("");
-        });
-        //Uppdatera produkt
-        searchBtnUpd.setOnAction(actionEvent -> {
-           try {
-              Item foundItem = rentalService.searchItemByNameReturnItem(updateProdField.getText());
-               confrUpdProd.setContentText("Hittade produkten - " + foundItem.getName() + ".\n Stämmer det?");
-            Optional<ButtonType> userResult = confrUpdProd.showAndWait();
-            if(userResult.isPresent()) {
-                if (userResult.get() == yesBtn) {
-                    tempItem = foundItem;
-                 //  updProdInfo.setText("Produkt bekräftad. Laddar sida för uppdatering."); - Syns aldrig?
-                productPane.setCenter(updateProdVbox);
-                validatedProd.setText("Vald produkt: "+ tempItem.getName());
-                updProdNameField.setText(tempItem.getName());
-                updProdDescripField.setText(tempItem.getDescription());
-                updDayPriceField.setText(String.valueOf(tempItem.getDayPrice()));
 
-                }else if(userResult.get() == noBtn) {  updateProdField.clear();
-                searchBtnUpd.setText("Sök"); }}
-                } catch (NullPointerException e) {updProdInfo.setText(e.getMessage());}});
-
-        confBtn.setOnAction(actionEvent -> {
-            if(!updProdNameField.getText().isEmpty()) {
-                itemservice.updateItemName(tempItem, updProdNameField.getText());
-              if(!updDayPriceField.getText().isEmpty()){
-                    itemservice.updateItemPrice(tempItem, updDayPriceField.getText());
-                    if(!updProdDescripField.getText().isEmpty()) {
-                        itemservice.updateItemDesc(tempItem, updProdDescripField.getText());
-                        try {
-                            confrmUpdText.setText("Efter uppdatering:\n"+ tempItem);
-                            updProdNameField.clear();updDayPriceField.clear(); updProdDescripField.clear(); tempItem= null; validatedProd.setText("");
-                        } catch (IOException e) {confrmUpdText.setText(e.getMessage());}
-        }}}});
-
-        removeProdBtn.setOnAction(actionEvent -> {
-            confRemoveProd.setContentText("Vill du radera "+ tempItem.getName() +" ?"); // tillägg senare om det påverkar uthyrning + kostnad kan man dra en chech här innan.
-            Optional<ButtonType> userRemoveResult = confRemoveProd.showAndWait();
-            if(userRemoveResult.isPresent()){
-                if(userRemoveResult.get() == removeBtn){
-                    try {
-                        itemService.deleteItem(tempItem); System.out.println(tempItem + "Raderad");
-                          confrmUpdText.setText(tempItem.getName() + " är raderad.");
-                    } catch (IOException e) { confrmUpdText.setText(e.getMessage());}
-                }else{
-                    confrmUpdText.setText("Avbröt radering av produkt.");
-                }
-            }
-        });*/
         // Vänsterfält
         VBox leftField = new VBox();
         leftField.setPadding(new Insets(15,15,5,10));
