@@ -16,6 +16,7 @@
         <mockito.version>5.14.2</mockito.version>
         <slf4j.version>2.0.16</slf4j.version>
         <com.mysql.version>9.4.0</com.mysql.version>
+        <h2.version>2.3.232</h2.version>
 
     </properties>
 
@@ -64,6 +65,12 @@
             <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -73,8 +80,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>25</source>
-                    <target>25</target>
+                    <source>21</source>
+                    <target>21</target>
                 </configuration>
             </plugin>
             <plugin>

@@ -56,4 +56,11 @@ public class HibernateUtil {
 
         }
     }
+
+    public static void shutdown() {
+        if (!SESSION_FACTORY.isClosed()) {
+            SESSION_FACTORY.close();
+        }
+    }
+
 }
