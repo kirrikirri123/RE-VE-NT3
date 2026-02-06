@@ -76,11 +76,11 @@ public class Rental {
 
     @Override
     public String toString() {
-        return "  Uthyrningsid: " + rentalId +
+        return "Uthyrningsid: " + rentalId +
                 ","+ member +
                 ", Produktnr: " + productId +
                 ", Kategori: " + rentalType +
-                ". Hyrd from." + startOfRent
+                ".\n Hyrd from." + startOfRent
                 ;
     }
 }

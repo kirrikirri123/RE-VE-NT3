@@ -4,9 +4,7 @@ import com.ahlenius.revent3fx.entity.Member;
 import com.ahlenius.revent3fx.entity.MemberStatus;
 import com.ahlenius.revent3fx.entity.Rental;
 import com.ahlenius.revent3fx.entity.RentalType;
-import com.ahlenius.revent3fx.pricePolicy.MonthDiscountPricePolicy;
 import com.ahlenius.revent3fx.repository.RentalRepoImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +24,7 @@ class RentalServiceTest {
     private RentalRepoImpl rentalRepo;
     @InjectMocks
     private RentalService service;
-    private MonthDiscountPricePolicy priceService = new MonthDiscountPricePolicy();
+    private PricingService priceService = new PricingService();
 
     @Test
     void calculateDay_shouldCalculateAndReturnPrice() {

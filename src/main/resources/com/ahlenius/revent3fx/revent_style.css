@@ -72,12 +72,15 @@
    ======================= */
 .text-field, .combo-box {
     -fx-background-color: #FFFFFF;
-    -fx-border-color: #3E6B79;
+    -fx-border-color: #D2AD69;
     -fx-border-radius: 4;
     -fx-background-radius: 4;
 }
 .text-field:focused, .combo-box:focused {
-    -fx-border-color: #00C0FA;
+    -fx-border-color: #3E6B79;
+}
+.combo-box-cell:selected{
+-fx-background-color: #FAA100;
 }
 
 /* =======================

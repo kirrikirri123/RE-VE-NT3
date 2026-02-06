@@ -2,6 +2,7 @@ package com.ahlenius.revent3fx.service;
 
 import com.ahlenius.revent3fx.entity.*;
 import com.ahlenius.revent3fx.exception.NoItemFoundException;
+import com.ahlenius.revent3fx.exception.NoPriceFoundException;
 import com.ahlenius.revent3fx.repository.*;
 
 import java.math.BigDecimal;
@@ -111,6 +112,15 @@ public class ItemService {
         };
     }
 
+    public String ItemNameFromRental(Rental rental) {
+        return switch (rental.getRentalType()) {
+            case BOUNCYCASTLE -> bouncyCastleRepo.findById(rental.getProductId()).orElseThrow(() -> new NoItemFoundException("Ingen produkt")).getProductName();
+            case DISCOMACHINE -> discoMachineRepo.findById(rental.getProductId()).orElseThrow(() -> new NoItemFoundException("Ingen produkt")).getProductName();
+            case MASCOTECOSTUME -> mascoteCostumeRepo.findById(rental.getProductId()).orElseThrow(() -> new NoItemFoundException("Ingen produkt")).getProductName();
+        };
+    }
+
+
     public BouncyCastle findBCByName(String name) {
         return bouncyCastleRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen hoppborg med det namnet."));
     }
@@ -138,11 +148,4 @@ public class ItemService {
         return discoMachineRepo.findAllItems();
     }
 
-    public Optional connectItemAndRentalByRentaType(Rental rental) {
-        return switch (rental.getRentalType()) {
-            case BOUNCYCASTLE -> bouncyCastleRepo.findById(rental.getProductId());
-            case DISCOMACHINE -> discoMachineRepo.findById(rental.getProductId());
-            case MASCOTECOSTUME -> mascoteCostumeRepo.findById(rental.getProductId());
-        };
-    }
 }
