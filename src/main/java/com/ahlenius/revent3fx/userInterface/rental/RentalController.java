@@ -3,6 +3,7 @@ package com.ahlenius.revent3fx.userInterface.rental;
 import com.ahlenius.revent3fx.exception.InvalidAmountRentingDaysException;
 import com.ahlenius.revent3fx.exception.InvalidDateChoiceException;
 import com.ahlenius.revent3fx.service.ItemService;
+import com.ahlenius.revent3fx.service.PricingService;
 import com.ahlenius.revent3fx.service.RentalService;
 import javafx.scene.control.ButtonType;
 import java.time.LocalDate;
@@ -14,12 +15,14 @@ import static com.ahlenius.revent3fx.entity.RentalType.*;
 public class RentalController {
 private RentalService rentalService;
 private ItemService itemService;
+private PricingService pricingService;
 private RentalView view;
 
 
-    public RentalController(RentalService rentalService, RentalView rentalView,ItemService itemService) {
+    public RentalController(RentalService rentalService, RentalView rentalView,PricingService pricingService,ItemService itemService){
         this.rentalService = rentalService;
         this.view = rentalView;
+        this.pricingService = pricingService;
         this.itemService = itemService;
 
     startUi();
@@ -29,22 +32,18 @@ private RentalView view;
     public void startUi(){
         view.OKBTN.setOnAction(actionEvent -> {
             LocalDate dateStart = view.datePicker.valueProperty().getValue();
-            try {
+             try {
                 view.days = Integer.parseInt(view.daysOfRentField.getText());
             } catch (NumberFormatException e) {
                 view.exceptionInfo.setText("Missat antal dagar. Skriv ett ungefärligt antal dar.");} //
                 try{
                     switch(view.rentalTypeComboBox.getValue()) {
                      case BOUNCYCASTLE  ->  view.rental = rentalService.newRental(view.memberComboBox.getValue(),view.availableBCItem.getValue().getProductId(),BOUNCYCASTLE, view.days, dateStart, false);
-                     //itemService.connectItemAndRentalByRentaType(view.rental).isPresent();
                      case MASCOTECOSTUME ->  view.rental = rentalService.newRental(view.memberComboBox.getValue(), view.availableMCItem.getValue().getProductId(),MASCOTECOSTUME, view.days, dateStart, false);
                      case DISCOMACHINE-> view.rental = rentalService.newRental(view.memberComboBox.getValue(), view.availableDMItem.getValue().getProductId(),DISCOMACHINE, view.days, dateStart, false);
-                 }
-
-                   // itemService.connectItemAndRentalByRentaType(view.rental).isPresent();
-
-
-                 view.confrimationText.setText("Ny uthyrning skapad.\n" + view.rental);
+                    }
+                String itemName =itemService.ItemNameFromRental(view.rental);
+                 view.confrimationText.setText("Ny uthyrning skapad.\n" + view.rental.getMember()+ " av "+ itemName+ " from."+ view.rental.getStartOfRent());
                     view.daysOfRentField.clear();
                     view.exceptionInfo.setText("");
                     view.rental = null;
@@ -71,10 +70,10 @@ private RentalView view;
             rentalService.updateReturnedStatus(view.tempRental);
             rentalService.countActualDays(view.endDatePicker.getValue(),view.tempRental);
             view.rentalPane.setCenter(view.finnishedRentingBox);
-            String days = String.valueOf(rentalService.rentalCountDays(view.tempRental));
-            //String price = rentalService.pricePolicyCalc(view.tempRental);
+            String days = String.valueOf(pricingService.rentalCountDays(view.tempRental));
+            String price = pricingService.pricePolicyCalc(view.tempRental);
             view.rentalDays.setText(days);
-           // view.rentalCostSum.setText(price);
+           view.rentalCostSum.setText(price);
             view.tempRental = null;
         });
 

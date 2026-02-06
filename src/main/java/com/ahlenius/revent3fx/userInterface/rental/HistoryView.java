@@ -22,6 +22,7 @@ public class HistoryView {
     private VBox memberHistoryBox = new VBox();
     private Button viewHistBtn = new Button();
     private Button memberHistBtn = new Button();
+    Button updRentalsList = new Button();
 
     public HistoryView() {
     }
@@ -33,9 +34,10 @@ public class HistoryView {
         VBox leftBox = new VBox();
         viewHistBtn.setText("Uthyrningshistorik");
         memberHistBtn.setText("Historik - Medlemsspecifik");
+        updRentalsList.setText("Uppdatera historik");
         leftBox.setPadding(new Insets(15, 15, 5, 10));
         leftBox.setSpacing(10);
-        leftBox.getChildren().addAll(viewHistBtn, memberHistBtn);
+        leftBox.getChildren().addAll(viewHistBtn, memberHistBtn,updRentalsList);
 
         // Genrell historik
         Label headerHistory = new Label("Uthyrningshistorik");
@@ -61,11 +63,14 @@ public class HistoryView {
         viewHistBtn.setOnAction(actionEvent -> {
             historyPane.setCenter(historyViewBox);
         });
+        updRentalsList.setOnAction( actionEvent ->{
+                    rentalHistoryObsList.setAll(rentalService.getReturnedRentalList());});
 
         // Layout HistoryPane
         historyPane.setLeft(leftBox);
         historyPane.setCenter(historyViewBox);
     }
+
 
     public Button getMemberHistBtn() {
         return memberHistBtn;

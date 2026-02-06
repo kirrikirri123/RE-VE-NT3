@@ -1,18 +1,14 @@
 package com.ahlenius.revent3fx.service;
 
-import com.ahlenius.revent3fx.entity.Member;
-import com.ahlenius.revent3fx.entity.Rental;
-import com.ahlenius.revent3fx.entity.RentalType;
-import com.ahlenius.revent3fx.pricePolicy.MonthDiscountPricePolicy;
+import com.ahlenius.revent3fx.entity.*;
 import com.ahlenius.revent3fx.repository.RentalRepoImpl;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 public class RentalService {
     private RentalRepoImpl rentalRepo;
-    private MonthDiscountPricePolicy monthDiscount;
+
 
     public RentalService() {
     }
@@ -37,41 +33,12 @@ public class RentalService {
         rental.setRentDays(x);
         rentalRepo.updateRental(rental);
     }
-
-    // Prissättning
     public void countActualDays(LocalDate stopRent, Rental rental){
         LocalDate theStartOfRent = rental.getStartOfRent();
         long actualDaysLong = stopRent.toEpochDay() - theStartOfRent.toEpochDay();
         int actualDays =(int) actualDaysLong;
-        System.out.println("I metoden räkna om dagar.");
         changeRentDays(rental,actualDays);
     }
-
-    public int rentalCountDays(Rental rental) {
-        return  rental.getRentDays();
-    }
-/*
-    public double returnRentalDayPrice(Rental rental) {
-    return  rental.getProductId();
-
-        getDayPrice();
-        // få fram dagspris
-    }
-        public double calculateBasePrice(Rental rental) {
-        return monthDiscount.calculateDay(returnRentalDayPrice(rental), rentalCountDays(rental));
-    }
-
-
-    public String pricePolicyCalc(Rental rental) {
-        double totalBasePrice = calculateBasePrice(rental);
-        String totalPrice;
-        if (rental.getMember().getMemberStatus().equals(MemberStatus.PRIVATEINDIVIDUAL)) {
-            totalPrice = privateIndividual.priceVAT(privateIndividual.discount(totalBasePrice));
-        } else if {
-            totalPrice = society.priceVAT(society.discount(totalBasePrice));
-        }
-        return totalPrice;
-    }*/
 
     public List<Rental> getRentalList() {
         return rentalRepo.findRentalList();
@@ -83,6 +50,7 @@ public class RentalService {
      public List<Rental> getNotReturnedRentalList(){
         return rentalRepo.findAvailibaleRentalList(false);
      }
+
 
 
 }

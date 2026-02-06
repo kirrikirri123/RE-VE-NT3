@@ -3,6 +3,7 @@ package com.ahlenius.revent3fx.userInterface.start;
 import com.ahlenius.revent3fx.repository.*;
 import com.ahlenius.revent3fx.service.ItemService;
 import com.ahlenius.revent3fx.service.MemberService;
+import com.ahlenius.revent3fx.service.PricingService;
 import com.ahlenius.revent3fx.service.RentalService;
 import com.ahlenius.revent3fx.userInterface.items.ItemView;
 import com.ahlenius.revent3fx.userInterface.member.MemberController;
@@ -31,6 +32,7 @@ public class ReventApp extends Application {
     ItemService itemService = new ItemService(bouncyRepo, discoRepo, costumeRepo);
     MemberService memberService = new MemberService(memberRepo);
     RentalService rentalService = new RentalService(rentalRepo);
+    PricingService pricingService = new PricingService(bouncyRepo, discoRepo, costumeRepo);
 
     StartView startView = new StartView();
     MainView mainView = new MainView();
@@ -42,7 +44,7 @@ public class ReventApp extends Application {
    */
     MemberController memberController = new MemberController(memberService, rentalService, memberView);
     ItemController itemController = new ItemController(itemService, itemView);
-    RentalController rentalController = new RentalController(rentalService, rentalView, itemService);
+    RentalController rentalController = new RentalController(rentalService, rentalView, pricingService,itemService);
     Scene start, main;
 
     @Override
@@ -63,7 +65,6 @@ public class ReventApp extends Application {
         mainView.startMenu.setOnAction(actionEvent -> {
             mainView.mainPane.setCenter(mainView.centerBox);
         });
-
 
         // Medlemsknappar i meny.
         mainView.getNewMem().setOnAction(actionEvent -> {
