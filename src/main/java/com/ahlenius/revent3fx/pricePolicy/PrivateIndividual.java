@@ -1,14 +1,18 @@
 package com.ahlenius.revent3fx.pricePolicy;
 
+import java.math.BigDecimal;
+
 public class PrivateIndividual  implements PricePolicy{
 
-    @Override
-    public String priceVAT(double x) {
-        double inkVAT = x * 1.25;
-        double diff = inkVAT - x;
-        return inkVAT + " kr."+"\nInkl. moms 25 % : "+ diff +" kr.";}
+        @Override
+    public String priceVAT(BigDecimal x) {
+            BigDecimal inkVAT = x.multiply(BigDecimal.valueOf(1.25));
+            BigDecimal diff = inkVAT.subtract(x);
+            return inkVAT + " kr."+"\nInkl. moms 25 % : "+ diff +" kr.";
+    }
 
     @Override
-    public double discount(double x) {
-        return x * 0.7; }
+    public BigDecimal discount(BigDecimal x) {
+        return x.multiply(BigDecimal.valueOf(0.7));
+    }
 }

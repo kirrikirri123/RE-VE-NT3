@@ -15,12 +15,12 @@ public class RentalRepoImpl implements RentalRepo{
     }
 
     @Override
-    public void saveRental(Rental rental) {
+    public Rental saveRental(Rental rental) {
         try(Session session = sessionFactory.openSession()){
             var transaction = session.beginTransaction();
             session.persist(rental);
             transaction.commit();
-        }
+        }return rental;
     }
 
     @Override

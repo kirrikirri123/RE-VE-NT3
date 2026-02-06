@@ -1,9 +1,11 @@
 package com.ahlenius.revent3fx.pricePolicy;
 
+import java.math.BigDecimal;
+
 public interface PricePolicy {
 
-    String priceVAT(double x);
-    double discount(double x);
+    String priceVAT(BigDecimal x);
+    BigDecimal discount(BigDecimal x);
 
 
 }

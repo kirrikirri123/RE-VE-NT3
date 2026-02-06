@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface RentalRepo {
 
-    void saveRental(Rental rental);
+    Rental saveRental(Rental rental);
 
     void removeRental(Rental rental);
 

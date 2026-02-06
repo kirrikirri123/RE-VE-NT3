@@ -1,16 +1,18 @@
 package com.ahlenius.revent3fx.service;
 
 import com.ahlenius.revent3fx.entity.Member;
-import com.ahlenius.revent3fx.entity.MemberStatus;
 import com.ahlenius.revent3fx.entity.Rental;
 import com.ahlenius.revent3fx.entity.RentalType;
+import com.ahlenius.revent3fx.pricePolicy.MonthDiscountPricePolicy;
 import com.ahlenius.revent3fx.repository.RentalRepoImpl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 public class RentalService {
     private RentalRepoImpl rentalRepo;
+    private MonthDiscountPricePolicy monthDiscount;
 
     public RentalService() {
     }
@@ -45,27 +47,20 @@ public class RentalService {
         changeRentDays(rental,actualDays);
     }
 
-    public double priceMonth(double dayPrice, double days) {
-        return (days / 30) * ((dayPrice * 30) * 0.7);
-    }
-
-    public double calculateDay(double dayPrice, int days) {
-        double price = dayPrice * days;
-        if (days >= 30) {
-            price = priceMonth(dayPrice, days);
-        }
-        return price;
-    }
     public int rentalCountDays(Rental rental) {
         return  rental.getRentDays();
     }
- /*
+/*
     public double returnRentalDayPrice(Rental rental) {
-     //   return  rental.getProductId().getDayPrice();
+    return  rental.getProductId();
+
+        getDayPrice();
+        // få fram dagspris
     }
         public double calculateBasePrice(Rental rental) {
-        return calculateDay(returnRentalDayPrice(rental), rentalCountDays(rental));
+        return monthDiscount.calculateDay(returnRentalDayPrice(rental), rentalCountDays(rental));
     }
+
 
     public String pricePolicyCalc(Rental rental) {
         double totalBasePrice = calculateBasePrice(rental);
