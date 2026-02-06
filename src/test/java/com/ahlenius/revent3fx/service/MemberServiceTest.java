@@ -19,47 +19,37 @@ class MemberServiceTest {
     private MemberService service;
 
     @BeforeEach
-    void setUp(){
-        memberRepo = mock(MemberRepoImpl.class); // Mockad databas.
+    void setUp() {
+        memberRepo = mock(MemberRepoImpl.class);
         service = new MemberService(memberRepo);
-
     }
 
     @Test
     void newMember_shouldThrowExceptionIfPhoneInvalid() {
-    //Testar så exceptionkastas och vi cike går in i save metoden i repoklassen.
-        assertThrows(InvalidPhoneInputException.class,()-> service.newMember("Förnamn","Efternamn","0","mail@mail.com", MemberStatus.EMPLOYEE));
-        verify(memberRepo,never()).saveMember(any(Member.class));
-    }
-
-    @Test
-     void newMember_shouldThrowExceptionIfNameIsBajs(){
         //Testar så exceptionkastas och vi cike går in i save metoden i repoklassen.
-        assertThrows(InvalidNameInputException.class,()-> service.newMember("bajs","Efternamn","0703024810","mail@mail.com", MemberStatus.EMPLOYEE));
-        verify(memberRepo,never()).saveMember(any(Member.class));
+        assertThrows(InvalidPhoneInputException.class, () -> service.newMember("Förnamn", "Efternamn", "0", "mail@mail.com", MemberStatus.EMPLOYEE));
+        verify(memberRepo, never()).saveMember(any(Member.class));
     }
 
     @Test
-    void newMember_shouldThrowExceptionIfNoNameOrEmail(){
-        assertThrows(InvalidMemberInfoInputException.class,()-> service.newMember("","Efternamn","0703024810","", MemberStatus.EMPLOYEE));
-        verify(memberRepo,never()).saveMember(any(Member.class));
+    void newMember_shouldThrowExceptionIfNameIsBajs() {
+        //Testar så exceptionkastas och vi cike går in i save metoden i repoklassen.
+        assertThrows(InvalidNameInputException.class, () -> service.newMember("bajs", "Efternamn", "0703024810", "mail@mail.com", MemberStatus.EMPLOYEE));
+        verify(memberRepo, never()).saveMember(any(Member.class));
     }
 
     @Test
-    void newMember_shouldSaveMemberIfInputCorrect(){
+    void newMember_shouldThrowExceptionIfNoNameOrEmail() {
+        assertThrows(InvalidMemberInfoInputException.class, () -> service.newMember("", "Efternamn", "0703024810", "", MemberStatus.EMPLOYEE));
+        verify(memberRepo, never()).saveMember(any(Member.class));
+    }
+
+    @Test
+    void newMember_shouldSaveMemberIfInputCorrect() {
         //Testar om den går in i sameMember metoden.
-        service.newMember("Förnamn","Efternamn","0703024810","mail@mail.com", MemberStatus.EMPLOYEE);
+        service.newMember("Förnamn", "Efternamn", "0703024810", "mail@mail.com", MemberStatus.EMPLOYEE);
 
         verify(memberRepo).saveMember(any(Member.class));
     }
 
-
-    @Test
-    void createMemberStatus() {
-        //Arrage
-        //Act
-        //Assert
-    }
-
-    //Lägg till nått gränsvärdes test? vad finns de för gränsvärden?
 }

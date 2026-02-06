@@ -73,7 +73,7 @@ public class ItemController {
                          view.updProdNameField.setText(view.pNameHolder);
                          view.updProdDescripField.setText(view.pDescrHolder);
                          view.updDayPriceField.setText(view.pDayPriceHolder);
-                            itemService.checkItem(view.pNameHolder);
+                            itemService.checkItem(view.pNameHolder); // vad är tanken här?
                      } else if (userResult.get() == view.noBtn) {
                          view.updateProdField.clear();
                          view.searchBtnUpd.setText("Sök");
