@@ -76,11 +76,12 @@ public class ItemController {
                             itemService.checkItem(view.pNameHolder); // vad är tanken här?
                      } else if (userResult.get() == view.noBtn) {
                          view.updateProdField.clear();
-                         view.searchBtnUpd.setText("Sök");
+                         // view.searchBtnUpd.setText("Sök");
                      }
                  }
          });/*
          view.confBtn.setOnAction(actionEvent -> {
+
              if (!view.updProdNameField.getText().isEmpty()) {
                  itemService.updateItemName(tempItem, view.updProdNameField.getText());
                  if (!view.updDayPriceField.getText().isEmpty()) {
@@ -103,7 +104,7 @@ public class ItemController {
          });
 
          view.removeProdBtn.setOnAction(actionEvent -> {
-             view.confRemoveProd.setContentText("Vill du radera " + tempItem.getName() + " ?"); // tillägg senare om det påverkar uthyrning + kostnad kan man dra en chech här innan.
+             view.confRemoveProd.setContentText("Vill du radera " + tempItem.getName() + " ?"); // tillägg senare om det påverkar uthyrning + kostnad kan man dra en check här innan.
              Optional<ButtonType> userRemoveResult = view.confRemoveProd.showAndWait();
              if (userRemoveResult.isPresent()) {
                  if (userRemoveResult.get() == view.removeBtn) {

@@ -4,17 +4,18 @@ import com.ahlenius.revent3fx.entity.BouncyCastle;
 import com.ahlenius.revent3fx.entity.Costume;
 import com.ahlenius.revent3fx.entity.DiscoMachine;
 import com.ahlenius.revent3fx.entity.RentalType;
+import com.ahlenius.revent3fx.service.ItemService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 public class ItemView {
+      private ItemService itemService;
     // Här läggs allt som har med produkterna att göra. Foto-info, boka osv.
     final BorderPane productPane = new BorderPane();
     final FlowPane itemView = new FlowPane();
@@ -27,6 +28,7 @@ public class ItemView {
     final Button viewAccesibleProdBtn = new Button("Aktuella produkter");
     final Button OKBTN = new Button("OK");
     final Button searchBtnUpd;
+    final Button cateChoiceBtn;
     final ButtonType noBtn;
     final ButtonType yesBtn;
     final ButtonType removeBtn;
@@ -58,7 +60,9 @@ public class ItemView {
     String pDayPriceHolder;
 
 
-    public ItemView(){
+    public ItemView(ItemService itemService){
+        this.itemService = itemService;
+
         // GalleriVY
         products = new Button("Galleri");
         Label headerGallery = new Label("Ett urval av produkter");
@@ -140,9 +144,10 @@ public class ItemView {
 
         // Redigera ProduktVy
         editProd = new Button("Redigera produkt");
+        cateChoiceBtn = new Button("Lås vald kategori");
         Label headerUpd = new Label("Redigera produkt");
         Label updateItemType = new Label("Välj produktkategori");
-        Label updateItemSearch = new Label("Sök på fullständigt produktnamn för redigering");
+        Label updateProdLabel = new Label("Välj produkt :");
         updateComboBox = new ComboBox<>();
         updateComboBox.getItems().addAll(RentalType.values());
         updateProdField = new TextField();
@@ -156,10 +161,19 @@ public class ItemView {
         updItemPane.setAlignment(Pos.CENTER);
         updItemPane.add(updateItemType,0,0);
         updItemPane.add(updateComboBox,1,0);
-        updItemPane.add(updateItemSearch,0,1);
-        updItemPane.add(updateProdField,1,1);
+        updItemPane.add(cateChoiceBtn,2,0);
+        updItemPane.add(updateProdLabel,0,1);
+
         updItemPane.add(updProdInfo,1,2);
         updItemPane.add(searchBtnUpd,3,4);
+        ObservableList<DiscoMachine> obsListDisco = FXCollections.observableArrayList(itemService.returnListDiscoItem());
+        ObservableList<BouncyCastle> obsListBouncy = FXCollections.observableArrayList(itemService.returnListBouncyItem());
+        ObservableList<Costume> obsListCostume = FXCollections.observableArrayList(itemService.returnListCostumeItem());
+        ChoiceBox<BouncyCastle> bouncyChoice = new ChoiceBox<>(obsListBouncy);
+        ChoiceBox<Costume> costumeChoice = new ChoiceBox<>(obsListCostume);
+        ChoiceBox<DiscoMachine> discoChoice = new ChoiceBox<>(obsListDisco);
+        HBox updProdChoiceBox = new HBox();
+        updProdChoiceBox.getChildren().addAll(bouncyChoice,costumeChoice,discoChoice);
         confrUpdProd = new Alert(Alert.AlertType.CONFIRMATION);
         yesBtn = new ButtonType("Ja");
         noBtn = new ButtonType("Avbryt");
@@ -220,8 +234,19 @@ public class ItemView {
         });
         editProd.setOnAction(actionEvent -> {
             productPane.setCenter(updateProdPane);
-            searchBtnUpd.setText("Sök"); updateProdField.clear();confrmUpdText.setText("");
+           // searchBtnUpd.setText("Sök");
+            updateProdField.clear();confrmUpdText.setText("");
         });
+        cateChoiceBtn.setOnAction(actionEvent -> {
+            cateChoiceBtn.setDisable(true);
+            switch(updateComboBox.getValue()){
+                case RentalType.BOUNCYCASTLE ->  updItemPane.add(bouncyChoice, 1, 1);
+                case RentalType.MASCOTECOSTUME -> updItemPane.add(costumeChoice, 1, 1);
+                case RentalType.DISCOMACHINE -> updItemPane.add(discoChoice, 1, 1);}
+
+        });
+
+
 
         // Vänsterfält
         VBox leftField = new VBox();

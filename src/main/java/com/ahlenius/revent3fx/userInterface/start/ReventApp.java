@@ -37,7 +37,7 @@ public class ReventApp extends Application {
     StartView startView = new StartView();
     MainView mainView = new MainView();
     MemberView memberView = new MemberView();
-    ItemView itemView = new ItemView();
+    ItemView itemView = new ItemView(itemService);
     RentalView rentalView = new RentalView(itemService,memberService,rentalService);
     HistoryView historyView = new HistoryView(rentalService);
     /* EconomyView economyView = new EconomyView(rentalService);

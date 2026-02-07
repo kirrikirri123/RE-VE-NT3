@@ -106,9 +106,9 @@ public class ItemService {
 
     public Object sortByRentalType(RentalType rentalType, String name) {
         return switch (rentalType) {
-            case RentalType.BOUNCYCASTLE -> findBCByName(name);
-            case RentalType.MASCOTECOSTUME -> findCByName(name);
-            case RentalType.DISCOMACHINE -> findDMByName(name);
+            case RentalType.BOUNCYCASTLE -> bouncyCastleRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen hoppborg med det namnet."));
+            case RentalType.MASCOTECOSTUME -> mascoteCostumeRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen maskeraddräkt med det namnet."));
+            case RentalType.DISCOMACHINE -> discoMachineRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen disco produkt med det namnet."));
         };
     }
 
@@ -118,19 +118,6 @@ public class ItemService {
             case DISCOMACHINE -> discoMachineRepo.findById(rental.getProductId()).orElseThrow(() -> new NoItemFoundException("Ingen produkt")).getProductName();
             case MASCOTECOSTUME -> mascoteCostumeRepo.findById(rental.getProductId()).orElseThrow(() -> new NoItemFoundException("Ingen produkt")).getProductName();
         };
-    }
-
-
-    public BouncyCastle findBCByName(String name) {
-        return bouncyCastleRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen hoppborg med det namnet."));
-    }
-
-    public Costume findCByName(String name) {
-        return mascoteCostumeRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen maskeraddräkt med det namnet."));
-    }
-
-    public DiscoMachine findDMByName(String name) {
-        return discoMachineRepo.findProductByName(name).orElseThrow(() -> new NoItemFoundException("Hittade ingen disco produkt med det namnet."));
     }
 
     public void checkItem(String pNameHolder) {

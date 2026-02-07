@@ -4,7 +4,6 @@ import com.ahlenius.revent3fx.entity.*;
 import com.ahlenius.revent3fx.service.ItemService;
 import com.ahlenius.revent3fx.service.MemberService;
 import com.ahlenius.revent3fx.service.RentalService;
-import com.ahlenius.revent3fx.util.TypeList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -25,7 +24,6 @@ public class RentalView {
     private RentalService rentalService;
     private MemberService memberService;
     private ItemService itemService;
-    private final TypeList typeList = new TypeList();
     final BorderPane rentalPane = new BorderPane();
     VBox prodViewBox;
     VBox newRentalBox = new VBox();
@@ -51,9 +49,6 @@ public class RentalView {
     Label rentalDays;
     Rental tempRental;
     int days;
-    RadioButton discobtn;
-    RadioButton costumebtn;
-    RadioButton bouncybtn;
     Alert confEndRent;
     ComboBox<RentalType>rentalTypeComboBox;
     ComboBox<BouncyCastle> availableBCItem;
@@ -126,7 +121,6 @@ public class RentalView {
         prodViewBox.setPadding(new Insets(25, 10, 10, 10));
 
         // Ny uthyrning
-        typeList.listOfRentalType();
         Label headerNewRental = new Label("Ny uthyrning");
         newRentalBox.setAlignment(Pos.CENTER);
         newRentalBox.setSpacing(10);
@@ -143,8 +137,8 @@ public class RentalView {
         daysOfRentField.setMaxWidth(250);
         ObservableList<Member> memberObsList = FXCollections.observableArrayList(memberService.findAllMembers());
         memberComboBox = new ComboBox<>(memberObsList);
-        ObservableList<RentalType> rentalTypeObsList = FXCollections.observableArrayList(typeList.getRentalInString());
-        rentalTypeComboBox = new ComboBox<>(rentalTypeObsList);
+        rentalTypeComboBox = new ComboBox<>();
+        rentalTypeComboBox.getItems().addAll(RentalType.values());
         availableBCItem = new ComboBox<>(obsListBouncy);
         availableMCItem = new ComboBox<>(obsListCostume);
         availableDMItem = new ComboBox<>(obsListDisco);
