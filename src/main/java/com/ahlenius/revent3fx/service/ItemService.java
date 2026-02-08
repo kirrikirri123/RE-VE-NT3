@@ -55,18 +55,18 @@ public class ItemService {
 
     //Uppdateringar
 //Pris
-    public Costume updateItemPrice(Costume costume, double newPrice) {
-        costume.setDayPrice(new BigDecimal(newPrice));
+    public Costume updateItemPrice(Costume costume, BigDecimal newPrice) {
+        costume.setDayPrice(newPrice);
         return mascoteCostumeRepo.updateItem(costume);
     }
 
-    public BouncyCastle updateItemPrice(BouncyCastle bouncyCastle, double newPrice) {
-        bouncyCastle.setDayPrice(new BigDecimal(newPrice));
+    public BouncyCastle updateItemPrice(BouncyCastle bouncyCastle, BigDecimal newPrice) {
+        bouncyCastle.setDayPrice(newPrice);
         return bouncyCastleRepo.updateItem(bouncyCastle);
     }
 
-    public DiscoMachine updateItemPrice(DiscoMachine discoMachine, double newPrice) {
-        discoMachine.setDayPrice(new BigDecimal(newPrice));
+    public DiscoMachine updateItemPrice(DiscoMachine discoMachine, BigDecimal newPrice) {
+        discoMachine.setDayPrice(newPrice);
         return discoMachineRepo.updateItem(discoMachine);
     }
 
@@ -118,9 +118,6 @@ public class ItemService {
             case DISCOMACHINE -> discoMachineRepo.findById(rental.getProductId()).orElseThrow(() -> new NoItemFoundException("Ingen produkt")).getProductName();
             case MASCOTECOSTUME -> mascoteCostumeRepo.findById(rental.getProductId()).orElseThrow(() -> new NoItemFoundException("Ingen produkt")).getProductName();
         };
-    }
-
-    public void checkItem(String pNameHolder) {
     }
 
     public List<BouncyCastle> returnListBouncyItem() {

@@ -39,6 +39,7 @@ public class ItemView {
     Label validatedProd;
     Label confrmUpdText;
     Label updMemExceptionInfo;
+    final Label emptyPlaceholder = new Label("");
     TextField prodNameField;
     TextField prodDescriptField;
     TextField updateProdField;
@@ -48,6 +49,9 @@ public class ItemView {
     TextField updDayPriceField;
     ComboBox<RentalType> itemTypeCombo;
     ComboBox<RentalType> updateComboBox;
+    ChoiceBox<DiscoMachine> discoChoice;
+    ChoiceBox<Costume> costumeChoice;
+    ChoiceBox<BouncyCastle> bouncyChoice;
     Alert confrUpdProd;
     Alert confRemoveProd;
     Button confBtn;
@@ -55,9 +59,7 @@ public class ItemView {
     BouncyCastle bouncyItem;
     Costume costumeItem;
     DiscoMachine discoItem;
-    String pNameHolder;
-    String pDescrHolder;
-    String pDayPriceHolder;
+
 
 
     public ItemView(ItemService itemService){
@@ -147,7 +149,7 @@ public class ItemView {
         cateChoiceBtn = new Button("Lås vald kategori");
         Label headerUpd = new Label("Redigera produkt");
         Label updateItemType = new Label("Välj produktkategori");
-        Label updateProdLabel = new Label("Välj produkt :");
+        Label updateProdLabel = new Label("Välj produkt:");
         updateComboBox = new ComboBox<>();
         updateComboBox.getItems().addAll(RentalType.values());
         updateProdField = new TextField();
@@ -169,11 +171,12 @@ public class ItemView {
         ObservableList<DiscoMachine> obsListDisco = FXCollections.observableArrayList(itemService.returnListDiscoItem());
         ObservableList<BouncyCastle> obsListBouncy = FXCollections.observableArrayList(itemService.returnListBouncyItem());
         ObservableList<Costume> obsListCostume = FXCollections.observableArrayList(itemService.returnListCostumeItem());
-        ChoiceBox<BouncyCastle> bouncyChoice = new ChoiceBox<>(obsListBouncy);
-        ChoiceBox<Costume> costumeChoice = new ChoiceBox<>(obsListCostume);
-        ChoiceBox<DiscoMachine> discoChoice = new ChoiceBox<>(obsListDisco);
+        bouncyChoice = new ChoiceBox<>(obsListBouncy);
+        costumeChoice = new ChoiceBox<>(obsListCostume);
+        discoChoice = new ChoiceBox<>(obsListDisco);
         HBox updProdChoiceBox = new HBox();
         updProdChoiceBox.getChildren().addAll(bouncyChoice,costumeChoice,discoChoice);
+
         confrUpdProd = new Alert(Alert.AlertType.CONFIRMATION);
         yesBtn = new ButtonType("Ja");
         noBtn = new ButtonType("Avbryt");
@@ -232,10 +235,16 @@ public class ItemView {
         newProd.setOnAction( actionEvent -> {
             productPane.setCenter(newProdBox);
         });
+
         editProd.setOnAction(actionEvent -> {
             productPane.setCenter(updateProdPane);
-           // searchBtnUpd.setText("Sök");
-            updateProdField.clear();confrmUpdText.setText("");
+            cateChoiceBtn.setDisable(false);
+            updateComboBox.setValue(null);
+            bouncyChoice.setValue(null);
+            costumeChoice.setValue(null);
+            discoChoice.setValue(null);
+            updItemPane.add(emptyPlaceholder, 1, 1);
+            confrmUpdText.setText("");
         });
         cateChoiceBtn.setOnAction(actionEvent -> {
             cateChoiceBtn.setDisable(true);
@@ -243,10 +252,7 @@ public class ItemView {
                 case RentalType.BOUNCYCASTLE ->  updItemPane.add(bouncyChoice, 1, 1);
                 case RentalType.MASCOTECOSTUME -> updItemPane.add(costumeChoice, 1, 1);
                 case RentalType.DISCOMACHINE -> updItemPane.add(discoChoice, 1, 1);}
-
         });
-
-
 
         // Vänsterfält
         VBox leftField = new VBox();

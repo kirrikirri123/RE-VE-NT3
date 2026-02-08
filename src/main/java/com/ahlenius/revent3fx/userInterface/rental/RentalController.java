@@ -40,13 +40,21 @@ private RentalView view;
                     switch(view.rentalTypeComboBox.getValue()) {
                      case BOUNCYCASTLE  ->  view.rental = rentalService.newRental(view.memberComboBox.getValue(),view.availableBCItem.getValue().getProductId(),BOUNCYCASTLE, view.days, dateStart, false);
                      case MASCOTECOSTUME ->  view.rental = rentalService.newRental(view.memberComboBox.getValue(), view.availableMCItem.getValue().getProductId(),MASCOTECOSTUME, view.days, dateStart, false);
-                     case DISCOMACHINE-> view.rental = rentalService.newRental(view.memberComboBox.getValue(), view.availableDMItem.getValue().getProductId(),DISCOMACHINE, view.days, dateStart, false);
+                     case DISCOMACHINE -> view.rental = rentalService.newRental(view.memberComboBox.getValue(), view.availableDMItem.getValue().getProductId(),DISCOMACHINE, view.days, dateStart, false);
                     }
-                String itemName =itemService.ItemNameFromRental(view.rental);
-                 view.confrimationText.setText("Ny uthyrning skapad.\n" + view.rental.getMember()+ " av "+ itemName+ " from."+ view.rental.getStartOfRent());
+                    String itemName =itemService.ItemNameFromRental(view.rental);
+                    String fname = view.rental.getMember().getfname();
+                    String lname = view.rental.getMember().getlname();
+                 view.confrimationText.setText("Ny uthyrning skapad.\n" + fname +" " +lname+" av "+ itemName+ "\nFrom."+ view.rental.getStartOfRent());
                     view.daysOfRentField.clear();
                     view.exceptionInfo.setText("");
                     view.rental = null;
+                    view.availableBCItem.setValue(null);
+                    view.availableMCItem.setValue(null);
+                    view.availableDMItem.setValue(null);
+                    view.rentalTypeComboBox.setValue(null);
+                    view.memberComboBox.setValue(null);
+                    view.cateChoiceBtn.setDisable(false);
 
                 } catch (InvalidAmountRentingDaysException | InvalidDateChoiceException e) {view.exceptionInfo.setText(e.getMessage());}
             });
