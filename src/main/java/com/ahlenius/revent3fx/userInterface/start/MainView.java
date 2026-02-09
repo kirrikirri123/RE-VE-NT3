@@ -19,6 +19,9 @@ public class MainView {
     private Button quitBtn = new Button();
     private MenuBar menuHeader = new MenuBar();
     Menu startMenu;
+    MenuItem home;
+    Menu economyMenu;
+    MenuItem revenue;
     VBox centerBox = new VBox();
     private MenuItem newMem;
     private MenuItem searchMem;
@@ -36,6 +39,7 @@ public class MainView {
 
 
 
+
     public MainView() {
         //Top
         Image iconleft = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/icon_small.png"));
@@ -48,6 +52,8 @@ public class MainView {
 
         //MenuBar
         startMenu = new Menu("Start");
+        home = new MenuItem("Öppna");
+        startMenu.getItems().add(home);
         Menu memberMenu = new Menu("Medlemshantering");
         newMem = new MenuItem("Ny medlem");
         searchMem = new MenuItem("Sök medlem");
@@ -69,7 +75,10 @@ public class MainView {
         rentalHistory = new MenuItem("Uthyrningshistorik");
         //memberhistory = new MenuItem("Medlemsspecifik");
         history.getItems().addAll(rentalHistory);
-        Menu economyMenu = new Menu("Ekonomi");
+        economyMenu = new Menu("Ekonomi");
+        revenue = new MenuItem("Öppna");
+        economyMenu.getItems().addAll(revenue);
+
 
         menuHeader.getMenus().addAll(startMenu, memberMenu, productMenu, rentalMenu, history, economyMenu);
         menuHeader.setPadding(new Insets(2, 10, 2, 345));
@@ -96,8 +105,6 @@ public class MainView {
         mainPane.setTop(header);
         mainPane.setCenter(centerBox);
         mainPane.setBottom(bottom);
-
-
 
         }
         //public MenuItem getHistoryMem () {return historyMem;}

@@ -5,6 +5,7 @@ import com.ahlenius.revent3fx.exception.InvalidAmountRentingDaysException;
 import com.ahlenius.revent3fx.exception.InvalidRentalInfoInputException;
 import com.ahlenius.revent3fx.repository.RentalRepoImpl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import java.util.List;
@@ -58,7 +59,10 @@ public class RentalService {
         return rentalRepo.findAvailibaleRentalList(false);
      }
 
-
+    public String sumAllRevenueFromRentals(){
+         BigDecimal sum = rentalRepo.findRevenue(true);
+         return  sum+ "kr.     * obs ex. moms.";
+    }
 
 }
 

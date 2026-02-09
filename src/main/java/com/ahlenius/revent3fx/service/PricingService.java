@@ -8,7 +8,7 @@ import com.ahlenius.revent3fx.pricePolicy.Society;
 import com.ahlenius.revent3fx.repository.BouncyCastleRepoImpl;
 import com.ahlenius.revent3fx.repository.DiscoMachineRepoImpl;
 import com.ahlenius.revent3fx.repository.MascoteCostumeRepoImpl;
-import com.ahlenius.revent3fx.repository.RentalRepoImpl;
+
 
 import java.math.BigDecimal;
 
@@ -35,7 +35,7 @@ public class PricingService {
         switch (rental.getMember().getMemberStatus()) {
             case MemberStatus.PRIVATEINDIVIDUAL -> totalPrice = privateIndividual.priceVAT(privateIndividual.discount(totalBasePrice));
             case MemberStatus.SOCIETY  -> totalPrice = society.priceVAT(society.discount(totalBasePrice));
-            case MemberStatus.EMPLOYEE ->totalPrice = employee.priceVAT(employee.discount(totalBasePrice));
+            case MemberStatus.EMPLOYEE -> totalPrice = employee.priceVAT(employee.discount(totalBasePrice));
         }                return totalPrice;
     }
     public BigDecimal exMomsPriceWithDiscount(Rental rental) { // returnerar för att kunna lägga i revenue ex.moms

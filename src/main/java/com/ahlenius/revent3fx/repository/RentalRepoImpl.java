@@ -5,7 +5,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RentalRepoImpl implements RentalRepo{
@@ -45,7 +47,15 @@ public class RentalRepoImpl implements RentalRepo{
                     .setParameter("returned",returned)
                     .getResultList();
         }
-    }
+            }
+
+   public BigDecimal findRevenue(boolean returned){
+        try(Session session = sessionFactory.openSession()){
+            return session.createQuery("SELECT SUM(r.totalRevenue) FROM Rental r WHERE r.returned = :returned",BigDecimal.class)
+                    .setParameter("returned",true).getSingleResult();
+        }
+        }
+
     @Override
     public void updateRental(Rental rental){
         try(Session session= sessionFactory.openSession()){

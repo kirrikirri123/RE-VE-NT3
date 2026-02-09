@@ -16,14 +16,16 @@ public class RentalController {
 private RentalService rentalService;
 private ItemService itemService;
 private PricingService pricingService;
+private EconomyView economyView;
 private RentalView view;
 
 
-    public RentalController(RentalService rentalService, RentalView rentalView,PricingService pricingService,ItemService itemService){
+    public RentalController(RentalService rentalService, RentalView rentalView,PricingService pricingService,ItemService itemService,EconomyView economyView){
         this.rentalService = rentalService;
         this.view = rentalView;
         this.pricingService = pricingService;
         this.itemService = itemService;
+        this.economyView = economyView;
 
     startUi();
 
@@ -87,6 +89,11 @@ private RentalView view;
            view.rentalCostSum.setText(price);
             view.tempRental = null;
         });
+
+        // Ekonomi
+        economyView.incomBtn.setOnAction(actionEvent -> {
+            economyView.sum.setText(rentalService.sumAllRevenueFromRentals()); });
+
 
     }
 
