@@ -212,7 +212,7 @@ public class MemberView {
         VBox leftField = new VBox();
         leftField.setPadding(new Insets(15,15,5,10));
         leftField.setSpacing(10);
-        leftField.getChildren().addAll(newMem,searchMem,updateMem,historyMem);
+        leftField.getChildren().addAll(newMem,searchMem,updateMem);
 
         // Knappar Layout
         newMem.setOnAction(actionEvent -> {
@@ -226,10 +226,10 @@ public class MemberView {
             memberPane.setCenter(updateMemPane);
             updateMember.clear(); updateMemInfo.setText("");confrmUpdText.setText("");
         });
-        historyMem.setOnAction(actionEvent -> {
+        /*historyMem.setOnAction(actionEvent -> {
             memberPane.setCenter(memHistoryPane);
             memberHistory.clear();exceptionInfoHistory.setText("");
-        });
+        });*/
          // Layout MembershipView
         memberPane.setCenter(newMemBox);
         memberPane.setLeft(leftField);

@@ -53,12 +53,11 @@ class MemberRepoImplTest {
         rentalRepo.saveRental(rental);
 
         List<Rental> rentalList = rentalRepo.findRentalList();
-        Rental foundRental = rentalList.getFirst();
+        Rental foundRental = rentalList.getLast();
 
         assertNotNull(foundRental,"Borde inte vara null");
         assertEquals("Förnamn", foundRental.getMember().getfname(), "Värden ska matcha");
         assertEquals(costume.getProductId(),foundRental.getProductId(),"Värden ska matcha");
-
     }
 
     @Test
@@ -75,13 +74,11 @@ class MemberRepoImplTest {
         memberRepo.updateMember(member);
 
         List<Member> memberList = memberRepo.findAllMembers();
-        Member foundMember = memberList.getFirst();
+        Member foundMember = memberList.getLast();
+
         assertEquals(member.getMemberId(),foundMember.getMemberId(),"Värden ska matcha");
         assertEquals(member.getlname(),foundMember.getlname(), "Värden ska matcha");
         assertEquals(member.getMemberStatus(),foundMember.getMemberStatus(), "Värden ska matcha");
 
     }
-
-
-
 }

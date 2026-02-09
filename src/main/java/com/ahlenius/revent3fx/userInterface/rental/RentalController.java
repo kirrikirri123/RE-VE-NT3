@@ -1,7 +1,7 @@
 package com.ahlenius.revent3fx.userInterface.rental;
 
 import com.ahlenius.revent3fx.exception.InvalidAmountRentingDaysException;
-import com.ahlenius.revent3fx.exception.InvalidDateChoiceException;
+import com.ahlenius.revent3fx.exception.InvalidRentalInfoInputException;
 import com.ahlenius.revent3fx.service.ItemService;
 import com.ahlenius.revent3fx.service.PricingService;
 import com.ahlenius.revent3fx.service.RentalService;
@@ -42,6 +42,7 @@ private RentalView view;
                      case MASCOTECOSTUME ->  view.rental = rentalService.newRental(view.memberComboBox.getValue(), view.availableMCItem.getValue().getProductId(),MASCOTECOSTUME, view.days, dateStart, false);
                      case DISCOMACHINE -> view.rental = rentalService.newRental(view.memberComboBox.getValue(), view.availableDMItem.getValue().getProductId(),DISCOMACHINE, view.days, dateStart, false);
                     }
+                } catch (InvalidAmountRentingDaysException | InvalidRentalInfoInputException e) {view.exceptionInfo.setText(e.getMessage());}
                     String itemName =itemService.ItemNameFromRental(view.rental);
                     String fname = view.rental.getMember().getfname();
                     String lname = view.rental.getMember().getlname();
@@ -56,7 +57,7 @@ private RentalView view;
                     view.memberComboBox.setValue(null);
                     view.cateChoiceBtn.setDisable(false);
 
-                } catch (InvalidAmountRentingDaysException | InvalidDateChoiceException e) {view.exceptionInfo.setText(e.getMessage());}
+
             });
 
         // Avsluta uthyrning
@@ -69,19 +70,19 @@ private RentalView view;
                 if (userEndingRentResult.get() == view.endRentBtn) {
                     view.rentalPane.setCenter(view.finalEndRentBox);}
                 if (userEndingRentResult.get() == view.closeConfAlertBtn) {
-                    view.exceptionEndRent.setText("Avbryter återlämning. Produkt fortfarande uthyrd.");
+                    view.exceptionInfo.setText("Avbryter återlämning. Produkt fortfarande uthyrd.");
                     view.tempRental = null;
-                    view.confEndRent.setContentText(" ");
                 }
             }
         });
         view.confEndRentBtn.setOnAction(actionE -> {
-            rentalService.updateReturnedStatus(view.tempRental);
             rentalService.countActualDays(view.endDatePicker.getValue(),view.tempRental);
             view.rentalPane.setCenter(view.finnishedRentingBox);
             String days = String.valueOf(pricingService.rentalCountDays(view.tempRental));
             String price = pricingService.pricePolicyCalc(view.tempRental);
-            pricingService.exMomsPriceWithDiscount(view.tempRental); //Borde ladda revenue med ex.moms priset.
+            view.tempRental.setTotalRevenue(pricingService.exMomsPriceWithDiscount(view.tempRental)); // revenue pris satt
+            view.tempRental.setReturned(true); //återlämnad
+            rentalService.updateRental(view.tempRental); // uppdaterad
             view.rentalDays.setText(days);
            view.rentalCostSum.setText(price);
             view.tempRental = null;

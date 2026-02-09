@@ -52,8 +52,8 @@ public class MainView {
         newMem = new MenuItem("Ny medlem");
         searchMem = new MenuItem("Sök medlem");
         updateMem = new MenuItem("Uppdatera medlem");
-        historyMem = new MenuItem("Se medlemshistorik");
-        memberMenu.getItems().addAll(newMem, searchMem, updateMem, historyMem);
+        //historyMem = new MenuItem("Se medlemshistorik");
+        memberMenu.getItems().addAll(newMem, searchMem, updateMem);
         Menu productMenu = new Menu("Produkter");
         products = new MenuItem("Galleri");
         newProducts = new MenuItem("Ny produkt");
@@ -67,8 +67,8 @@ public class MainView {
         rentalMenu.getItems().addAll(accesibleProd,newRental, endRental);
         Menu history = new Menu("Historik");
         rentalHistory = new MenuItem("Uthyrningshistorik");
-        memberhistory = new MenuItem("Medlemsspecifik");
-        history.getItems().addAll(rentalHistory, memberhistory);
+        //memberhistory = new MenuItem("Medlemsspecifik");
+        history.getItems().addAll(rentalHistory);
         Menu economyMenu = new Menu("Ekonomi");
 
         menuHeader.getMenus().addAll(startMenu, memberMenu, productMenu, rentalMenu, history, economyMenu);
@@ -80,7 +80,7 @@ public class MainView {
                 "\n R-EV-ENT är den hjälpande handen som hyr till dig om privatperson och förening\n när ni skapar för ett oförglömligt minne, en ökad gemenskap i föreningen \n och glädje för familj med vänner." +
                 "\n Ditt nästa lyckade event börjar här. Just rent !");
         mainUnderLabel.setStyle("-fx-font-size: 12px");
-         centerBox.setSpacing(5);
+        centerBox.setSpacing(5);
         centerBox.setAlignment(Pos.CENTER);
         centerBox.getChildren().addAll(mainLabel,mainUnderLabel);
 
@@ -100,9 +100,7 @@ public class MainView {
 
 
         }
-        public MenuItem getHistoryMem () {
-            return historyMem;
-        }
+        //public MenuItem getHistoryMem () {return historyMem;}
         public MenuItem getUpdateMem () {
             return updateMem;
         }
@@ -111,12 +109,6 @@ public class MainView {
         }
         public MenuItem getNewMem () {
             return newMem;
-        }
-        public Label getHeaderLabel () {
-            return headerLabel;
-        }
-        public Label getBottomLabel () {
-            return bottomLabel;
         }
         public Button getQuitBtn () {
             return quitBtn;

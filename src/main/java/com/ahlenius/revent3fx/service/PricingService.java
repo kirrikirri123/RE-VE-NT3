@@ -8,6 +8,7 @@ import com.ahlenius.revent3fx.pricePolicy.Society;
 import com.ahlenius.revent3fx.repository.BouncyCastleRepoImpl;
 import com.ahlenius.revent3fx.repository.DiscoMachineRepoImpl;
 import com.ahlenius.revent3fx.repository.MascoteCostumeRepoImpl;
+import com.ahlenius.revent3fx.repository.RentalRepoImpl;
 
 import java.math.BigDecimal;
 
