@@ -4,17 +4,18 @@ import com.ahlenius.revent3fx.entity.BouncyCastle;
 import com.ahlenius.revent3fx.entity.Costume;
 import com.ahlenius.revent3fx.entity.DiscoMachine;
 import com.ahlenius.revent3fx.entity.RentalType;
+import com.ahlenius.revent3fx.service.ItemService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 public class ItemView {
+      private ItemService itemService;
     // Här läggs allt som har med produkterna att göra. Foto-info, boka osv.
     final BorderPane productPane = new BorderPane();
     final FlowPane itemView = new FlowPane();
@@ -27,6 +28,7 @@ public class ItemView {
     final Button viewAccesibleProdBtn = new Button("Aktuella produkter");
     final Button OKBTN = new Button("OK");
     final Button searchBtnUpd;
+    final Button cateChoiceBtn;
     final ButtonType noBtn;
     final ButtonType yesBtn;
     final ButtonType removeBtn;
@@ -37,6 +39,7 @@ public class ItemView {
     Label validatedProd;
     Label confrmUpdText;
     Label updMemExceptionInfo;
+    final Label emptyPlaceholder = new Label("");
     TextField prodNameField;
     TextField prodDescriptField;
     TextField updateProdField;
@@ -46,6 +49,9 @@ public class ItemView {
     TextField updDayPriceField;
     ComboBox<RentalType> itemTypeCombo;
     ComboBox<RentalType> updateComboBox;
+    ChoiceBox<DiscoMachine> discoChoice;
+    ChoiceBox<Costume> costumeChoice;
+    ChoiceBox<BouncyCastle> bouncyChoice;
     Alert confrUpdProd;
     Alert confRemoveProd;
     Button confBtn;
@@ -53,12 +59,12 @@ public class ItemView {
     BouncyCastle bouncyItem;
     Costume costumeItem;
     DiscoMachine discoItem;
-    String pNameHolder;
-    String pDescrHolder;
-    String pDayPriceHolder;
 
 
-    public ItemView(){
+
+    public ItemView(ItemService itemService){
+        this.itemService = itemService;
+
         // GalleriVY
         products = new Button("Galleri");
         Label headerGallery = new Label("Ett urval av produkter");
@@ -140,9 +146,10 @@ public class ItemView {
 
         // Redigera ProduktVy
         editProd = new Button("Redigera produkt");
+        cateChoiceBtn = new Button("Lås vald kategori");
         Label headerUpd = new Label("Redigera produkt");
         Label updateItemType = new Label("Välj produktkategori");
-        Label updateItemSearch = new Label("Sök på fullständigt produktnamn för redigering");
+        Label updateProdLabel = new Label("Välj produkt:");
         updateComboBox = new ComboBox<>();
         updateComboBox.getItems().addAll(RentalType.values());
         updateProdField = new TextField();
@@ -156,10 +163,20 @@ public class ItemView {
         updItemPane.setAlignment(Pos.CENTER);
         updItemPane.add(updateItemType,0,0);
         updItemPane.add(updateComboBox,1,0);
-        updItemPane.add(updateItemSearch,0,1);
-        updItemPane.add(updateProdField,1,1);
+        updItemPane.add(cateChoiceBtn,2,0);
+        updItemPane.add(updateProdLabel,0,1);
+
         updItemPane.add(updProdInfo,1,2);
         updItemPane.add(searchBtnUpd,3,4);
+        ObservableList<DiscoMachine> obsListDisco = FXCollections.observableArrayList(itemService.returnListDiscoItem());
+        ObservableList<BouncyCastle> obsListBouncy = FXCollections.observableArrayList(itemService.returnListBouncyItem());
+        ObservableList<Costume> obsListCostume = FXCollections.observableArrayList(itemService.returnListCostumeItem());
+        bouncyChoice = new ChoiceBox<>(obsListBouncy);
+        costumeChoice = new ChoiceBox<>(obsListCostume);
+        discoChoice = new ChoiceBox<>(obsListDisco);
+        HBox updProdChoiceBox = new HBox();
+        updProdChoiceBox.getChildren().addAll(bouncyChoice,costumeChoice,discoChoice);
+
         confrUpdProd = new Alert(Alert.AlertType.CONFIRMATION);
         yesBtn = new ButtonType("Ja");
         noBtn = new ButtonType("Avbryt");
@@ -218,9 +235,23 @@ public class ItemView {
         newProd.setOnAction( actionEvent -> {
             productPane.setCenter(newProdBox);
         });
+
         editProd.setOnAction(actionEvent -> {
             productPane.setCenter(updateProdPane);
-            searchBtnUpd.setText("Sök"); updateProdField.clear();confrmUpdText.setText("");
+            cateChoiceBtn.setDisable(false);
+            updateComboBox.setValue(null);
+            bouncyChoice.setValue(null);
+            costumeChoice.setValue(null);
+            discoChoice.setValue(null);
+            updItemPane.add(emptyPlaceholder, 1, 1);
+            confrmUpdText.setText("");
+        });
+        cateChoiceBtn.setOnAction(actionEvent -> {
+            cateChoiceBtn.setDisable(true);
+            switch(updateComboBox.getValue()){
+                case RentalType.BOUNCYCASTLE ->  updItemPane.add(bouncyChoice, 1, 1);
+                case RentalType.MASCOTECOSTUME -> updItemPane.add(costumeChoice, 1, 1);
+                case RentalType.DISCOMACHINE -> updItemPane.add(discoChoice, 1, 1);}
         });
 
         // Vänsterfält

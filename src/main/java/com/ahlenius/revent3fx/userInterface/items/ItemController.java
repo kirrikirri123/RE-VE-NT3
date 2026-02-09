@@ -5,6 +5,7 @@ import com.ahlenius.revent3fx.exception.NoItemFoundException;
 import com.ahlenius.revent3fx.service.ItemService;
 import javafx.scene.control.ButtonType;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 
@@ -42,88 +43,106 @@ public class ItemController {
          });
         //Uppdatera produkt
          view.searchBtnUpd.setOnAction(actionEvent -> {
-             try {
-                 var item = itemService.sortByRentalType(view.updateComboBox.getValue(), view.updateProdField.getText());
-                 if (item instanceof BouncyCastle bc) {
-                     view.confrUpdProd.setContentText("Hittade produkten - " + bc.getProductName() + ".\n Stämmer det?");
-                     view.bouncyItem = bc;
-                     view.pNameHolder = bc.getProductName();
-                     view.pDescrHolder = bc.getDescription();
-                     view.pDayPriceHolder = String.valueOf(bc.getDayPrice());
-                 } else if (item instanceof Costume c) {
-                     view.confrUpdProd.setContentText("Hittade produkten - " + c.getProductName() + ".\n Stämmer det?");
-                     view.costumeItem = c;
-                     view.pNameHolder = c.getProductName();
-                     view.pDescrHolder = c.getDescription();
-                     view.pDayPriceHolder = String.valueOf(c.getDayPrice());
-                 } else if (item instanceof DiscoMachine dM) {
-                     view.confrUpdProd.setContentText("Hittade produkten - " + dM.getProductName() + ".\n Stämmer det?");
-                     view.discoItem = dM;
-                     view.pNameHolder = dM.getProductName();
-                     view.pDescrHolder = dM.getDescription();
-                     view.pDayPriceHolder = String.valueOf(dM.getDayPrice());
-                 }
-             }catch (NoItemFoundException e){view.updProdInfo.setText(e.getMessage());}
+              if(view.updateComboBox.getValue() == RentalType.DISCOMACHINE){
+                  view.discoItem = view.discoChoice.getValue();
+                  view.confrUpdProd.setContentText("Hittade produkten - " + view.discoItem.getProductName() + ".\n Stämmer det?");
+              }else if(view.updateComboBox.getValue() == RentalType.BOUNCYCASTLE){
+                  view.bouncyItem = view.bouncyChoice.getValue();
+                  view.confrUpdProd.setContentText("Hittade produkten - " + view.bouncyItem.getProductName() + ".\n Stämmer det?");
+              }else if(view.updateComboBox.getValue() == RentalType.MASCOTECOSTUME){
+                  view.costumeItem = view.costumeChoice.getValue();
+                  view.confrUpdProd.setContentText("Hittade produkten - " + view.costumeItem.getProductName() + ".\n Stämmer det?");
 
+              }
                  Optional<ButtonType> userResult = view.confrUpdProd.showAndWait();
                  if (userResult.isPresent()) {
                      if (userResult.get() == view.yesBtn) {
                          view.productPane.setCenter(view.updateProdVbox);
-                         view.validatedProd.setText("Vald produkt: " + view.pNameHolder);
-                         view.updProdNameField.setText(view.pNameHolder);
-                         view.updProdDescripField.setText(view.pDescrHolder);
-                         view.updDayPriceField.setText(view.pDayPriceHolder);
-                            itemService.checkItem(view.pNameHolder); // vad är tanken här?
+                         switch(view.updateComboBox.getValue()){
+                         case DISCOMACHINE :{
+                            view.validatedProd.setText("Vald produkt: " + view.discoItem.getProductName());
+                            view.updProdNameField.setText(view.discoItem.getProductName());
+                            view.updProdDescripField.setText(view.discoItem.getDescription());
+                            view.updDayPriceField.setText(String.valueOf(view.discoItem.getDayPrice()));}
+                         case MASCOTECOSTUME : {view.validatedProd.setText("Vald produkt: " + view.costumeItem.getProductName());
+                            view.updProdNameField.setText(view.costumeItem.getProductName());
+                            view.updProdDescripField.setText(view.costumeItem.getDescription());
+                            view.updDayPriceField.setText(String.valueOf(view.costumeItem.getDayPrice()));}
+                         case BOUNCYCASTLE : view.validatedProd.setText("Vald produkt: " + view.bouncyItem.getProductName());
+                            view.updProdNameField.setText(view.bouncyItem.getProductName());
+                            view.updProdDescripField.setText(view.bouncyItem.getDescription());
+                            view.updDayPriceField.setText(String.valueOf(view.bouncyItem.getDayPrice()));}
+                     }
                      } else if (userResult.get() == view.noBtn) {
-                         view.updateProdField.clear();
-                         view.searchBtnUpd.setText("Sök");
+                        view.updateProdField.clear();
+                        view.bouncyItem = null;
+                        view.discoItem = null;
+                        view.costumeItem = null;
+                        view.updateProdField.clear();
+                        view.updProdNameField.clear();
+                        view.updDayPriceField.clear();
+                        view.updProdDescripField.clear();
                      }
-                 }
-         });/*
+
+         });
          view.confBtn.setOnAction(actionEvent -> {
-             if (!view.updProdNameField.getText().isEmpty()) {
-                 itemService.updateItemName(tempItem, view.updProdNameField.getText());
+             switch(view.updateComboBox.getValue()){
+                 case DISCOMACHINE :{
+                     if (!view.updProdNameField.getText().isEmpty()) {
+                         itemService.updateItemName(view.discoItem, view.updProdNameField.getText());
+                         if (!view.updDayPriceField.getText().isEmpty()) {
+                             itemService.updateItemPrice(view.costumeItem, new BigDecimal(view.updDayPriceField.getText()));
+                             if (!view.updProdDescripField.getText().isEmpty()) {
+                                 itemService.updateItemDesc(view.discoItem, view.updProdDescripField.getText());}}}
+                     view.confrmUpdText.setText("Uppdaterat!");
+                 }
+                 case MASCOTECOSTUME : {if (!view.updProdNameField.getText().isEmpty()) {
+                     itemService.updateItemName(view.costumeItem, view.updProdNameField.getText());
+                     if (!view.updDayPriceField.getText().isEmpty()) {
+                         itemService.updateItemPrice(view.costumeItem, new BigDecimal(view.updDayPriceField.getText()));
+                         if (!view.updProdDescripField.getText().isEmpty()) {
+                             itemService.updateItemDesc(view.costumeItem, view.updProdDescripField.getText());}}}
+                     view.confrmUpdText.setText("Uppdaterat!");
+                 }
+                 case BOUNCYCASTLE :{ if (!view.updProdNameField.getText().isEmpty()) {
+                 itemService.updateItemName(view.bouncyItem, view.updProdNameField.getText());
                  if (!view.updDayPriceField.getText().isEmpty()) {
-                     itemService.updateItemPrice(tempItem, view.updDayPriceField.getText());
+                     itemService.updateItemPrice(view.bouncyItem, new BigDecimal(view.updDayPriceField.getText()));
                      if (!view.updProdDescripField.getText().isEmpty()) {
-                         itemService.updateItemDesc(tempItem, view.updProdDescripField.getText());
-                         try {
-                             view.confrmUpdText.setText("Efter uppdatering:\n" + tempItem);
-                             view.updProdNameField.clear();
-                             view.updDayPriceField.clear();
-                             view.updProdDescripField.clear();
-                             tempItem = null;
-                             view.validatedProd.setText("");
-                         } catch (IOException e) {
-                             view.confrmUpdText.setText(e.getMessage());
-                         }
-                     }
+                         itemService.updateItemDesc(view.bouncyItem, view.updProdDescripField.getText());}}}
+                     view.confrmUpdText.setText("Uppdaterat!");
                  }
              }
-         });
+                view.updProdNameField.clear();
+                view.updDayPriceField.clear();
+                view.updProdDescripField.clear();
+                view.bouncyItem = null;
+                view.discoItem = null;
+                view.costumeItem = null;
+                view.validatedProd.setText("");
+                                      });
 
          view.removeProdBtn.setOnAction(actionEvent -> {
-             view.confRemoveProd.setContentText("Vill du radera " + tempItem.getName() + " ?"); // tillägg senare om det påverkar uthyrning + kostnad kan man dra en chech här innan.
-             Optional<ButtonType> userRemoveResult = view.confRemoveProd.showAndWait();
-             if (userRemoveResult.isPresent()) {
-                 if (userRemoveResult.get() == view.removeBtn) {
-                     try {
-                         itemService.deleteItem(tempItem);
-                         System.out.println(tempItem + "Raderad");
-                         view.confrmUpdText.setText(tempItem.getName() + " är raderad.");
-                     } catch (IOException e) {
-                         view.confrmUpdText.setText(e.getMessage());
-                     }
-                 } else {
-                     view.confrmUpdText.setText("Avbröt radering av produkt.");
-                 }
+             try{
+             switch(view.updateComboBox.getValue()){
+                 case DISCOMACHINE  -> itemService.deleteItem(view.discoItem);
+                 case MASCOTECOSTUME-> itemService.deleteItem(view.costumeItem);
+                 case BOUNCYCASTLE  -> itemService.deleteItem(view.bouncyItem);
              }
-         });*/
+             view.confrmUpdText.setStyle("-fx-font-color: RED");
+             view.confrmUpdText.setText("Produkt raderad!");
+
+             } catch (RuntimeException e){ view.confrmUpdText.setText(e.getMessage()+ "Något gick fel vid radering av produkt. Raderingen avbröts.");}
+             view.updProdNameField.clear();
+             view.updDayPriceField.clear();
+             view.updProdDescripField.clear();
+             view.bouncyItem = null;
+             view.discoItem = null;
+             view.costumeItem = null;
+         });
+
 
      }
-
-
-
-     }
+}
 
 
