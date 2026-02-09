@@ -25,7 +25,7 @@ public class Member {
     private MemberStatus memberStatus;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Rental> rentalListMember = new ArrayList<>(); // Vilka uthyrningar är kopplade till medlemmen
+    private List<Rental> rentalListMember = new ArrayList<>();
 
     protected Member (){}
 

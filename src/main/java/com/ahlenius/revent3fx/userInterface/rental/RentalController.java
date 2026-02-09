@@ -71,6 +71,7 @@ private RentalView view;
                 if (userEndingRentResult.get() == view.closeConfAlertBtn) {
                     view.exceptionEndRent.setText("Avbryter återlämning. Produkt fortfarande uthyrd.");
                     view.tempRental = null;
+                    view.confEndRent.setContentText(" ");
                 }
             }
         });
@@ -80,6 +81,7 @@ private RentalView view;
             view.rentalPane.setCenter(view.finnishedRentingBox);
             String days = String.valueOf(pricingService.rentalCountDays(view.tempRental));
             String price = pricingService.pricePolicyCalc(view.tempRental);
+            pricingService.exMomsPriceWithDiscount(view.tempRental); //Borde ladda revenue med ex.moms priset.
             view.rentalDays.setText(days);
            view.rentalCostSum.setText(price);
             view.tempRental = null;

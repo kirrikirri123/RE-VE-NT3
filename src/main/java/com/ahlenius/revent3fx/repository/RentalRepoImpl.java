@@ -22,7 +22,6 @@ public class RentalRepoImpl implements RentalRepo{
             transaction.commit();
         }return rental;
     }
-
     @Override
     public void removeRental(Rental rental) {
         try(Session session = sessionFactory.openSession()){
@@ -31,28 +30,26 @@ public class RentalRepoImpl implements RentalRepo{
             transaction.commit();
         }
     }
-
     @Override
     public List<Rental> findRentalList() {
         try(Session session = sessionFactory.openSession()){
-        return session.createQuery(" FROM Rental"
+        return session.createQuery(" SELECT r FROM Rental r join fetch r.member"
                  , Rental.class).getResultList();
         }
     }
-
+    @Override
     public List<Rental> findAvailibaleRentalList(boolean returned) {
         try(Session session = sessionFactory.openSession()){
-            return session.createQuery("from Rental r where r.returned = :returned", Rental.class)
+            return session.createQuery("SELECT r FROM Rental r join fetch r.member where r.returned = :returned", Rental.class)
                     .setParameter("returned",returned)
                     .getResultList();
         }
     }
-
-    public Rental updateRental(Rental rental){
+    @Override
+    public void updateRental(Rental rental){
         try(Session session= sessionFactory.openSession()){
             Transaction transaction = session.beginTransaction();
             session.merge(rental);
             transaction.commit();
-            return rental;
         }}
 }

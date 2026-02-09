@@ -15,13 +15,13 @@ public class HibernateUtil {
 
     private static final SessionFactory SESSION_FACTORY = buildSessionFactory();
 
-    private HibernateUtil() { } // endast här inne
+    private HibernateUtil() { }
 
     public static SessionFactory getSessionFactory() {return SESSION_FACTORY;    }
 
     private static SessionFactory buildSessionFactory() {
         try {
-            Properties properties = new Properties(); // Vad händer här eg?
+            Properties properties = new Properties();
 
             try (InputStream in =
                          HibernateUtil.class

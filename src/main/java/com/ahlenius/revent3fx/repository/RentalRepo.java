@@ -14,4 +14,9 @@ public interface RentalRepo {
     void removeRental(Rental rental);
 
     List<Rental> findRentalList();
+
+    void updateRental(Rental rental);
+
+    List<Rental> findAvailibaleRentalList(boolean returned);
+
 }

@@ -20,6 +20,7 @@ public class RentalService {
     public Rental newRental(Member member, long productId, RentalType rentalType, int rentDays, LocalDate startOfRent, boolean returned) {
         Rental rental = new Rental(member, productId, rentalType, rentDays, startOfRent, returned);
         rentalRepo.saveRental(rental);
+        member.addRental(rental);
         return rental;
     }
 
