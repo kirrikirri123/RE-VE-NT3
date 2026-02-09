@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -67,46 +68,24 @@ public class ItemView {
 
         // GalleriVY
         products = new Button("Galleri");
-        Label headerGallery = new Label("Ett urval av produkter");
+        Label headerGallery = new Label();
         headerGallery.setAlignment(Pos.CENTER);
         headerGallery.setPrefSize(750,55);
 
-        VBox item1 = new VBox();
-        item1.setAlignment(Pos.BASELINE_LEFT);
-        item1.setSpacing(10);
-        Image image1 = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/gurk_costume.png"));
-        ImageView imageView1 = new ImageView(image1);
-        imageView1.setPreserveRatio(true);
-        imageView1.setFitWidth(235);
-        Label nameItem1 = new Label("Gruk-Man");
-        Label descripItem1 = new Label("Grön och ståtlig dräkt.Garanterar skratt!");
-        Label dayPriceItem1 = new Label("275kr");
-        item1.setSpacing(5);
-        item1.getChildren().addAll(imageView1,nameItem1,descripItem1,dayPriceItem1);
+        Image gif = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/Costumes.gif"));
+        Image cone = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/cone.png"));
+        ImageView imageGif = new ImageView(gif);
+        imageGif.setPreserveRatio(true);
 
         VBox item2 = new VBox();
+        imageGif.setCursor(Cursor.CROSSHAIR);
+        imageGif.setOnMouseClicked(mouseEvent -> {
+            imageGif.setImage(cone);
+        });
         item2.setAlignment(Pos.CENTER);
-        Image image2 = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/dino_costume.png"));
-        ImageView imageView2 = new ImageView(image2);
-        imageView2.setPreserveRatio(true);
-        imageView2.setFitWidth(235);
-        Label item2name = new Label("Dino-dräkt");
-        Label item2desc = new Label("Skräckinjagande. Springvänlig modell");
-        Label item2price = new Label("575kr");
-        item1.setSpacing(5);
-        item2.getChildren().addAll(imageView2,item2name,item2desc,item2price);
+        item2.getChildren().addAll(headerGallery,imageGif);
 
-        VBox item4 = new VBox();
-        item4.setAlignment(Pos.BASELINE_RIGHT);
-        Image image4 = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/trampoline.png"));
-        ImageView imageView4 = new ImageView(image4);
-        imageView4.setPreserveRatio(true);
-        imageView4.setFitWidth(235);
-        Label item4name = new Label("Studsmatta - Större ");
-        Label item4desc = new Label("Klassisk trampolin. Max vikt 350 kg");
-        Label item4Price = new Label("1500kr");
-        item4.getChildren().addAll(imageView4,item4name,item4desc,item4Price);
-        itemView.getChildren().addAll(headerGallery,item1,item2,item4);
+        itemView.getChildren().addAll(item2);
 
         // Ny produktVY
         Label headerNewProd = new Label(" Skapa ny produkt");
