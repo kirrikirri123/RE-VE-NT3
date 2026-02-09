@@ -2,6 +2,7 @@ package com.ahlenius.revent3fx.userInterface.start;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -46,9 +47,18 @@ public class MainView {
         ImageView iconImageView = new ImageView(iconleft);
         iconImageView.setPreserveRatio(true);
         iconImageView.setFitWidth(125);
+        Image jumpgif = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/jump_high.gif"));
+        ImageView imageJGif = new ImageView(jumpgif);
+        imageJGif.setPreserveRatio(true);
+        imageJGif.setFitWidth(125);
         HBox topHeader = new HBox();
         topHeader.setPadding(new Insets(15, 15, 3, 15));
-        topHeader.getChildren().addAll(iconImageView, headerLabel);
+        topHeader.getChildren().addAll(iconImageView, headerLabel,imageJGif);
+        Image jump = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/trampoline.png"));
+        imageJGif.setCursor(Cursor.OPEN_HAND);
+        imageJGif.setOnMouseClicked(mouseEvent -> {
+            imageJGif.setImage(jump);
+        });
 
         //MenuBar
         startMenu = new Menu("Start");
