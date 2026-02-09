@@ -9,6 +9,7 @@ import com.ahlenius.revent3fx.repository.BouncyCastleRepoImpl;
 import com.ahlenius.revent3fx.repository.DiscoMachineRepoImpl;
 import com.ahlenius.revent3fx.repository.MascoteCostumeRepoImpl;
 
+
 import java.math.BigDecimal;
 
 public class PricingService {
@@ -33,10 +34,18 @@ public class PricingService {
         String totalPrice = "";
         switch (rental.getMember().getMemberStatus()) {
             case MemberStatus.PRIVATEINDIVIDUAL -> totalPrice = privateIndividual.priceVAT(privateIndividual.discount(totalBasePrice));
-            case MemberStatus.SOCIETY  -> totalPrice = society.priceVAT(privateIndividual.discount(totalBasePrice));
-            case MemberStatus.EMPLOYEE ->totalPrice = employee.priceVAT(privateIndividual.discount(totalBasePrice));
+            case MemberStatus.SOCIETY  -> totalPrice = society.priceVAT(society.discount(totalBasePrice));
+            case MemberStatus.EMPLOYEE -> totalPrice = employee.priceVAT(employee.discount(totalBasePrice));
         }                return totalPrice;
     }
+    public BigDecimal exMomsPriceWithDiscount(Rental rental) { // returnerar för att kunna lägga i revenue ex.moms
+        BigDecimal totalBasePrice = calculateBasePrice(rental);
+        return switch (rental.getMember().getMemberStatus()) {
+            case MemberStatus.PRIVATEINDIVIDUAL -> privateIndividual.discount(totalBasePrice);
+            case MemberStatus.SOCIETY -> society.discount(totalBasePrice);
+            case MemberStatus.EMPLOYEE -> employee.discount(totalBasePrice);
+        };}
+
 
     public BigDecimal calculateBasePrice(Rental rental) {
         return calculateDay(dayPriceFromRental(rental), rentalCountDays(rental));

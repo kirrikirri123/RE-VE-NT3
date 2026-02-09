@@ -25,6 +25,7 @@ public class RentalView {
     private MemberService memberService;
     private ItemService itemService;
     final BorderPane rentalPane = new BorderPane();
+    private ObservableList<Rental> rentalsObsList;
     VBox prodViewBox;
     VBox newRentalBox = new VBox();
     VBox endRentalBox = new VBox();
@@ -168,7 +169,7 @@ public class RentalView {
         endRentalBox.setSpacing(10);
         endRentalBox.setPadding(new Insets(35, 15, 15, 15));
         Label rentalChoice = new Label("Välj bland aktuella uthyrningar: ");
-        ObservableList<Rental> rentalsObsList = FXCollections.observableArrayList(rentalService.getNotReturnedRentalList());
+        rentalsObsList = FXCollections.observableArrayList(rentalService.getNotReturnedRentalList());
         rentingMemberComboBox = new ComboBox<>(rentalsObsList);
         memberComboBox.getItems().addAll();
         confirmRentMem = new Button("Välj uthyrning");
@@ -182,7 +183,6 @@ public class RentalView {
         confEndRent.setHeaderText("Säker på att du vill avsluta uthyrning?");
 
         // Steg 2 - Avsluta uthyrning
-        // Ta in vald rental - sett ett slut datum ändra returned till true
         finalEndRentBox = new VBox();
         finalEndRentBox.setAlignment(Pos.CENTER);
         finalEndRentBox.setSpacing(5);
@@ -222,6 +222,8 @@ public class RentalView {
             daysOfRentField.clear();
             exceptionInfo.setText("");
             exceptionEndRent.setText("");
+            confrimationText.setText("");
+            cateChoiceBtn.setDisable(false);
         });
         endRental.setOnAction(actionEvent -> {
             rentalPane.setCenter(endRentalBox);
@@ -233,7 +235,6 @@ public class RentalView {
                     obsListBouncy.setAll(itemService.returnListBouncyItem());
                         obsListCostume.setAll(itemService.returnListCostumeItem());
                             }
-
         );
         cateChoiceBtn.setOnAction(actionEvent -> {
             cateChoiceBtn.setDisable(true);
@@ -241,7 +242,6 @@ public class RentalView {
                 case BOUNCYCASTLE -> newRentalPane.add(availableBCItem, 1, 2);
                 case MASCOTECOSTUME -> newRentalPane.add(availableMCItem, 1, 2);
                 case DISCOMACHINE -> newRentalPane.add(availableDMItem, 1, 2);}
-
         });
 
         // Layout RentalPane
@@ -252,23 +252,38 @@ public class RentalView {
     public VBox getEndRentalBox () {
         return endRentalBox;
     }
-                public VBox getNewRentalBox () {
-                    return newRentalBox;
+     public VBox getNewRentalBox () {
+        return newRentalBox;
                 }
-                public VBox getProdViewBox () {
-                    return prodViewBox;
+    public VBox getProdViewBox () {
+        return prodViewBox;
                 }
-                public Button getEndRental () {
-                    return endRental;
+    public Button getEndRental () {
+        return endRental;
                 }
-                public Button getNewRental () {
-                    return newRental;
+    public Button getNewRental () {
+        return newRental;
                 }
-                public Button getViewProd () {
-                    return viewProd;
+    public Button getViewProd () {
+        return viewProd;
                 }
-                public BorderPane getRentalPane () {
-                    return rentalPane;
+    public BorderPane getRentalPane () {
+        return rentalPane;
                 }
-            }
+    public ObservableList<Rental> getRentalsObsList (){
+        return rentalsObsList;
+                }
+
+    public Label getExceptionInfo() {
+        return exceptionInfo;
+    }
+
+    public Label getConfrimationText() {
+        return confrimationText;
+    }
+
+    public Label getExceptionEndRent() {
+        return exceptionEndRent;
+    }
+}
 

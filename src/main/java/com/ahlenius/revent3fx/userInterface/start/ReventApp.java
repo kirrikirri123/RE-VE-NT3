@@ -9,6 +9,7 @@ import com.ahlenius.revent3fx.userInterface.items.ItemView;
 import com.ahlenius.revent3fx.userInterface.member.MemberController;
 import com.ahlenius.revent3fx.userInterface.member.MemberView;
 import com.ahlenius.revent3fx.userInterface.items.ItemController;
+import com.ahlenius.revent3fx.userInterface.rental.EconomyView;
 import com.ahlenius.revent3fx.userInterface.rental.HistoryView;
 import com.ahlenius.revent3fx.userInterface.rental.RentalController;
 import com.ahlenius.revent3fx.userInterface.rental.RentalView;
@@ -40,11 +41,11 @@ public class ReventApp extends Application {
     ItemView itemView = new ItemView(itemService);
     RentalView rentalView = new RentalView(itemService,memberService,rentalService);
     HistoryView historyView = new HistoryView(rentalService);
-    /* EconomyView economyView = new EconomyView(rentalService);
-   */
+    EconomyView economyView = new EconomyView();
+
     MemberController memberController = new MemberController(memberService, rentalService, memberView);
     ItemController itemController = new ItemController(itemService, itemView);
-    RentalController rentalController = new RentalController(rentalService, rentalView, pricingService,itemService);
+    RentalController rentalController = new RentalController(rentalService, rentalView, pricingService,itemService,economyView);
     Scene start, main;
 
     @Override
@@ -62,7 +63,7 @@ public class ReventApp extends Application {
             changeScene(stage, main);
         });
 
-        mainView.startMenu.setOnAction(actionEvent -> {
+        mainView.home.setOnAction(actionEvent -> {
             mainView.mainPane.setCenter(mainView.centerBox);
         });
 
@@ -71,10 +72,10 @@ public class ReventApp extends Application {
             mainView.getMainView().setCenter(memberView.getMemberPane());
             memberView.getMemberPane().setCenter(memberView.getNewMemBox());
         });
-        mainView.getHistoryMem().setOnAction(actionEvent -> {
+      /*  mainView.getHistoryMem().setOnAction(actionEvent -> {
             mainView.getMainView().setCenter(memberView.getMemberPane());
             memberView.getMemberPane().setCenter(memberView.getMemHistoryPane());
-        });
+        });*/
         mainView.getSearchMem().setOnAction(actionEvent -> {
             mainView.getMainView().setCenter(memberView.getMemberPane());
             memberView.getMemberPane().setCenter(memberView.getSearchMemPane());
@@ -120,26 +121,31 @@ public class ReventApp extends Application {
         mainView.getNewRental().setOnAction(actionEvent -> {
             mainView.getMainView().setCenter(rentalView.getRentalPane());
             rentalView.getRentalPane().setCenter(rentalView.getNewRentalBox());
+            rentalView.getExceptionInfo().setText("");
+            rentalView.getConfrimationText().setText("");
         });
 
         mainView.getEndRental().setOnAction(actionEvent -> {
             mainView.getMainView().setCenter(rentalView.getRentalPane());
             rentalView.getRentalPane().setCenter(rentalView.getEndRentalBox());
+            rentalView.getRentalsObsList().setAll(rentalService.getNotReturnedRentalList());
         });
         // Historyknappar i meny
         mainView.getRentalHistory().setOnAction(actionEvent -> {
             mainView.getMainView().setCenter(historyView.getHistoryPane());
-            //historyView.getHistoryPane().setCenter(historyView.getHistoryViewBox());
+            historyView.getHistoryPane().setCenter(historyView.getHistoryViewBox());
         });
 
-        mainView.getMemberhistory().setOnAction(actionEvent -> {
+       /*  mainView.getMemberhistory().setOnAction(actionEvent -> {
             mainView.getMainView().setCenter(memberView.getMemberPane());
             memberView.getMemberPane().setCenter(memberView.getMemHistoryPane());
         });
-        historyView.getMemberHistBtn().setOnAction(actionEvent -> {
+       historyView.getMemberHistBtn().setOnAction(actionEvent -> {
             mainView.getMainView().setCenter(memberView.getMemberPane());
             memberView.getMemberPane().setCenter(memberView.getMemHistoryPane());
-        });
+        });*/
+        mainView.revenue.setOnAction(actionEvent -> {
+                    mainView.getMainView().setCenter(economyView.getEconomyPane());});
 
 
         // Avsluta

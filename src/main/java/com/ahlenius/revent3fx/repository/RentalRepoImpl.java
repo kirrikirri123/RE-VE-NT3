@@ -5,6 +5,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RentalRepoImpl implements RentalRepo{
@@ -22,7 +25,6 @@ public class RentalRepoImpl implements RentalRepo{
             transaction.commit();
         }return rental;
     }
-
     @Override
     public void removeRental(Rental rental) {
         try(Session session = sessionFactory.openSession()){
@@ -31,28 +33,34 @@ public class RentalRepoImpl implements RentalRepo{
             transaction.commit();
         }
     }
-
     @Override
     public List<Rental> findRentalList() {
         try(Session session = sessionFactory.openSession()){
-        return session.createQuery(" FROM Rental"
+        return session.createQuery(" SELECT r FROM Rental r join fetch r.member"
                  , Rental.class).getResultList();
         }
     }
-
+    @Override
     public List<Rental> findAvailibaleRentalList(boolean returned) {
         try(Session session = sessionFactory.openSession()){
-            return session.createQuery("from Rental r where r.returned = :returned", Rental.class)
+            return session.createQuery("SELECT r FROM Rental r join fetch r.member where r.returned = :returned", Rental.class)
                     .setParameter("returned",returned)
                     .getResultList();
         }
-    }
+            }
 
-    public Rental updateRental(Rental rental){
+   public BigDecimal findRevenue(boolean returned){
+        try(Session session = sessionFactory.openSession()){
+            return session.createQuery("SELECT SUM(r.totalRevenue) FROM Rental r WHERE r.returned = :returned",BigDecimal.class)
+                    .setParameter("returned",true).getSingleResult();
+        }
+        }
+
+    @Override
+    public void updateRental(Rental rental){
         try(Session session= sessionFactory.openSession()){
             Transaction transaction = session.beginTransaction();
             session.merge(rental);
             transaction.commit();
-            return rental;
         }}
 }

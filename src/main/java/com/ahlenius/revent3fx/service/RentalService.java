@@ -1,9 +1,13 @@
 package com.ahlenius.revent3fx.service;
 
 import com.ahlenius.revent3fx.entity.*;
+import com.ahlenius.revent3fx.exception.InvalidAmountRentingDaysException;
+import com.ahlenius.revent3fx.exception.InvalidRentalInfoInputException;
 import com.ahlenius.revent3fx.repository.RentalRepoImpl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+
 import java.util.List;
 
 public class RentalService {
@@ -18,13 +22,17 @@ public class RentalService {
     }
 
     public Rental newRental(Member member, long productId, RentalType rentalType, int rentDays, LocalDate startOfRent, boolean returned) {
-        Rental rental = new Rental(member, productId, rentalType, rentDays, startOfRent, returned);
+         if(rentDays>183||rentDays<1)
+        {throw new InvalidAmountRentingDaysException("Stämmer hyresdagarna? Minst 1 dag. Max 6 månader");}
+        if(member.equals(null) || rentalType == null)
+        {throw new InvalidRentalInfoInputException("Fyll i alla fält för att göra en uthyrning");
+    }else{Rental rental = new Rental(member, productId, rentalType, rentDays, startOfRent, returned);
         rentalRepo.saveRental(rental);
+        //member.addRental(rental);}
         return rental;
-    }
+    }}
 
-    public void updateReturnedStatus(Rental rental){
-        rental.setReturned(true);
+    public void updateRental(Rental rental){
         rentalRepo.updateRental(rental);
     }
 
@@ -51,7 +59,10 @@ public class RentalService {
         return rentalRepo.findAvailibaleRentalList(false);
      }
 
-
+    public String sumAllRevenueFromRentals(){
+         BigDecimal sum = rentalRepo.findRevenue(true);
+         return  sum+ "kr.     * obs ex. moms.";
+    }
 
 }
 

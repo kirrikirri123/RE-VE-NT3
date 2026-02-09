@@ -19,7 +19,7 @@ public class HistoryView {
     private RentalService rentalService;
     private BorderPane historyPane = new BorderPane();
     private VBox historyViewBox = new VBox();
-    private VBox memberHistoryBox = new VBox();
+    //private VBox memberHistoryBox = new VBox();
     private Button viewHistBtn = new Button();
     private Button memberHistBtn = new Button();
     Button updRentalsList = new Button();
@@ -32,15 +32,15 @@ public class HistoryView {
 
         // Vänstrafältet
         VBox leftBox = new VBox();
-        viewHistBtn.setText("Uthyrningshistorik");
-        memberHistBtn.setText("Historik - Medlemsspecifik");
+      // viewHistBtn.setText("Uthyrningshistorik");
+       // memberHistBtn.setText("Historik - Medlemsspecifik");
         updRentalsList.setText("Uppdatera historik");
         leftBox.setPadding(new Insets(15, 15, 5, 10));
         leftBox.setSpacing(10);
-        leftBox.getChildren().addAll(viewHistBtn, memberHistBtn,updRentalsList);
+        leftBox.getChildren().addAll(updRentalsList);
 
         // Genrell historik
-        Label headerHistory = new Label("Uthyrningshistorik");
+        Label headerHistory = new Label("Tidigare uthyrningar. - Obs ej aktiva.");
         historyViewBox.setAlignment(Pos.CENTER);
         historyViewBox.setSpacing(10);
         ObservableList<Rental> rentalHistoryObsList = FXCollections.observableList(rentalService.getReturnedRentalList());
@@ -53,16 +53,18 @@ public class HistoryView {
         startRentCol.setCellValueFactory(new PropertyValueFactory<>("startOfRent"));
         TableColumn<Rental, String> daysRentedCol = new TableColumn<>("Hyresdagar");
         daysRentedCol.setCellValueFactory(new PropertyValueFactory<>("rentDays"));
-        allHistoryView.getColumns().setAll(rentalNameCol,rentalItemCol,startRentCol,daysRentedCol);
+        TableColumn<Rental, String> totalRevenueCol = new TableColumn<>("Total hyra ex. moms");
+        totalRevenueCol.setCellValueFactory(new PropertyValueFactory<>("totalRevenue"));
+        allHistoryView.getColumns().setAll(rentalNameCol,rentalItemCol,startRentCol,daysRentedCol,totalRevenueCol);
 
         historyViewBox.getChildren().addAll(headerHistory,allHistoryView);
 
 
         // Knappar Layout
 
-        viewHistBtn.setOnAction(actionEvent -> {
+       /* viewHistBtn.setOnAction(actionEvent -> {
             historyPane.setCenter(historyViewBox);
-        });
+        });*/
         updRentalsList.setOnAction( actionEvent ->{
                     rentalHistoryObsList.setAll(rentalService.getReturnedRentalList());});
 
@@ -71,16 +73,14 @@ public class HistoryView {
         historyPane.setCenter(historyViewBox);
     }
 
-
     public Button getMemberHistBtn() {
         return memberHistBtn;
     }
     public Button getViewHistBtn() {
         return viewHistBtn;
     }
-    public VBox getMemberHistoryBox() {
-        return memberHistoryBox;
-    }
+   // public VBox getMemberHistoryBox() { return memberHistoryBox;}
+
     public VBox getHistoryViewBox() {
         return historyViewBox;
     }

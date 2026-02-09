@@ -23,9 +23,8 @@ public class Member {
     @Enumerated(EnumType.STRING)
     @Column(name = "member_status", length = 18, nullable = false)
     private MemberStatus memberStatus;
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Rental> rentalListMember = new ArrayList<>(); // Vilka uthyrningar är kopplade till medlemmen
+    private List<Rental> rentalListMember = new ArrayList<>();
 
     protected Member (){}
 
@@ -50,9 +49,8 @@ public class Member {
         this.email = email;
     }
     public void setMemberStatus(MemberStatus memberStatus) {
-        this.memberStatus = memberStatus;
+      this.memberStatus = memberStatus;
     }
-
     //GETTER
     public long getMemberId() {
         return memberId;
