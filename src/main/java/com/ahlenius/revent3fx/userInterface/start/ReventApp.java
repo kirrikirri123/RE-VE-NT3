@@ -123,6 +123,7 @@ public class ReventApp extends Application {
             rentalView.getRentalPane().setCenter(rentalView.getNewRentalBox());
             rentalView.getExceptionInfo().setText("");
             rentalView.getConfrimationText().setText("");
+            rentalView.getMemberObsList().setAll(memberService.findAllMembers());
         });
 
         mainView.getEndRental().setOnAction(actionEvent -> {

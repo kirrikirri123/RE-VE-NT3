@@ -22,6 +22,7 @@ public class EconomyView {
             economyBox.setAlignment(Pos.CENTER);
             economyBox.setPadding(new Insets(25,35,25,35));
             Label headerEconomy = new Label("Ekonomi");
+            headerEconomy.getStyleClass().add("title");
             Label businessToDay = new Label("Totala intäkter på avslutade affärer är: ");
             incomBtn = new Button("Beräkna");
             GridPane economyGPane = new GridPane();

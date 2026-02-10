@@ -40,7 +40,13 @@ public class HistoryView {
         leftBox.getChildren().addAll(updRentalsList);
 
         // Genrell historik
-        Label headerHistory = new Label("Tidigare uthyrningar. - Obs ej aktiva.");
+        VBox headerBox = new VBox();
+        Label headerHistory = new Label("Tidigare uthyrningar");
+        Label headerUnder = new Label( "- Obs, ej aktiva");
+        headerBox.getChildren().addAll(headerHistory,headerUnder);
+        headerBox.setAlignment(Pos.CENTER);
+        headerHistory.getStyleClass().add("title");
+        headerUnder.getStyleClass().add("subtitle");
         historyViewBox.setAlignment(Pos.CENTER);
         historyViewBox.setSpacing(10);
         ObservableList<Rental> rentalHistoryObsList = FXCollections.observableList(rentalService.getReturnedRentalList());
@@ -57,7 +63,7 @@ public class HistoryView {
         totalRevenueCol.setCellValueFactory(new PropertyValueFactory<>("totalRevenue"));
         allHistoryView.getColumns().setAll(rentalNameCol,rentalItemCol,startRentCol,daysRentedCol,totalRevenueCol);
 
-        historyViewBox.getChildren().addAll(headerHistory,allHistoryView);
+        historyViewBox.getChildren().addAll(headerBox,allHistoryView);
 
 
         // Knappar Layout

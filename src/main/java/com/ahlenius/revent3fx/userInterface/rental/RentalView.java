@@ -26,6 +26,7 @@ public class RentalView {
     private ItemService itemService;
     final BorderPane rentalPane = new BorderPane();
     private ObservableList<Rental> rentalsObsList;
+    private ObservableList<Member> memberObsList;
     VBox prodViewBox;
     VBox newRentalBox = new VBox();
     VBox endRentalBox = new VBox();
@@ -76,6 +77,8 @@ public class RentalView {
         newRental.setText("Ny uthyrning");
         endRental.setText("Avsluta uthyrning");
         updItemList.setText("Uppdatera produktlistor");
+        newRental.getStyleClass().add("accent");
+        endRental.getStyleClass().add("primary");
         leftBox.setPadding(new Insets(15, 15, 5, 10));
         leftBox.setSpacing(10);
         leftBox.getChildren().addAll(viewProd, newRental, endRental,updItemList);
@@ -83,7 +86,8 @@ public class RentalView {
         // Aktuella produkter. TabelPane
         prodViewBox = new VBox();
         Label headerViewProd = new Label("Aktuella produkter för uthyrning: ");
-        //hoppb
+        headerViewProd.getStyleClass().add("title");
+        //hoppborg
         ObservableList<BouncyCastle> obsListBouncy = FXCollections.observableArrayList(itemService.returnListBouncyItem());
         TableView<BouncyCastle> bouncyCastleTableView = new TableView<>();
         bouncyCastleTableView.setItems(obsListBouncy);
@@ -123,6 +127,7 @@ public class RentalView {
 
         // Ny uthyrning
         Label headerNewRental = new Label("Ny uthyrning");
+        headerNewRental.getStyleClass().add("title");
         newRentalBox.setAlignment(Pos.CENTER);
         newRentalBox.setSpacing(10);
         confrimationText = new Label();
@@ -136,7 +141,7 @@ public class RentalView {
         daysOfRentField = new TextField();
         daysOfRentField.setPromptText("tex. 5");
         daysOfRentField.setMaxWidth(250);
-        ObservableList<Member> memberObsList = FXCollections.observableArrayList(memberService.findAllMembers());
+        memberObsList = FXCollections.observableArrayList(memberService.findAllMembers());
         memberComboBox = new ComboBox<>(memberObsList);
         rentalTypeComboBox = new ComboBox<>();
         rentalTypeComboBox.getItems().addAll(RentalType.values());
@@ -165,10 +170,12 @@ public class RentalView {
 
         // Avsluta uthyrning
         Label headerCloseRental = new Label("Avsluta uthyrning");
+        headerCloseRental.getStyleClass().add("title");
         endRentalBox.setAlignment(Pos.TOP_CENTER);
         endRentalBox.setSpacing(10);
         endRentalBox.setPadding(new Insets(35, 15, 15, 15));
         Label rentalChoice = new Label("Välj bland aktuella uthyrningar: ");
+        rentalChoice.getStyleClass().add("subtitle");
         rentalsObsList = FXCollections.observableArrayList(rentalService.getNotReturnedRentalList());
         rentingMemberComboBox = new ComboBox<>(rentalsObsList);
         memberComboBox.getItems().addAll();
@@ -198,6 +205,7 @@ public class RentalView {
         finnishedRentingBox.setSpacing(10);
         finnishedRentingBox.setAlignment(Pos.CENTER);
         Label headerRentingInfo = new Label("Uthyrning avslutad.");
+        headerRentingInfo.getStyleClass().add("title");
         GridPane rentingSumPane= new GridPane();
         rentingSumPane.setHgap(7);
         rentingSumPane.setVgap(7);
@@ -219,6 +227,7 @@ public class RentalView {
         });
         newRental.setOnAction(actionEvent -> {
             rentalPane.setCenter(newRentalBox);
+            memberObsList.setAll(memberService.findAllMembers());
             daysOfRentField.clear();
             exceptionInfo.setText("");
             exceptionEndRent.setText("");
@@ -252,7 +261,7 @@ public class RentalView {
     public VBox getEndRentalBox () {
         return endRentalBox;
     }
-     public VBox getNewRentalBox () {
+    public VBox getNewRentalBox () {
         return newRentalBox;
                 }
     public VBox getProdViewBox () {
@@ -273,15 +282,15 @@ public class RentalView {
     public ObservableList<Rental> getRentalsObsList (){
         return rentalsObsList;
                 }
-
+    public ObservableList<Member> getMemberObsList() {
+        return memberObsList;
+    }
     public Label getExceptionInfo() {
         return exceptionInfo;
     }
-
     public Label getConfrimationText() {
         return confrimationText;
     }
-
     public Label getExceptionEndRent() {
         return exceptionEndRent;
     }

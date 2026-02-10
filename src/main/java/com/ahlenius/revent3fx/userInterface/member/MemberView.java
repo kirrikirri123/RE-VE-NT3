@@ -64,6 +64,7 @@ public class MemberView {
     public MemberView(){
          //NY medlemsVy
         headerText = new Label("Skapa ny medlem");
+        headerText.getStyleClass().add("title");
         GridPane newMemPane= new GridPane();
         newMem = new Button("Ny medlem");
         Label fName = new Label("Förnamn / Föreningsnamn ");
@@ -108,6 +109,7 @@ public class MemberView {
         //Sök medlemsVy
         searchMem = new Button("Sök medlem");
         Label headerSearch = new Label("Sök befintlig medlem");
+        headerSearch.getStyleClass().add("title");
         Label searchMemLabel = new Label(searchEmail);
         searchMember.setMaxWidth(250);
         searchMember.setPromptText("Tex. Bosse.Bengtsson@yahoo.se");
@@ -115,9 +117,10 @@ public class MemberView {
         searchMemPane.setAlignment(Pos.CENTER);
         searchMemPane.getChildren().addAll(headerSearch,searchMemLabel,searchMember,searchBtnMem,confirmationSearchMem);
 
-        //HistorikVy
+        //HistorikVy - Används ej just nu
         historyMem = new Button("Medlemshistorik");
         Label headerHistoryMem = new Label("Medlemshistorik");
+        headerHistoryMem.getStyleClass().add("title");
         Label memberHistLab = new Label(searchEmail);
         Label exceptionInfoHistory = new Label();
         TextField memberHistory = new TextField();
@@ -127,11 +130,12 @@ public class MemberView {
         memHistoryPane.setAlignment(Pos.CENTER);
         memHistoryPane.getChildren().addAll(headerHistoryMem,memberHistLab,memberHistory,searchBtnHist,exceptionInfoHistory);
 
-       /// Steg 2 Visa Historik
+       // Steg 2 Visa Historik används ej just nu.
         VBox memHistShow = new VBox();
         memHistShow.setSpacing(10);
         memHistShow.setAlignment(Pos.CENTER);
         Label headerShowHist = new Label("Medlemshistorik");
+        headerShowHist.getStyleClass().add("title");
         TableView<Rental> historyTable = new TableView<>();
         TableColumn<Rental, String> rentalNameCol = new TableColumn<Rental, String>("Medlem");
         rentalNameCol.setCellValueFactory(new PropertyValueFactory<>("rentingMember"));
@@ -148,6 +152,7 @@ public class MemberView {
         //Uppdatera medlemVy
         updateMem = new Button("Uppdatera medlem");
         Label headerUpdate = new Label("Uppdatera medlem");
+        headerUpdate.getStyleClass().add("title");
         Label updateMemLabel = new Label(searchEmail);
         updateMemInfo = new Label();
         updateMember.setMaxWidth(250);
@@ -162,6 +167,7 @@ public class MemberView {
 
             // Steg 2 uppdatera medlem.
         Label update2ndView = new Label("Redigering av medlemsinformation");
+        update2ndView.getStyleClass().add("title");
         validatedMem = new Label();
         Label updName = new Label(" Ändra stavning i namn : ");
         Label updPhone = new Label("Ändra telefonnummer : ");
@@ -209,6 +215,8 @@ public class MemberView {
         confRemoveMem.setHeaderText("Vill du ta bort medlem ur register?");
 
         // Vänsterfält
+        newMem.getStyleClass().add("accent");
+        updateMem.getStyleClass().add("primary");
         VBox leftField = new VBox();
         leftField.setPadding(new Insets(15,15,5,10));
         leftField.setSpacing(10);

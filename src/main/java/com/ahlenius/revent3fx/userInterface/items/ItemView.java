@@ -61,8 +61,6 @@ public class ItemView {
     Costume costumeItem;
     DiscoMachine discoItem;
 
-
-
     public ItemView(ItemService itemService){
         this.itemService = itemService;
 
@@ -89,6 +87,7 @@ public class ItemView {
 
         // Ny produktVY
         Label headerNewProd = new Label(" Skapa ny produkt");
+        headerNewProd.getStyleClass().add("title");
         newProdBox.setSpacing(10);
         newProdBox.setAlignment(Pos.CENTER);
         newProd = new Button("Ny produkt");
@@ -127,6 +126,7 @@ public class ItemView {
         editProd = new Button("Redigera produkt");
         cateChoiceBtn = new Button("Lås vald kategori");
         Label headerUpd = new Label("Redigera produkt");
+        headerUpd.getStyleClass().add("title");
         Label updateItemType = new Label("Välj produktkategori");
         Label updateProdLabel = new Label("Välj produkt:");
         updateComboBox = new ComboBox<>();
@@ -170,6 +170,7 @@ public class ItemView {
         // Steg 2 uppdatera produkt.
         updateProdVbox = new VBox();
         Label update2ndView = new Label("Redigering av produktinformation");
+        update2ndView.getStyleClass().add("title");
         Label updName = new Label(" Ändra produktnamn: ");
         Label updDescript = new Label("Uppdatera beskrivning: ");
         Label updDayPrice = new Label("Uppdatera dagshyra: ");
@@ -234,6 +235,8 @@ public class ItemView {
         });
 
         // Vänsterfält
+        newProd.getStyleClass().add("accent");
+        editProd.getStyleClass().add("primary");
         VBox leftField = new VBox();
         leftField.setPadding(new Insets(15,15,5,10));
         leftField.setSpacing(10);

@@ -39,8 +39,6 @@ public class MainView {
     private MenuItem memberhistory;
 
 
-
-
     public MainView() {
         //Top
         Image iconleft = new Image(getClass().getResourceAsStream("/com/ahlenius/revent3fx/icon_small.png"));
@@ -94,16 +92,17 @@ public class MainView {
         menuHeader.setPadding(new Insets(2, 10, 2, 345));
         //Center Welcome
         Label mainLabel = new Label(" Välkommen, dags att börja hyra!");
-        mainLabel.setStyle("-fx-font-size: 24px");
+        mainLabel.getStyleClass().add("title");
         Label mainUnderLabel = new Label("Det finns inget bättre arrangemang än det som skapar bestående minnen \ntill priset av en mindre prislapp och små besvär." +
                 "\n R-EV-ENT är den hjälpande handen som hyr till dig om privatperson och förening\n när ni skapar för ett oförglömligt minne, en ökad gemenskap i föreningen \n och glädje för familj med vänner." +
                 "\n Ditt nästa lyckade event börjar här. Just rent !");
-        mainUnderLabel.setStyle("-fx-font-size: 12px");
+        mainUnderLabel.getStyleClass().add("subtitle");
         centerBox.setSpacing(5);
         centerBox.setAlignment(Pos.CENTER);
         centerBox.getChildren().addAll(mainLabel,mainUnderLabel);
 
         //Bottom
+        quitBtn.getStyleClass().add("accent");
         quitBtn.setText("Avsluta");
         bottom.setPadding(new Insets(15, 10, 10, 10));
         bottom.setAlignment(Pos.BASELINE_RIGHT);
