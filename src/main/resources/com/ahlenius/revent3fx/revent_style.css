@@ -51,10 +51,10 @@
 
 /* Varm orange knapp */
 .button.accent {
-    -fx-background-color: #FA5100;
+    -fx-background-color: #FAA100 ;
 }
 .button.accent:hover {
-    -fx-background-color: #FAA100;
+    -fx-background-color: #FA5100;
 }
 
 /* Beige/guld knapp */
